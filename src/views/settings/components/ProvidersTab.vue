@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import {
   Card,
   CardContent,
@@ -6,10 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { KeyRound, Plus, Server } from 'lucide-vue-next'
 import BrandIcon from '@/components/shared/BrandIcon.vue'
+
+const router = useRouter()
 
 defineProps<{
   providers: any[]
@@ -45,7 +48,12 @@ defineProps<{
       </CardContent>
 
       <CardFooter class="mt-auto pt-4">
-        <Button variant="outline" class="w-full">Configure</Button>
+        <Button
+          variant="outline"
+          class="w-full"
+          @click="router.push(`/settings/providers/${prov.id}`)"
+          >Configure</Button
+        >
       </CardFooter>
     </Card>
 

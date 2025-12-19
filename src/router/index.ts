@@ -22,19 +22,16 @@ const routes = [
     name: "settings",
     component: () => import("@/views/settings/SettingsView.vue"),
   },
-  // FUTURE CRUD ROUTES (Placeholders)
-  /*
-      {
-        path: '/settings/providers/:id',
-        name: 'provider-edit',
-        component: () => import('@/views/settings/ProviderView.vue')
-      },
-      {
-        path: '/settings/models/:id',
-        name: 'model-edit',
-        component: () => import('@/views/settings/ModelView.vue')
-      },
-      */
+  {
+    path: "/settings/providers/:id",
+    name: "provider-edit",
+    component: () => import("@/views/settings/ProviderView.vue"),
+  },
+  {
+    path: "/settings/models/:id",
+    name: "model-edit",
+    component: () => import("@/views/settings/ModelView.vue"),
+  },
 ];
 
 const router = createRouter({

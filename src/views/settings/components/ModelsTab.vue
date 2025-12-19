@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import {
   Card,
   CardContent,
@@ -16,6 +17,8 @@ const props = defineProps<{
   models: any[]
   providers: any[]
 }>()
+
+const router = useRouter()
 
 const getProviderName = (providerId: string) => {
   const p = props.providers.find((p) => p.id === providerId)
@@ -61,7 +64,13 @@ const getProviderName = (providerId: string) => {
                 >Enabled</Label
               >
             </div>
-            <Button variant="ghost" size="icon"><Edit class="size-4" /></Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              @click="router.push(`/settings/models/${model.id}`)"
+            >
+              <Edit class="size-4" />
+            </Button>
           </div>
         </div>
       </div>
