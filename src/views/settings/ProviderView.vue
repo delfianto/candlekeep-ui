@@ -78,7 +78,12 @@ onMounted(fetchProvider)
     subtitle="Configure connection details and credentials."
   >
     <template #header>
-      <Button variant="ghost" size="sm" class="w-fit -ml-2 mb-2" @click="router.push('/settings')">
+      <Button
+        variant="ghost"
+        size="sm"
+        class="w-fit -ml-2 mb-2"
+        @click="router.push({ path: '/settings', query: { tab: 'providers' } })"
+      >
         <ArrowLeft class="size-4 mr-2" /> Back to Settings
       </Button>
     </template>

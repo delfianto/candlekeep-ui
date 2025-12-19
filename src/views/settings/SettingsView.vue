@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import ContentLayout from '@/components/layout/ContentLayout.vue'
 import {
   Tabs,
@@ -17,10 +18,20 @@ import InterfaceTab from './components/InterfaceTab.vue'
 import AboutTab from './components/AboutTab.vue'
 
 // -- STATE --
-// We keep the state here so we can share it (e.g., ModelsTab needs Providers data)
+// Keep the state here so we can share it
+// e.g., ModelsTab needs Providers data
 const isLoading = ref(true)
 const providers = ref([])
 const models = ref([])
+
+const route = useRoute()
+const router = useRouter()
+
+// -- TAB STATE --
+const activeTab = ref<string>((route.query.tab as string) || 'providers')
+watch(activeTab, (newTab) => {
+  router.replace({ query: { ...route.query, tab: newTab } })
+})
 
 // -- ACTIONS --
 const fetchData = async () => {
@@ -56,7 +67,7 @@ onMounted(fetchData)
     title="Settings"
     subtitle="Manage your AI connections, models, and interface preferences."
   >
-    <Tabs default-value="providers" class="space-y-6">
+    <Tabs v-model="activeTab" class="space-y-6">
       <TabsList class="grid w-full grid-cols-2 md:w-180 md:grid-cols-5 bg-muted/50 p-1">
         <TabsTrigger value="providers" class="gap-2"
           ><Server class="size-4" /> Providers</TabsTrigger
