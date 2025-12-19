@@ -32,13 +32,14 @@ import {
   Loader2
 } from 'lucide-vue-next'
 
-// -- TYPES (Mirroring your API Schema) --
+// -- TYPES --
 interface Provider {
   id: string
   name: string
   provider_type: string
+  base_url: string | null
   enabled: boolean
-  api_key_configured?: boolean
+  api_key_configured: boolean
 }
 
 interface Model {
@@ -54,7 +55,6 @@ const isLoading = ref(true)
 const providers = ref<Provider[]>([])
 const models = ref<Model[]>([])
 
-// Templates are still mock-only as they aren't in your handlers.ts yet
 const templates = ref([
   { id: 1, name: 'Creative Writer', description: 'For storytelling and RPG elements.', preview: 'You are an expert storyteller...' },
   { id: 2, name: 'Code Assistant', description: 'Strict logic and clean code output.', preview: 'You are a senior software engineer...' },
@@ -65,7 +65,6 @@ const templates = ref([
 const fetchData = async () => {
   isLoading.value = true
   try {
-    // Parallel fetch for better performance
     const [provRes, modRes] = await Promise.all([
       fetch('/api/providers'),
       fetch('/api/models')
@@ -73,6 +72,19 @@ const fetchData = async () => {
 
     if (provRes.ok) providers.value = await provRes.json()
     if (modRes.ok) models.value = await modRes.json()
+
+    // DEBUG: Check for ID mismatch if names are missing
+    if (models.value.length > 0 && providers.value.length > 0) {
+      const missing = models.value.filter(m => !providers.value.find(p => p.id === m.provider_id));
+      if (missing.length > 0) {
+        console.warn("Data Mismatch: Some models reference provider IDs that don't exist in the provider list.",
+          {
+            modelProviderIds: missing.map(m => m.provider_id),
+            availableProviderIds: providers.value.map(p => p.id)
+          }
+        );
+      }
+    }
   } catch (error) {
     console.error('Failed to load settings:', error)
   } finally {
@@ -134,7 +146,9 @@ onMounted(() => {
               <CardContent class="pt-4">
                 <div class="flex items-center space-x-2 text-sm text-muted-foreground">
                   <component :is="prov.enabled ? CheckCircle2 : AlertCircle" class="size-4" />
-                  <span>{{ prov.enabled ? 'Ready to generate' : 'Not configured' }}</span>
+                  <span>
+                    {{ prov.api_key_configured ? 'Key Configured' : 'Missing API Key' }}
+                  </span>
                 </div>
               </CardContent>
               <CardFooter>
@@ -191,7 +205,7 @@ onMounted(() => {
 
                   <div class="flex items-center gap-4">
                     <div class="flex items-center space-x-2">
-                      <Switch :id="`model-${model.id}`" :checked="model.enabled" />
+                      <Switch :id="`model-${model.id}`" v-model:checked="model.enabled" />
                       <Label :for="`model-${model.id}`" class="text-xs text-muted-foreground"
                         >Enabled</Label
                       >

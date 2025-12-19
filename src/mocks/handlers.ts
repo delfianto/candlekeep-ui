@@ -2,7 +2,7 @@ import { http, HttpResponse, delay } from "msw";
 import { characters } from "@/mocks/data/characters";
 import { chats } from "@/mocks/data/chats";
 import { messages } from "@/mocks/data/messages";
-import { llmProviders } from "@/mocks/data/llmProviders";
+import { providers } from "@/mocks/data/providers";
 import { models } from "@/mocks/data/models";
 import { personas } from "@/mocks/data/personas";
 import type { components } from "@/api/schema";
@@ -14,7 +14,7 @@ const db = {
   characters,
   chats,
   messages,
-  llmProviders,
+  providers,
   models,
   personas,
 };
@@ -117,7 +117,7 @@ export const handlers = [
   // LLM Providers
   http.get("/api/providers", async () => {
     await delay(100);
-    return HttpResponse.json(db.llmProviders);
+    return HttpResponse.json(db.providers);
   }),
 
   // Models
