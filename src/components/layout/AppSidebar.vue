@@ -24,16 +24,15 @@ import {
   Flame,
 } from 'lucide-vue-next'
 import { useColorMode } from '@vueuse/core'
-import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router' // <--- Required for active state
 
 const mode = useColorMode()
-const route = useRoute()
+const route = useRoute() // <--- Get current route
 
 const toggleTheme = () => {
   mode.value = mode.value === 'dark' ? 'light' : 'dark'
 }
 
-// Updated Menu Structure
 const navItems = [
   { label: 'Home', icon: Home, route: '/' },
   { label: 'Chats', icon: MessageSquare, route: '/chats' },
@@ -67,7 +66,7 @@ const navItems = [
             <AppSidebarButton
               :label="item.label"
               :icon="item.icon"
-              :isActive="route.path === item.route"
+              :isActive="item.route === '/' ? route.path === '/' : route.path.startsWith(item.route)"
             />
           </RouterLink>
         </SidebarMenuItem>
@@ -109,7 +108,6 @@ const navItems = [
                 <AvatarImage src="/avatar-placeholder.png" alt="User" />
                 <AvatarFallback class="rounded-lg">DM</AvatarFallback>
               </Avatar>
-
               <div
                 class="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden"
               >
