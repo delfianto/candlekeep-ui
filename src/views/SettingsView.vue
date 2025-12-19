@@ -23,16 +23,17 @@ import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import {
-  Server,
+  AlertCircle,
+  CheckCircle2,
   Cpu,
+  Edit,
   FileText,
+  Info,
+  Link,
+  Loader2,
   Palette,
   Plus,
-  Edit,
-  CheckCircle2,
-  AlertCircle,
-  Loader2,
-  Info,
+  Server,
 } from 'lucide-vue-next'
 
 // -- TYPES --
@@ -73,8 +74,15 @@ const fetchData = async () => {
       fetch('/api/models')
     ])
 
-    if (provRes.ok) providers.value = await provRes.json()
-    if (modRes.ok) models.value = await modRes.json()
+    if (provRes.ok) {
+      const data: Provider[] = await provRes.json()
+      providers.value = data.sort((a, b) => a.name.localeCompare(b.name))
+    }
+
+    if (modRes.ok) {
+      const data: Model[] = await modRes.json()
+      models.value = data.sort((a, b) => a.name.localeCompare(b.name))
+    }
   } catch (error) {
     console.error('Failed to load settings:', error)
   } finally {
@@ -131,7 +139,7 @@ onMounted(() => {
               :class="prov.enabled ? 'border-primary/50 bg-primary/5' : ''"
             >
               <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                   <BrandIcon :name="prov.provider_type" class="size-5" />
                   <CardTitle class="text-lg font-bold">{{ prov.name }}</CardTitle>
                 </div>
@@ -139,14 +147,26 @@ onMounted(() => {
                   {{ prov.enabled ? 'Active' : 'Disabled' }}
                 </Badge>
               </CardHeader>
-              <CardContent class="pt-4">
+
+              <CardContent class="pt-4 flex flex-col gap-2">
                 <div class="flex items-center space-x-2 text-sm text-muted-foreground">
                   <component :is="prov.enabled ? CheckCircle2 : AlertCircle" class="size-4" />
                   <span>
                     {{ prov.api_key_configured ? 'Key Configured' : 'Missing API Key' }}
                   </span>
                 </div>
+
+                <div
+                  v-if="prov.base_url"
+                  class="flex items-center space-x-2 text-sm text-muted-foreground/70 pl-0.5"
+                >
+                  <Link class="size-4 shrink-0" />
+                  <span class="truncate font-mono" :title="prov.base_url">
+                    {{ prov.base_url }}
+                  </span>
+                </div>
               </CardContent>
+
               <CardFooter class="mt-auto pt-4">
                 <Button variant="outline" class="w-full">Configure</Button>
               </CardFooter>
