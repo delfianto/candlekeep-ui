@@ -7,31 +7,39 @@ import {
   SidebarMenuItem,
   SidebarFooter,
   SidebarRail,
+  SidebarMenuButton
 } from '@/components/ui/sidebar'
+import { Separator } from '@/components/ui/separator'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import AppSidebarButton from './AppSidebarButton.vue'
 import {
+  Home,
   MessageSquare,
   Users,
   BookOpen,
+  Database,
   Settings,
   Moon,
   Sun,
-  Database,
   Flame,
 } from 'lucide-vue-next'
 import { useColorMode } from '@vueuse/core'
+import { useRoute } from 'vue-router'
 
 const mode = useColorMode()
+const route = useRoute()
 
 const toggleTheme = () => {
   mode.value = mode.value === 'dark' ? 'light' : 'dark'
 }
 
+// Updated Menu Structure
 const navItems = [
-  { label: 'Chat', icon: MessageSquare, route: '/chat', active: true },
-  { label: 'Characters', icon: Users, route: '/characters', active: false },
-  { label: 'World Info', icon: BookOpen, route: '/world', active: false },
-  { label: 'Memory', icon: Database, route: '/memory', active: false },
+  { label: 'Home', icon: Home, route: '/' },
+  { label: 'Chats', icon: MessageSquare, route: '/chats' },
+  { label: 'Characters', icon: Users, route: '/characters' },
+  { label: 'World Lore', icon: BookOpen, route: '/world' },
+  { label: 'Memory', icon: Database, route: '/memory' },
 ]
 </script>
 
@@ -46,7 +54,6 @@ const navItems = [
         >
           <Flame class="size-6" />
         </div>
-
         <span class="font-bold text-lg truncate group-data-[collapsible=icon]:hidden">
           Candlekeep
         </span>
@@ -56,7 +63,13 @@ const navItems = [
     <SidebarContent>
       <SidebarMenu class="gap-1 px-2 group-data-[collapsible=icon]:gap-6">
         <SidebarMenuItem v-for="item in navItems" :key="item.label">
-          <AppSidebarButton :label="item.label" :icon="item.icon" :isActive="item.active" />
+          <RouterLink :to="item.route">
+            <AppSidebarButton
+              :label="item.label"
+              :icon="item.icon"
+              :isActive="route.path === item.route"
+            />
+          </RouterLink>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarContent>
@@ -71,8 +84,40 @@ const navItems = [
           />
         </SidebarMenuItem>
 
+        <RouterLink to="/settings">
+          <SidebarMenuItem>
+            <AppSidebarButton
+              label="Settings"
+              :icon="Settings"
+              :isActive="route.path === '/settings'"
+            />
+          </SidebarMenuItem>
+        </RouterLink>
+
+        <div class="px-2 my-1 group-data-[collapsible=icon]:hidden">
+          <Separator class="bg-border/50" />
+        </div>
+
         <SidebarMenuItem>
-          <AppSidebarButton label="Settings" :icon="Settings" />
+          <RouterLink to="/persona">
+            <SidebarMenuButton
+              tooltip="Active Persona"
+              :isActive="route.path === '/persona'"
+              class="h-14 gap-4 transition-all duration-200 group-data-[collapsible=icon]:justify-center"
+            >
+              <Avatar class="h-8 w-8 shrink-0 rounded-lg border">
+                <AvatarImage src="/avatar-placeholder.png" alt="User" />
+                <AvatarFallback class="rounded-lg">DM</AvatarFallback>
+              </Avatar>
+
+              <div
+                class="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden"
+              >
+                <span class="truncate font-semibold">Dungeon Master</span>
+                <span class="truncate text-xs text-muted-foreground">Level 20</span>
+              </div>
+            </SidebarMenuButton>
+          </RouterLink>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarFooter>

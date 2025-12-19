@@ -1,30 +1,22 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/views/Home.vue";
+
+const routes = [
+  { path: "/", name: "home", component: () => import("@/views/HomeView.vue") },
+  { path: "/chats", name: "chats", component: () => import("@/views/ChatView.vue") },
+  {
+    path: "/characters",
+    name: "characters",
+    component: () => import("@/views/CharactersView.vue"),
+  },
+  { path: "/world", name: "world", component: () => import("@/views/WorldLoreView.vue") },
+  { path: "/memory", name: "memory", component: () => import("@/views/MemoryView.vue") },
+  { path: "/settings", name: "settings", component: () => import("@/views/SettingsView.vue") },
+  { path: "/persona", name: "persona", component: () => import("@/views/PersonaView.vue") },
+];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: "/",
-      name: "home",
-      component: Home,
-    },
-    {
-      path: "/characters",
-      name: "characters",
-      component: () => import("@/views/Home.vue"), // Placeholder
-    },
-    {
-      path: "/presets",
-      name: "presets",
-      component: () => import("@/views/Home.vue"), // Placeholder
-    },
-    {
-      path: "/lorebooks",
-      name: "lorebooks",
-      component: () => import("@/views/Home.vue"), // Placeholder
-    },
-  ],
+  history: createWebHistory(),
+  routes,
 });
 
 export default router;
