@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { APP_INFO } from '@/constants/appInfo'
+import BrandIcon from '@/components/shared/BrandIcon.vue'
 import ContentLayout from '@/components/layout/ContentLayout.vue'
 import {
   Tabs,
@@ -29,7 +31,8 @@ import {
   Edit,
   CheckCircle2,
   AlertCircle,
-  Loader2
+  Loader2,
+  Info,
 } from 'lucide-vue-next'
 
 // -- TYPES --
@@ -72,19 +75,6 @@ const fetchData = async () => {
 
     if (provRes.ok) providers.value = await provRes.json()
     if (modRes.ok) models.value = await modRes.json()
-
-    // DEBUG: Check for ID mismatch if names are missing
-    if (models.value.length > 0 && providers.value.length > 0) {
-      const missing = models.value.filter(m => !providers.value.find(p => p.id === m.provider_id));
-      if (missing.length > 0) {
-        console.warn("Data Mismatch: Some models reference provider IDs that don't exist in the provider list.",
-          {
-            modelProviderIds: missing.map(m => m.provider_id),
-            availableProviderIds: providers.value.map(p => p.id)
-          }
-        );
-      }
-    }
   } catch (error) {
     console.error('Failed to load settings:', error)
   } finally {
@@ -110,7 +100,7 @@ onMounted(() => {
     subtitle="Manage your AI connections, models, and interface preferences."
   >
     <Tabs default-value="providers" class="space-y-6">
-      <TabsList class="grid w-full grid-cols-2 md:w-150 md:grid-cols-4 bg-muted/50 p-1">
+      <TabsList class="grid w-full grid-cols-2 md:w-180 md:grid-cols-5 bg-muted/50 p-1">
         <TabsTrigger value="providers" class="flex items-center gap-2"
           ><Server class="size-4" /> Providers</TabsTrigger
         >
@@ -123,6 +113,9 @@ onMounted(() => {
         <TabsTrigger value="ui" class="flex items-center gap-2"
           ><Palette class="size-4" /> Interface</TabsTrigger
         >
+        <TabsTrigger value="about" class="flex items-center gap-2"
+          ><Info class="size-4" /> About</TabsTrigger
+        >
       </TabsList>
 
       <div v-if="isLoading" class="flex justify-center py-12">
@@ -131,7 +124,7 @@ onMounted(() => {
 
       <template v-else>
         <TabsContent value="providers" class="space-y-4">
-          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
             <Card
               v-for="prov in providers"
               :key="prov.id"
@@ -151,13 +144,13 @@ onMounted(() => {
                   </span>
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter class="mt-auto pt-4">
                 <Button variant="outline" class="w-full">Configure</Button>
               </CardFooter>
             </Card>
 
             <Card
-              class="flex flex-col items-center justify-center border-dashed border-2 hover:border-primary/50 cursor-pointer transition-colors h-45"
+              class="flex flex-col items-center justify-center border-dashed border-2 hover:border-primary/50 cursor-pointer transition-colors h-full min-h-45"
             >
               <div class="flex flex-col items-center gap-2 text-muted-foreground">
                 <Plus class="size-8" />
@@ -291,6 +284,53 @@ onMounted(() => {
                 >
                   Deep Sea
                 </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </TabsContent>
+
+      <TabsContent value="about">
+        <Card class="max-w-3xl mx-auto">
+          <CardContent class="pt-10 pb-10 flex flex-col items-center text-center space-y-6">
+            <div class="mb-4">
+              <div
+                class="size-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto text-primary"
+              >
+                <span class="text-4xl">🕯️</span>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <h1 class="text-4xl font-serif font-bold tracking-tight text-foreground">
+                {{ APP_INFO.name }}
+              </h1>
+              <p
+                class="text-sm font-medium text-muted-foreground tracking-widest uppercase opacity-70"
+              >
+                Est. 2025
+              </p>
+            </div>
+
+            <p class="text-lg text-muted-foreground max-w-lg font-serif italic leading-relaxed">
+              "{{ APP_INFO.description }}"
+            </p>
+
+            <Separator class="w-32 my-6" />
+
+            <div class="space-y-4">
+              <a
+                :href="APP_INFO.github"
+                target="_blank"
+                class="inline-flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors"
+              >
+                <BrandIcon name="github" class="size-4" />
+                GitHub Repository
+              </a>
+
+              <div class="flex flex-col gap-1 text-xs text-muted-foreground">
+                <span>Version {{ APP_INFO.version }}</span>
+                <span>{{ APP_INFO.license }}</span>
               </div>
             </div>
           </CardContent>
