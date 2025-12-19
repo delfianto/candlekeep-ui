@@ -205,7 +205,7 @@ onMounted(() => {
 
                   <div class="flex items-center gap-4">
                     <div class="flex items-center space-x-2">
-                      <Switch :id="`model-${model.id}`" v-model:checked="model.enabled" />
+                      <Switch :id="`model-${model.id}`" v-model="model.enabled" />
                       <Label :for="`model-${model.id}`" class="text-xs text-muted-foreground"
                         >Enabled</Label
                       >

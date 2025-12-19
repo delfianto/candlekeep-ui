@@ -45,7 +45,7 @@ export const providers: Provider[] = [
     enabled: true,
     created_at: NOW,
     updated_at: NOW,
-    api_key_configured: false,
+    api_key_configured: true,
     env_var_name: "OPENROUTER_API_KEY",
   },
   {
@@ -56,7 +56,7 @@ export const providers: Provider[] = [
     enabled: true,
     created_at: NOW,
     updated_at: NOW,
-    api_key_configured: true,
+    api_key_configured: false,
     env_var_name: null,
   },
 ];
