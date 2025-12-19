@@ -1,0 +1,62 @@
+import type { components } from "@/api/schema";
+
+type Provider = components["schemas"]["ProviderResponse"];
+const NOW = new Date().toISOString();
+
+export const providers: Provider[] = [
+  {
+    id: "pv_openai_1",
+    name: "OpenAI",
+    provider_type: "openai",
+    base_url: null,
+    enabled: true,
+    created_at: NOW,
+    updated_at: NOW,
+    api_key_configured: true,
+    env_var_name: "OPENAI_API_KEY",
+  },
+  {
+    id: "pv_anthropic_1",
+    name: "Anthropic",
+    provider_type: "anthropic",
+    base_url: null,
+    enabled: true,
+    created_at: NOW,
+    updated_at: NOW,
+    api_key_configured: true,
+    env_var_name: "ANTHROPIC_API_KEY",
+  },
+  {
+    id: "pv_google_1",
+    name: "Google Gemini",
+    provider_type: "google",
+    base_url: null,
+    enabled: true,
+    created_at: NOW,
+    updated_at: NOW,
+    api_key_configured: true,
+    env_var_name: "GOOGLE_API_KEY",
+  },
+  {
+    id: "pv_openrouter_1",
+    name: "OpenRouter",
+    provider_type: "openrouter",
+    base_url: "https://openrouter.ai/api/v1",
+    enabled: true,
+    created_at: NOW,
+    updated_at: NOW,
+    api_key_configured: false,
+    env_var_name: "OPENROUTER_API_KEY",
+  },
+  {
+    id: "pv_ollama_1",
+    name: "Ollama Local",
+    provider_type: "ollama",
+    base_url: "http://localhost:11434",
+    enabled: true,
+    created_at: NOW,
+    updated_at: NOW,
+    api_key_configured: true,
+    env_var_name: null,
+  },
+];
