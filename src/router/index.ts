@@ -10,8 +10,31 @@ const routes = [
   },
   { path: "/world", name: "world", component: () => import("@/views/WorldLoreView.vue") },
   { path: "/memory", name: "memory", component: () => import("@/views/MemoryView.vue") },
-  { path: "/settings", name: "settings", component: () => import("@/views/SettingsView.vue") },
-  { path: "/persona", name: "persona", component: () => import("@/views/PersonaView.vue") },
+  {
+    path: "/persona",
+    name: "persona",
+    component: () => import("@/views/settings/SettingsView.vue"),
+  },
+
+  // --- SETTINGS ROUTES ---
+  {
+    path: "/settings",
+    name: "settings",
+    component: () => import("@/views/settings/SettingsView.vue"),
+  },
+  // FUTURE CRUD ROUTES (Placeholders)
+  /*
+      {
+        path: '/settings/providers/:id',
+        name: 'provider-edit',
+        component: () => import('@/views/settings/ProviderView.vue')
+      },
+      {
+        path: '/settings/models/:id',
+        name: 'model-edit',
+        component: () => import('@/views/settings/ModelView.vue')
+      },
+      */
 ];
 
 const router = createRouter({

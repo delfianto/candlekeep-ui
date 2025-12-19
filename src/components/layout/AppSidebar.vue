@@ -89,7 +89,7 @@ const navItems = [
             <AppSidebarButton
               label="Settings"
               :icon="Settings"
-              :isActive="route.path === '/settings'"
+              :isActive="route.path.startsWith('/settings')"
             />
           </SidebarMenuItem>
         </RouterLink>
