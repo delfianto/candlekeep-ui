@@ -8,7 +8,6 @@ import {
   SidebarMenuButton,
   SidebarFooter,
   SidebarRail,
-  useSidebar
 } from '@/components/ui/sidebar'
 import {
   MessageSquare,
@@ -19,12 +18,10 @@ import {
   Sun,
   Database,
   Flame,
-  PanelLeft
 } from 'lucide-vue-next'
 import { useColorMode } from '@vueuse/core'
 
 const mode = useColorMode()
-const { toggleSidebar } = useSidebar()
 
 const toggleTheme = () => {
   mode.value = mode.value === 'dark' ? 'light' : 'dark'
@@ -75,7 +72,7 @@ const navItems = [
     </SidebarContent>
 
     <SidebarFooter>
-      <SidebarMenu class="gap-2 px-2">
+      <SidebarMenu class="gap-2">
         <SidebarMenuItem>
           <SidebarMenuButton
             @click="toggleTheme"
