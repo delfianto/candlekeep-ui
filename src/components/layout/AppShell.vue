@@ -23,7 +23,7 @@ const navItems = [
 
     <SidebarInset class="flex flex-col h-screen overflow-hidden bg-background w-full">
       <div class="flex-1 h-full w-full overflow-hidden relative">
-        <slot />
+        <router-view />
       </div>
 
       <nav
