@@ -42,7 +42,10 @@ const navItems = [
 </template>
 
 <style scoped>
-/* Safe area for mobile */
+:deep(:root), :deep(.group\/sidebar-wrapper) {
+  --sidebar-width-icon: 5rem;
+}
+
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom);
 }

@@ -38,14 +38,15 @@ const navItems = [
 <template>
   <Sidebar collapsible="icon" class="border-r border-border bg-card/30">
     <SidebarHeader
-      class="flex items-center justify-between py-4 group-data-[collapsible=icon]:justify-center"
+      class="flex items-center justify-between py-4 mb-4 group-data-[collapsible=icon]:justify-center"
     >
-      <div class="flex items-center gap-2 transition-all overflow-hidden">
+      <div class="flex items-center gap-3 transition-all overflow-hidden">
         <div
-          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground"
         >
-          <Flame class="size-8" />
+          <Flame class="size-6" />
         </div>
+
         <span class="font-bold text-lg truncate group-data-[collapsible=icon]:hidden">
           Candlekeep
         </span>
@@ -53,7 +54,7 @@ const navItems = [
     </SidebarHeader>
 
     <SidebarContent>
-      <SidebarMenu class="gap-2 px-2">
+      <SidebarMenu class="gap-1 px-2 group-data-[collapsible=icon]:gap-6">
         <SidebarMenuItem v-for="item in navItems" :key="item.label">
           <AppSidebarButton :label="item.label" :icon="item.icon" :isActive="item.active" />
         </SidebarMenuItem>
@@ -61,7 +62,7 @@ const navItems = [
     </SidebarContent>
 
     <SidebarFooter>
-      <SidebarMenu class="gap-2">
+      <SidebarMenu class="gap-1 group-data-[collapsible=icon]:gap-6">
         <SidebarMenuItem>
           <AppSidebarButton
             :label="mode === 'dark' ? 'Light Mode' : 'Dark Mode'"

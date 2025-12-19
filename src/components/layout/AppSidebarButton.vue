@@ -15,9 +15,9 @@ defineProps<{
   <SidebarMenuButton
     :tooltip="tooltip || label"
     :isActive="isActive"
-    class="h-12 transition-all duration-200 group-data-[collapsible=icon]:justify-center"
+    class="h-14 gap-4 transition-all duration-200 group-data-[collapsible=icon]:justify-center"
   >
-    <component :is="icon" class="size-7 shrink-0" />
+    <component :is="icon" class="size-7! shrink-0" />
 
     <span class="group-data-[collapsible=icon]:hidden">
       {{ label }}
