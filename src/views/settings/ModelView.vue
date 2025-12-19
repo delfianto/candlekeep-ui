@@ -10,6 +10,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -17,14 +27,16 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Slider } from '@/components/ui/slider'
 import {
+  AlertCircle,
   ArrowLeft,
-  Save,
+  Box,
   Cpu,
   Loader2,
-  AlertCircle,
+  RotateCcw,
+  Save,
   Thermometer,
+  Trash2,
   Zap,
-  Box
 } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
 
@@ -32,15 +44,17 @@ const route = useRoute()
 const router = useRouter()
 const modelId = route.params.id as string
 
+// -- STATE --
 const isLoading = ref(true)
 const isSaving = ref(false)
+const isDeleting = ref(false)
 const model = ref<any>(null)
 
-const saveModel = async () => {
-  isSaving.value = true
-  await new Promise(r => setTimeout(r, 800))
-  isSaving.value = false
-}
+// Dialog States
+const showResetDialog = ref(false)
+const showDeleteDialog = ref(false)
+
+// -- ACTIONS --
 
 const fetchModel = async () => {
   isLoading.value = true
@@ -55,6 +69,29 @@ const fetchModel = async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+const saveModel = async () => {
+  isSaving.value = true
+  // Mock API call
+  await new Promise(r => setTimeout(r, 800))
+  isSaving.value = false
+}
+
+const handleResetConfirm = async () => {
+  // Re-fetch data to revert changes
+  await fetchModel()
+  showResetDialog.value = false
+}
+
+const handleDeleteConfirm = async () => {
+  isDeleting.value = true
+  // Mock API Delete call
+  await new Promise(r => setTimeout(r, 1000))
+  isDeleting.value = false
+  showDeleteDialog.value = false
+  // Navigate back to settings
+  router.push({ path: '/settings', query: { tab: 'models' } })
 }
 
 onMounted(fetchModel)
@@ -201,15 +238,73 @@ onMounted(fetchModel)
               <span class="font-medium">{{ model.model_family_id }}</span>
             </div>
           </CardContent>
-          <CardFooter>
-            <Button class="w-full" @click="saveModel" :disabled="isSaving">
-              <Loader2 v-if="isSaving" class="size-4 mr-2 animate-spin" />
-              <Save v-else class="size-4 mr-2" />
-              Save Changes
+          <CardFooter class="flex flex-col gap-3">
+            <div class="flex w-full gap-2">
+              <Button
+                variant="outline"
+                class="flex-1"
+                @click="showResetDialog = true"
+                :disabled="isSaving"
+              >
+                <RotateCcw class="size-4 mr-2" />
+                Reset
+              </Button>
+              <Button class="flex-1" @click="saveModel" :disabled="isSaving">
+                <Loader2 v-if="isSaving" class="size-4 mr-2 animate-spin" />
+                <Save v-else class="size-4 mr-2" />
+                Save
+              </Button>
+            </div>
+
+            <Button
+              variant="ghost"
+              class="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+              @click="showDeleteDialog = true"
+            >
+              <Trash2 class="size-4 mr-2" />
+              Delete Model
             </Button>
           </CardFooter>
         </Card>
       </div>
     </div>
+
+    <AlertDialog :open="showResetDialog" @update:open="showResetDialog = $event">
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Discard changes?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will revert all unsaved changes to their last saved state. This action cannot be
+            undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction @click="handleResetConfirm">Confirm Reset</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+
+    <AlertDialog :open="showDeleteDialog" @update:open="showDeleteDialog = $event">
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete this model?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete <strong>{{ model.name }}</strong> and remove it from your
+            registry. Any chats using this model may break.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            @click="handleDeleteConfirm"
+            class="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          >
+            <span v-if="isDeleting">Deleting...</span>
+            <span v-else>Delete Permanently</span>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   </ContentLayout>
 </template>
