@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle2, AlertCircle, Plus, Link } from 'lucide-vue-next'
+import { KeyRound, Plus, Server } from 'lucide-vue-next'
 import BrandIcon from '@/components/shared/BrandIcon.vue'
 
 defineProps<{
@@ -35,15 +35,12 @@ defineProps<{
 
       <CardContent class="pt-4 flex flex-col gap-2">
         <div class="flex items-center space-x-2 text-sm text-muted-foreground">
-          <component :is="prov.enabled ? CheckCircle2 : AlertCircle" class="size-4" />
+          <KeyRound class="size-4 shrink-0" />
           <span>{{ prov.api_key_configured ? 'Key Configured' : 'Missing API Key' }}</span>
         </div>
-        <div
-          v-if="prov.base_url"
-          class="flex items-center space-x-2 text-xs text-muted-foreground/70 pl-0.5"
-        >
-          <Link class="size-3 shrink-0" />
-          <span class="truncate font-mono" :title="prov.base_url">{{ prov.base_url }}</span>
+        <div v-if="prov.base_url" class="flex items-center space-x-2 text-sm text-muted-foreground">
+          <Server class="size-4 shrink-0" />
+          <span class="truncate" :title="prov.base_url">{{ prov.base_url }}</span>
         </div>
       </CardContent>
 
