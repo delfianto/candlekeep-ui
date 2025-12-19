@@ -131,7 +131,10 @@ onMounted(() => {
               :class="prov.enabled ? 'border-primary/50 bg-primary/5' : ''"
             >
               <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle class="text-lg font-bold">{{ prov.name }}</CardTitle>
+                <div class="flex items-center gap-2">
+                  <BrandIcon :name="prov.provider_type" class="size-5" />
+                  <CardTitle class="text-lg font-bold">{{ prov.name }}</CardTitle>
+                </div>
                 <Badge :variant="prov.enabled ? 'default' : 'outline'">
                   {{ prov.enabled ? 'Active' : 'Disabled' }}
                 </Badge>
