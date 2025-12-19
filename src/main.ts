@@ -23,3 +23,5 @@ async function prepareApp() {
 prepareApp().then(() => {
   app.mount("#app");
 });
+
+console.log("Candlekeep initialized...");
