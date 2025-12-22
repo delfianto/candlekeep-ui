@@ -61,8 +61,9 @@ const fetchModel = async () => {
   try {
     const res = await fetch(`/api/models`)
     if (res.ok) {
-      const all = await res.json()
-      model.value = all.find((m: any) => m.id === modelId)
+      const data = await res.json()
+      const items = data.items || data
+      model.value = items.find((m: any) => m.id === modelId)
     }
   } catch (error) {
     console.error('Failed to load model', error)

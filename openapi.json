@@ -403,50 +403,19 @@
           "providers"
         ],
         "summary": "List Providers",
-        "description": "List configured model providers with pagination",
+        "description": "List configured model providers",
         "operationId": "list_providers_api_providers_get",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "maximum": 100,
-              "minimum": 1,
-              "default": 10,
-              "title": "Limit"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0,
-              "title": "Offset"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaginatedResponse_ProviderResponse_"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "items": {
+                    "$ref": "#/components/schemas/ProviderResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Providers Api Providers Get"
                 }
               }
             }
@@ -461,14 +430,14 @@
         "description": "Register a new model provider",
         "operationId": "create_provider_api_providers_post",
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ProviderCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -648,19 +617,54 @@
           "model-families"
         ],
         "summary": "List Model Families",
-        "description": "List all model families",
+        "description": "List all model families with pagination",
         "operationId": "list_model_families_api_model_families_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number (1-based)",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number (1-based)"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Items per page"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/ModelFamilyResponse"
-                  },
-                  "type": "array",
-                  "title": "Response List Model Families Api Model Families Get"
+                  "$ref": "#/components/schemas/PaginatedResponse_ModelFamilyResponse_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -675,14 +679,14 @@
         "description": "Create a new model family",
         "operationId": "create_model_family_api_model_families_post",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ModelFamilyCreate"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "201": {
@@ -846,6 +850,19 @@
         "operationId": "list_models_api_models_get",
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number (1-based)",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number (1-based)"
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -853,20 +870,11 @@
               "type": "integer",
               "maximum": 100,
               "minimum": 1,
+              "description": "Items per page",
               "default": 10,
               "title": "Limit"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0,
-              "title": "Offset"
-            }
+            },
+            "description": "Items per page"
           }
         ],
         "responses": {
@@ -1071,6 +1079,19 @@
         "operationId": "list_characters_api_characters_get",
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number (1-based)",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number (1-based)"
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -1078,20 +1099,11 @@
               "type": "integer",
               "maximum": 100,
               "minimum": 1,
+              "description": "Items per page",
               "default": 10,
               "title": "Limit"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0,
-              "title": "Offset"
-            }
+            },
+            "description": "Items per page"
           }
         ],
         "responses": {
@@ -1377,6 +1389,19 @@
         "operationId": "list_chats_api_chats_get",
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number (1-based)",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number (1-based)"
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -1384,20 +1409,11 @@
               "type": "integer",
               "maximum": 100,
               "minimum": 1,
+              "description": "Items per page",
               "default": 10,
               "title": "Limit"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0,
-              "title": "Offset"
-            }
+            },
+            "description": "Items per page"
           }
         ],
         "responses": {
@@ -1751,6 +1767,19 @@
         "operationId": "list_personas_api_personas__get",
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number (1-based)",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number (1-based)"
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -1758,20 +1787,11 @@
               "type": "integer",
               "maximum": 100,
               "minimum": 1,
+              "description": "Items per page",
               "default": 10,
               "title": "Limit"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0,
-              "title": "Offset"
-            }
+            },
+            "description": "Items per page"
           }
         ],
         "responses": {
@@ -2100,6 +2120,19 @@
         "operationId": "list_templates_api_prompt_templates__get",
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number (1-based)",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number (1-based)"
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -2107,20 +2140,11 @@
               "type": "integer",
               "maximum": 100,
               "minimum": 1,
+              "description": "Items per page",
               "default": 10,
               "title": "Limit"
-            }
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0,
-              "title": "Offset"
-            }
+            },
+            "description": "Items per page"
           }
         ],
         "responses": {
@@ -3658,27 +3682,64 @@
             "type": "array",
             "title": "Items"
           },
-          "total": {
+          "total_items": {
             "type": "integer",
-            "title": "Total"
+            "title": "Total Items",
+            "description": "Total number of items"
+          },
+          "current_page": {
+            "type": "integer",
+            "title": "Current Page",
+            "description": "Current page number (1-based)"
           },
           "limit": {
             "type": "integer",
             "title": "Limit",
             "description": "Number of items per page"
           },
-          "offset": {
-            "type": "integer",
-            "title": "Offset",
-            "description": "Number of items skipped"
+          "has_next_page": {
+            "type": "boolean",
+            "title": "Has Next Page",
+            "description": "Whether there is a next page"
+          },
+          "has_previous_page": {
+            "type": "boolean",
+            "title": "Has Previous Page",
+            "description": "Whether there is a previous page"
+          },
+          "next_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page",
+            "description": "Next page number"
+          },
+          "previous_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Page",
+            "description": "Previous page number"
           }
         },
         "type": "object",
         "required": [
           "items",
-          "total",
+          "total_items",
+          "current_page",
           "limit",
-          "offset"
+          "has_next_page",
+          "has_previous_page"
         ],
         "title": "PaginatedResponse[CharacterResponse]"
       },
@@ -3691,29 +3752,136 @@
             "type": "array",
             "title": "Items"
           },
-          "total": {
+          "total_items": {
             "type": "integer",
-            "title": "Total"
+            "title": "Total Items",
+            "description": "Total number of items"
+          },
+          "current_page": {
+            "type": "integer",
+            "title": "Current Page",
+            "description": "Current page number (1-based)"
           },
           "limit": {
             "type": "integer",
             "title": "Limit",
             "description": "Number of items per page"
           },
-          "offset": {
-            "type": "integer",
-            "title": "Offset",
-            "description": "Number of items skipped"
+          "has_next_page": {
+            "type": "boolean",
+            "title": "Has Next Page",
+            "description": "Whether there is a next page"
+          },
+          "has_previous_page": {
+            "type": "boolean",
+            "title": "Has Previous Page",
+            "description": "Whether there is a previous page"
+          },
+          "next_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page",
+            "description": "Next page number"
+          },
+          "previous_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Page",
+            "description": "Previous page number"
           }
         },
         "type": "object",
         "required": [
           "items",
-          "total",
+          "total_items",
+          "current_page",
           "limit",
-          "offset"
+          "has_next_page",
+          "has_previous_page"
         ],
         "title": "PaginatedResponse[ChatResponse]"
+      },
+      "PaginatedResponse_ModelFamilyResponse_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ModelFamilyResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total_items": {
+            "type": "integer",
+            "title": "Total Items",
+            "description": "Total number of items"
+          },
+          "current_page": {
+            "type": "integer",
+            "title": "Current Page",
+            "description": "Current page number (1-based)"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit",
+            "description": "Number of items per page"
+          },
+          "has_next_page": {
+            "type": "boolean",
+            "title": "Has Next Page",
+            "description": "Whether there is a next page"
+          },
+          "has_previous_page": {
+            "type": "boolean",
+            "title": "Has Previous Page",
+            "description": "Whether there is a previous page"
+          },
+          "next_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page",
+            "description": "Next page number"
+          },
+          "previous_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Page",
+            "description": "Previous page number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total_items",
+          "current_page",
+          "limit",
+          "has_next_page",
+          "has_previous_page"
+        ],
+        "title": "PaginatedResponse[ModelFamilyResponse]"
       },
       "PaginatedResponse_ModelResponse_": {
         "properties": {
@@ -3724,27 +3892,64 @@
             "type": "array",
             "title": "Items"
           },
-          "total": {
+          "total_items": {
             "type": "integer",
-            "title": "Total"
+            "title": "Total Items",
+            "description": "Total number of items"
+          },
+          "current_page": {
+            "type": "integer",
+            "title": "Current Page",
+            "description": "Current page number (1-based)"
           },
           "limit": {
             "type": "integer",
             "title": "Limit",
             "description": "Number of items per page"
           },
-          "offset": {
-            "type": "integer",
-            "title": "Offset",
-            "description": "Number of items skipped"
+          "has_next_page": {
+            "type": "boolean",
+            "title": "Has Next Page",
+            "description": "Whether there is a next page"
+          },
+          "has_previous_page": {
+            "type": "boolean",
+            "title": "Has Previous Page",
+            "description": "Whether there is a previous page"
+          },
+          "next_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page",
+            "description": "Next page number"
+          },
+          "previous_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Page",
+            "description": "Previous page number"
           }
         },
         "type": "object",
         "required": [
           "items",
-          "total",
+          "total_items",
+          "current_page",
           "limit",
-          "offset"
+          "has_next_page",
+          "has_previous_page"
         ],
         "title": "PaginatedResponse[ModelResponse]"
       },
@@ -3757,27 +3962,64 @@
             "type": "array",
             "title": "Items"
           },
-          "total": {
+          "total_items": {
             "type": "integer",
-            "title": "Total"
+            "title": "Total Items",
+            "description": "Total number of items"
+          },
+          "current_page": {
+            "type": "integer",
+            "title": "Current Page",
+            "description": "Current page number (1-based)"
           },
           "limit": {
             "type": "integer",
             "title": "Limit",
             "description": "Number of items per page"
           },
-          "offset": {
-            "type": "integer",
-            "title": "Offset",
-            "description": "Number of items skipped"
+          "has_next_page": {
+            "type": "boolean",
+            "title": "Has Next Page",
+            "description": "Whether there is a next page"
+          },
+          "has_previous_page": {
+            "type": "boolean",
+            "title": "Has Previous Page",
+            "description": "Whether there is a previous page"
+          },
+          "next_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page",
+            "description": "Next page number"
+          },
+          "previous_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Page",
+            "description": "Previous page number"
           }
         },
         "type": "object",
         "required": [
           "items",
-          "total",
+          "total_items",
+          "current_page",
           "limit",
-          "offset"
+          "has_next_page",
+          "has_previous_page"
         ],
         "title": "PaginatedResponse[PersonaResponse]"
       },
@@ -3790,62 +4032,66 @@
             "type": "array",
             "title": "Items"
           },
-          "total": {
+          "total_items": {
             "type": "integer",
-            "title": "Total"
+            "title": "Total Items",
+            "description": "Total number of items"
+          },
+          "current_page": {
+            "type": "integer",
+            "title": "Current Page",
+            "description": "Current page number (1-based)"
           },
           "limit": {
             "type": "integer",
             "title": "Limit",
             "description": "Number of items per page"
           },
-          "offset": {
-            "type": "integer",
-            "title": "Offset",
-            "description": "Number of items skipped"
+          "has_next_page": {
+            "type": "boolean",
+            "title": "Has Next Page",
+            "description": "Whether there is a next page"
+          },
+          "has_previous_page": {
+            "type": "boolean",
+            "title": "Has Previous Page",
+            "description": "Whether there is a previous page"
+          },
+          "next_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page",
+            "description": "Next page number"
+          },
+          "previous_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Page",
+            "description": "Previous page number"
           }
         },
         "type": "object",
         "required": [
           "items",
-          "total",
+          "total_items",
+          "current_page",
           "limit",
-          "offset"
+          "has_next_page",
+          "has_previous_page"
         ],
         "title": "PaginatedResponse[PromptTemplateResponse]"
-      },
-      "PaginatedResponse_ProviderResponse_": {
-        "properties": {
-          "items": {
-            "items": {
-              "$ref": "#/components/schemas/ProviderResponse"
-            },
-            "type": "array",
-            "title": "Items"
-          },
-          "total": {
-            "type": "integer",
-            "title": "Total"
-          },
-          "limit": {
-            "type": "integer",
-            "title": "Limit",
-            "description": "Number of items per page"
-          },
-          "offset": {
-            "type": "integer",
-            "title": "Offset",
-            "description": "Number of items skipped"
-          }
-        },
-        "type": "object",
-        "required": [
-          "items",
-          "total",
-          "limit",
-          "offset"
-        ],
-        "title": "PaginatedResponse[ProviderResponse]"
       },
       "PersonaResponse": {
         "properties": {

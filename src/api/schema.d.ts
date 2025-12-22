@@ -93,7 +93,7 @@ export interface paths {
         };
         /**
          * List Providers
-         * @description List configured model providers with pagination
+         * @description List configured model providers
          */
         get: operations["list_providers_api_providers_get"];
         put?: never;
@@ -165,7 +165,7 @@ export interface paths {
         };
         /**
          * List Model Families
-         * @description List all model families
+         * @description List all model families with pagination
          */
         get: operations["list_model_families_api_model_families_get"];
         put?: never;
@@ -1211,103 +1211,241 @@ export interface components {
         PaginatedResponse_CharacterResponse_: {
             /** Items */
             items: components["schemas"]["CharacterResponse"][];
-            /** Total */
-            total: number;
+            /**
+             * Total Items
+             * @description Total number of items
+             */
+            total_items: number;
+            /**
+             * Current Page
+             * @description Current page number (1-based)
+             */
+            current_page: number;
             /**
              * Limit
              * @description Number of items per page
              */
             limit: number;
             /**
-             * Offset
-             * @description Number of items skipped
+             * Has Next Page
+             * @description Whether there is a next page
              */
-            offset: number;
+            has_next_page: boolean;
+            /**
+             * Has Previous Page
+             * @description Whether there is a previous page
+             */
+            has_previous_page: boolean;
+            /**
+             * Next Page
+             * @description Next page number
+             */
+            next_page?: number | null;
+            /**
+             * Previous Page
+             * @description Previous page number
+             */
+            previous_page?: number | null;
         };
         /** PaginatedResponse[ChatResponse] */
         PaginatedResponse_ChatResponse_: {
             /** Items */
             items: components["schemas"]["ChatResponse"][];
-            /** Total */
-            total: number;
+            /**
+             * Total Items
+             * @description Total number of items
+             */
+            total_items: number;
+            /**
+             * Current Page
+             * @description Current page number (1-based)
+             */
+            current_page: number;
             /**
              * Limit
              * @description Number of items per page
              */
             limit: number;
             /**
-             * Offset
-             * @description Number of items skipped
+             * Has Next Page
+             * @description Whether there is a next page
              */
-            offset: number;
+            has_next_page: boolean;
+            /**
+             * Has Previous Page
+             * @description Whether there is a previous page
+             */
+            has_previous_page: boolean;
+            /**
+             * Next Page
+             * @description Next page number
+             */
+            next_page?: number | null;
+            /**
+             * Previous Page
+             * @description Previous page number
+             */
+            previous_page?: number | null;
+        };
+        /** PaginatedResponse[ModelFamilyResponse] */
+        PaginatedResponse_ModelFamilyResponse_: {
+            /** Items */
+            items: components["schemas"]["ModelFamilyResponse"][];
+            /**
+             * Total Items
+             * @description Total number of items
+             */
+            total_items: number;
+            /**
+             * Current Page
+             * @description Current page number (1-based)
+             */
+            current_page: number;
+            /**
+             * Limit
+             * @description Number of items per page
+             */
+            limit: number;
+            /**
+             * Has Next Page
+             * @description Whether there is a next page
+             */
+            has_next_page: boolean;
+            /**
+             * Has Previous Page
+             * @description Whether there is a previous page
+             */
+            has_previous_page: boolean;
+            /**
+             * Next Page
+             * @description Next page number
+             */
+            next_page?: number | null;
+            /**
+             * Previous Page
+             * @description Previous page number
+             */
+            previous_page?: number | null;
         };
         /** PaginatedResponse[ModelResponse] */
         PaginatedResponse_ModelResponse_: {
             /** Items */
             items: components["schemas"]["ModelResponse"][];
-            /** Total */
-            total: number;
+            /**
+             * Total Items
+             * @description Total number of items
+             */
+            total_items: number;
+            /**
+             * Current Page
+             * @description Current page number (1-based)
+             */
+            current_page: number;
             /**
              * Limit
              * @description Number of items per page
              */
             limit: number;
             /**
-             * Offset
-             * @description Number of items skipped
+             * Has Next Page
+             * @description Whether there is a next page
              */
-            offset: number;
+            has_next_page: boolean;
+            /**
+             * Has Previous Page
+             * @description Whether there is a previous page
+             */
+            has_previous_page: boolean;
+            /**
+             * Next Page
+             * @description Next page number
+             */
+            next_page?: number | null;
+            /**
+             * Previous Page
+             * @description Previous page number
+             */
+            previous_page?: number | null;
         };
         /** PaginatedResponse[PersonaResponse] */
         PaginatedResponse_PersonaResponse_: {
             /** Items */
             items: components["schemas"]["PersonaResponse"][];
-            /** Total */
-            total: number;
+            /**
+             * Total Items
+             * @description Total number of items
+             */
+            total_items: number;
+            /**
+             * Current Page
+             * @description Current page number (1-based)
+             */
+            current_page: number;
             /**
              * Limit
              * @description Number of items per page
              */
             limit: number;
             /**
-             * Offset
-             * @description Number of items skipped
+             * Has Next Page
+             * @description Whether there is a next page
              */
-            offset: number;
+            has_next_page: boolean;
+            /**
+             * Has Previous Page
+             * @description Whether there is a previous page
+             */
+            has_previous_page: boolean;
+            /**
+             * Next Page
+             * @description Next page number
+             */
+            next_page?: number | null;
+            /**
+             * Previous Page
+             * @description Previous page number
+             */
+            previous_page?: number | null;
         };
         /** PaginatedResponse[PromptTemplateResponse] */
         PaginatedResponse_PromptTemplateResponse_: {
             /** Items */
             items: components["schemas"]["PromptTemplateResponse"][];
-            /** Total */
-            total: number;
+            /**
+             * Total Items
+             * @description Total number of items
+             */
+            total_items: number;
+            /**
+             * Current Page
+             * @description Current page number (1-based)
+             */
+            current_page: number;
             /**
              * Limit
              * @description Number of items per page
              */
             limit: number;
             /**
-             * Offset
-             * @description Number of items skipped
+             * Has Next Page
+             * @description Whether there is a next page
              */
-            offset: number;
-        };
-        /** PaginatedResponse[ProviderResponse] */
-        PaginatedResponse_ProviderResponse_: {
-            /** Items */
-            items: components["schemas"]["ProviderResponse"][];
-            /** Total */
-            total: number;
+            has_next_page: boolean;
             /**
-             * Limit
-             * @description Number of items per page
+             * Has Previous Page
+             * @description Whether there is a previous page
              */
-            limit: number;
+            has_previous_page: boolean;
             /**
-             * Offset
-             * @description Number of items skipped
+             * Next Page
+             * @description Next page number
              */
-            offset: number;
+            next_page?: number | null;
+            /**
+             * Previous Page
+             * @description Previous page number
+             */
+            previous_page?: number | null;
         };
         /**
          * PersonaResponse
@@ -1727,10 +1865,7 @@ export interface operations {
     };
     list_providers_api_providers_get: {
         parameters: {
-            query?: {
-                limit?: number;
-                offset?: number;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
@@ -1743,16 +1878,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedResponse_ProviderResponse_"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
+                    "application/json": components["schemas"]["ProviderResponse"][];
                 };
             };
         };
@@ -1907,7 +2033,12 @@ export interface operations {
     };
     list_model_families_api_model_families_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Page number (1-based) */
+                page?: number;
+                /** @description Items per page */
+                limit?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1920,7 +2051,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ModelFamilyResponse"][];
+                    "application/json": components["schemas"]["PaginatedResponse_ModelFamilyResponse_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -2056,8 +2196,10 @@ export interface operations {
     list_models_api_models_get: {
         parameters: {
             query?: {
+                /** @description Page number (1-based) */
+                page?: number;
+                /** @description Items per page */
                 limit?: number;
-                offset?: number;
             };
             header?: never;
             path?: never;
@@ -2216,8 +2358,10 @@ export interface operations {
     list_characters_api_characters_get: {
         parameters: {
             query?: {
+                /** @description Page number (1-based) */
+                page?: number;
+                /** @description Items per page */
                 limit?: number;
-                offset?: number;
             };
             header?: never;
             path?: never;
@@ -2438,8 +2582,10 @@ export interface operations {
     list_chats_api_chats_get: {
         parameters: {
             query?: {
+                /** @description Page number (1-based) */
+                page?: number;
+                /** @description Items per page */
                 limit?: number;
-                offset?: number;
             };
             header?: never;
             path?: never;
@@ -2699,8 +2845,10 @@ export interface operations {
     list_personas_api_personas__get: {
         parameters: {
             query?: {
+                /** @description Page number (1-based) */
+                page?: number;
+                /** @description Items per page */
                 limit?: number;
-                offset?: number;
             };
             header?: never;
             path?: never;
@@ -2952,8 +3100,10 @@ export interface operations {
     list_templates_api_prompt_templates__get: {
         parameters: {
             query?: {
+                /** @description Page number (1-based) */
+                page?: number;
+                /** @description Items per page */
                 limit?: number;
-                offset?: number;
             };
             header?: never;
             path?: never;

@@ -49,7 +49,8 @@ const fetchData = async () => {
 
     if (modRes.ok) {
       const data = await modRes.json()
-      models.value = data.sort((a: any, b: any) => a.name.localeCompare(b.name))
+      const items = data.items || data // Fallback if API returns array
+      models.value = items.sort((a: any, b: any) => a.name.localeCompare(b.name))
     }
   } catch (error) {
     console.error('Failed to load settings:', error)

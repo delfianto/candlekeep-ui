@@ -5,10 +5,10 @@ import tailwindcss from "@tailwindcss/postcss";
 import autoprefixer from "autoprefixer";
 import Terminal from "vite-plugin-terminal";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     vue(),
-    Terminal({
+    command === 'serve' && Terminal({
       // Directs all browser logs to terminal
       console: "terminal",
 
@@ -35,4 +35,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
