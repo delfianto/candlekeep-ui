@@ -59,4 +59,15 @@ export const providers: Provider[] = [
     api_key_configured: false,
     env_var_name: null,
   },
+  {
+    id: "pv_xai_1",
+    name: "xAI",
+    provider_type: "xai",
+    base_url: "https://api.x.ai/v1",
+    enabled: true,
+    created_at: NOW,
+    updated_at: NOW,
+    api_key_configured: true,
+    env_var_name: "XAI_API_KEY",
+  },
 ];

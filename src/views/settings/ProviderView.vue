@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ContentLayout from '@/components/layout/ContentLayout.vue'
 import BrandIcon from '@/components/shared/BrandIcon.vue'
@@ -17,7 +17,6 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Separator } from '@/components/ui/separator'
 import { ArrowLeft, Save, Trash2, RotateCcw, Loader2, AlertCircle } from 'lucide-vue-next'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const route = useRoute()
 const router = useRouter()

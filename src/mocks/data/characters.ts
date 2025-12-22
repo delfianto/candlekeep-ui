@@ -15,7 +15,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-1/400/400",
+    avatar_path: "https://picsum.photos/seed/char-1/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-1/200/200",
   },
   {
     id: "char-2",
@@ -29,7 +30,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-2/400/400",
+    avatar_path: "https://picsum.photos/seed/char-2/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-2/200/200",
   },
   {
     id: "char-3",
@@ -43,7 +45,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-3/400/400",
+    avatar_path: "https://picsum.photos/seed/char-3/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-3/200/200",
   },
   {
     id: "char-4",
@@ -57,7 +60,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-4/400/400",
+    avatar_path: "https://picsum.photos/seed/char-4/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-4/200/200",
   },
   {
     id: "char-5",
@@ -71,7 +75,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-5/400/400",
+    avatar_path: "https://picsum.photos/seed/char-5/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-5/200/200",
   },
   {
     id: "char-6",
@@ -85,7 +90,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-6/400/400",
+    avatar_path: "https://picsum.photos/seed/char-6/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-6/200/200",
   },
   {
     id: "char-7",
@@ -99,7 +105,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-7/400/400",
+    avatar_path: "https://picsum.photos/seed/char-7/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-7/200/200",
   },
   {
     id: "char-8",
@@ -113,7 +120,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-8/400/400",
+    avatar_path: "https://picsum.photos/seed/char-8/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-8/200/200",
   },
   {
     id: "char-9",
@@ -127,7 +135,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-9/400/400",
+    avatar_path: "https://picsum.photos/seed/char-9/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-9/200/200",
   },
   {
     id: "char-10",
@@ -141,7 +150,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 50 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 50 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-10/400/400",
+    avatar_path: "https://picsum.photos/seed/char-10/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-10/200/200",
   },
   {
     id: "char-11",
@@ -155,7 +165,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-11/400/400",
+    avatar_path: "https://picsum.photos/seed/char-11/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-11/200/200",
   },
   {
     id: "char-12",
@@ -169,7 +180,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-12/400/400",
+    avatar_path: "https://picsum.photos/seed/char-12/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-12/200/200",
   },
   {
     id: "char-13",
@@ -183,7 +195,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-13/400/400",
+    avatar_path: "https://picsum.photos/seed/char-13/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-13/200/200",
   },
   {
     id: "char-14",
@@ -197,7 +210,8 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-14/400/400",
+    avatar_path: "https://picsum.photos/seed/char-14/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-14/200/200",
   },
   {
     id: "char-15",
@@ -211,6 +225,7 @@ export const characters: Character[] = [
     example_dialogues: [],
     created_at: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
-    avatar_path: "https://picsum.photos/seed/char-15/400/400",
+    avatar_path: "https://picsum.photos/seed/char-15/400/600",
+    avatar_thumbnail_path: "https://picsum.photos/seed/char-15/200/200",
   },
 ];

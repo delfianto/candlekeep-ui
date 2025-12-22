@@ -129,4 +129,21 @@ export const models: Model[] = [
     created_at: NOW,
     updated_at: NOW,
   },
+  // --- xAI Models ---
+  {
+    id: "md_xai_grok2",
+    provider_id: "pv_xai_1",
+    model_identifier: "grok-2-1212",
+    name: "Grok 2",
+    model_family_id: "mf_grok",
+    system_prompt:
+      "You are Grok, an AI assistant with a sense of humor and a bit of a rebellious streak. You provide helpful, witty, and slightly edgy responses while maintaining high factual accuracy and strong reasoning capabilities.",
+    parameters: {
+      temperature: 0.7,
+      max_tokens: 4096,
+    },
+    enabled: true,
+    created_at: NOW,
+    updated_at: NOW,
+  },
 ];

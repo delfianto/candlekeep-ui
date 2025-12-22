@@ -23,7 +23,6 @@ import {
   ResizablePanelGroup
 } from '@/components/ui/resizable'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Separator } from '@/components/ui/separator'
 
 // -- DUMMY DATA --
 const chatSessions = ref([

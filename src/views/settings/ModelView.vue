@@ -178,7 +178,7 @@ onMounted(fetchModel)
               </div>
               <Slider
                 :model-value="[model.parameters?.temperature ?? 0.7]"
-                @update:model-value="(v) => model.parameters.temperature = v[0]"
+                @update:model-value="(v) => { if (v && v.length > 0) model.parameters.temperature = v[0] }"
                 :max="2"
                 :step="0.05"
               />
@@ -208,7 +208,7 @@ onMounted(fetchModel)
               </div>
               <Slider
                 :model-value="[model.parameters?.top_p ?? 1.0]"
-                @update:model-value="(v) => model.parameters.top_p = v[0]"
+                @update:model-value="(v) => { if (v && v.length > 0) model.parameters.top_p = v[0] }"
                 :max="1"
                 :step="0.01"
               />

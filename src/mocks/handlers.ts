@@ -5,6 +5,7 @@ import { messages } from "@/mocks/data/messages";
 import { providers } from "@/mocks/data/providers";
 import { models } from "@/mocks/data/models";
 import { personas } from "@/mocks/data/personas";
+import { modelFamilies } from "@/mocks/data/model-families";
 import type { components } from "@/api/schema";
 
 type Chat = components["schemas"]["ChatResponse"];
@@ -17,6 +18,7 @@ const db = {
   providers,
   models,
   personas,
+  modelFamilies,
 };
 
 export const handlers = [
@@ -144,5 +146,11 @@ export const handlers = [
     if (!persona) return new HttpResponse(null, { status: 404 });
     await delay(100);
     return HttpResponse.json(persona);
+  }),
+
+  // Model Families
+  http.get("/api/model-families", async () => {
+    await delay(100);
+    return HttpResponse.json(db.modelFamilies);
   }),
 ];

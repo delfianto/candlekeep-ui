@@ -93,13 +93,13 @@ export interface paths {
         };
         /**
          * List Providers
-         * @description List all providers with API key configuration status
+         * @description List configured model providers with pagination
          */
         get: operations["list_providers_api_providers_get"];
         put?: never;
         /**
          * Create Provider
-         * @description Create a new provider
+         * @description Register a new model provider
          */
         post: operations["create_provider_api_providers_post"];
         delete?: never;
@@ -122,15 +122,35 @@ export interface paths {
         get: operations["get_provider_api_providers__provider_id__get"];
         /**
          * Update Provider
-         * @description Update provider
+         * @description Update provider configuration
          */
         put: operations["update_provider_api_providers__provider_id__put"];
         post?: never;
         /**
          * Delete Provider
-         * @description Delete provider
+         * @description Remove a provider
          */
         delete: operations["delete_provider_api_providers__provider_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/model-families/parameter-docs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Parameter Definitions
+         * @description Returns documentation for all known model parameters.
+         */
+        get: operations["get_parameter_definitions_api_model_families_parameter_docs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -197,7 +217,7 @@ export interface paths {
         };
         /**
          * List Models
-         * @description List all model definitions
+         * @description List model definitions with pagination
          */
         get: operations["list_models_api_models_get"];
         put?: never;
@@ -221,7 +241,8 @@ export interface paths {
         };
         /**
          * Get Model
-         * @description Get model definition by ID
+         * @description Get model definition by ID.
+         *     Returns detailed information including the embedded Model Family.
          */
         get: operations["get_model_api_models__model_id__get"];
         /**
@@ -249,7 +270,7 @@ export interface paths {
         };
         /**
          * List Characters
-         * @description List all characters
+         * @description List characters with pagination
          */
         get: operations["list_characters_api_characters_get"];
         put?: never;
@@ -341,7 +362,7 @@ export interface paths {
         };
         /**
          * List Chats
-         * @description List all chats
+         * @description List chats with pagination
          */
         get: operations["list_chats_api_chats_get"];
         put?: never;
@@ -399,9 +420,29 @@ export interface paths {
         put?: never;
         /**
          * Send Message
-         * @description Send a message and get AI response
+         * @description Send a message and get AI response (blocking)
          */
         post: operations["send_message_api_chats__chat_id__messages_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chats/{chat_id}/messages/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send Message Stream
+         * @description Send a message and get AI response (streaming SSE)
+         */
+        post: operations["send_message_stream_api_chats__chat_id__messages_stream_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -417,7 +458,7 @@ export interface paths {
         };
         /**
          * List Personas
-         * @description List all personas
+         * @description List personas with pagination
          */
         get: operations["list_personas_api_personas__get"];
         put?: never;
@@ -529,7 +570,7 @@ export interface paths {
         };
         /**
          * List Templates
-         * @description List all prompt templates
+         * @description List prompt templates with pagination
          */
         get: operations["list_templates_api_prompt_templates__get"];
         put?: never;
@@ -753,6 +794,21 @@ export interface components {
              * @description Array of example conversations
              */
             example_dialogues?: Record<string, never>[] | null;
+            /**
+             * Scenario
+             * @description Current scenario context
+             */
+            scenario?: string | null;
+            /**
+             * Post History Instructions
+             * @description Instructions after history
+             */
+            post_history_instructions?: string | null;
+            /**
+             * Alternate Greetings
+             * @description Alternative first messages
+             */
+            alternate_greetings?: string[] | null;
             /** Id */
             id: string;
             /** Avatar Path */
@@ -900,9 +956,9 @@ export interface components {
             name: string;
             /**
              * Model Family Id
-             * @description Optional link to model family
+             * @description Link to model family
              */
-            model_family_id?: string | null;
+            model_family_id: string;
             /**
              * System Prompt
              * @description Custom system prompt override
@@ -921,6 +977,61 @@ export interface components {
             enabled: boolean;
         };
         /**
+         * ModelDetailResponse
+         * @description Schema for detailed model responses (includes embedded relationships)
+         */
+        ModelDetailResponse: {
+            /**
+             * Provider Id
+             * @description Provider ID
+             */
+            provider_id: string;
+            /**
+             * Model Identifier
+             * @description Actual API model name
+             */
+            model_identifier: string;
+            /**
+             * Name
+             * @description User-friendly display name
+             */
+            name: string;
+            /**
+             * Model Family Id
+             * @description Link to model family
+             */
+            model_family_id: string;
+            /**
+             * System Prompt
+             * @description Custom system prompt override
+             */
+            system_prompt?: string | null;
+            /**
+             * Parameters
+             * @description All model parameters (temperature, max_tokens, etc.)
+             */
+            parameters?: Record<string, never>;
+            /**
+             * Enabled
+             * @description Whether model is available
+             * @default true
+             */
+            enabled: boolean;
+            /** Id */
+            id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            model_family: components["schemas"]["ModelFamilyResponse"];
+        };
+        /**
          * ModelFamilyCreate
          * @description Schema for creating a new model family
          */
@@ -936,25 +1047,20 @@ export interface components {
              */
             description?: string | null;
             /**
-             * Provider Type
-             * @description Provider type (optional, can be cross-provider)
+             * Provider Types
+             * @description List of provider types this family belongs to
              */
-            provider_type?: string | null;
+            provider_types?: string[];
             /**
-             * Supported Parameters
-             * @description List of supported parameter names
+             * Parameters
+             * @description Per-parameter configuration: type, default, ranges, etc.
              */
-            supported_parameters?: string[];
+            parameters?: Record<string, never>;
             /**
-             * Default Values
-             * @description Default parameter values
+             * Unsupported Parameters
+             * @description List of parameters explicitly known to be unsupported
              */
-            default_values?: Record<string, never>;
-            /**
-             * Parameter Constraints
-             * @description Parameter validation rules and constraints
-             */
-            parameter_constraints?: Record<string, never> | null;
+            unsupported_parameters?: string[];
             /**
              * Extra Metadata
              * @description Additional metadata about the model family
@@ -977,25 +1083,20 @@ export interface components {
              */
             description?: string | null;
             /**
-             * Provider Type
-             * @description Provider type (optional, can be cross-provider)
+             * Provider Types
+             * @description List of provider types this family belongs to
              */
-            provider_type?: string | null;
+            provider_types?: string[];
             /**
-             * Supported Parameters
-             * @description List of supported parameter names
+             * Parameters
+             * @description Per-parameter configuration: type, default, ranges, etc.
              */
-            supported_parameters?: string[];
+            parameters?: Record<string, never>;
             /**
-             * Default Values
-             * @description Default parameter values
+             * Unsupported Parameters
+             * @description List of parameters explicitly known to be unsupported
              */
-            default_values?: Record<string, never>;
-            /**
-             * Parameter Constraints
-             * @description Parameter validation rules and constraints
-             */
-            parameter_constraints?: Record<string, never> | null;
+            unsupported_parameters?: string[];
             /**
              * Extra Metadata
              * @description Additional metadata about the model family
@@ -1023,20 +1124,18 @@ export interface components {
             name?: string | null;
             /** Description */
             description?: string | null;
-            /** Provider Type */
-            provider_type?: string | null;
-            /** Supported Parameters */
-            supported_parameters?: string[] | null;
-            /** Default Values */
-            default_values?: Record<string, never> | null;
-            /** Parameter Constraints */
-            parameter_constraints?: Record<string, never> | null;
+            /** Provider Types */
+            provider_types?: string[] | null;
+            /** Parameters */
+            parameters?: Record<string, never> | null;
+            /** Unsupported Parameters */
+            unsupported_parameters?: string[] | null;
             /** Extra Metadata */
             extra_metadata?: Record<string, never> | null;
         };
         /**
          * ModelResponse
-         * @description Schema for model responses
+         * @description Schema for model responses (list view)
          */
         ModelResponse: {
             /**
@@ -1056,9 +1155,9 @@ export interface components {
             name: string;
             /**
              * Model Family Id
-             * @description Optional link to model family
+             * @description Link to model family
              */
-            model_family_id?: string | null;
+            model_family_id: string;
             /**
              * System Prompt
              * @description Custom system prompt override
@@ -1107,6 +1206,108 @@ export interface components {
             parameters?: Record<string, never> | null;
             /** Enabled */
             enabled?: boolean | null;
+        };
+        /** PaginatedResponse[CharacterResponse] */
+        PaginatedResponse_CharacterResponse_: {
+            /** Items */
+            items: components["schemas"]["CharacterResponse"][];
+            /** Total */
+            total: number;
+            /**
+             * Limit
+             * @description Number of items per page
+             */
+            limit: number;
+            /**
+             * Offset
+             * @description Number of items skipped
+             */
+            offset: number;
+        };
+        /** PaginatedResponse[ChatResponse] */
+        PaginatedResponse_ChatResponse_: {
+            /** Items */
+            items: components["schemas"]["ChatResponse"][];
+            /** Total */
+            total: number;
+            /**
+             * Limit
+             * @description Number of items per page
+             */
+            limit: number;
+            /**
+             * Offset
+             * @description Number of items skipped
+             */
+            offset: number;
+        };
+        /** PaginatedResponse[ModelResponse] */
+        PaginatedResponse_ModelResponse_: {
+            /** Items */
+            items: components["schemas"]["ModelResponse"][];
+            /** Total */
+            total: number;
+            /**
+             * Limit
+             * @description Number of items per page
+             */
+            limit: number;
+            /**
+             * Offset
+             * @description Number of items skipped
+             */
+            offset: number;
+        };
+        /** PaginatedResponse[PersonaResponse] */
+        PaginatedResponse_PersonaResponse_: {
+            /** Items */
+            items: components["schemas"]["PersonaResponse"][];
+            /** Total */
+            total: number;
+            /**
+             * Limit
+             * @description Number of items per page
+             */
+            limit: number;
+            /**
+             * Offset
+             * @description Number of items skipped
+             */
+            offset: number;
+        };
+        /** PaginatedResponse[PromptTemplateResponse] */
+        PaginatedResponse_PromptTemplateResponse_: {
+            /** Items */
+            items: components["schemas"]["PromptTemplateResponse"][];
+            /** Total */
+            total: number;
+            /**
+             * Limit
+             * @description Number of items per page
+             */
+            limit: number;
+            /**
+             * Offset
+             * @description Number of items skipped
+             */
+            offset: number;
+        };
+        /** PaginatedResponse[ProviderResponse] */
+        PaginatedResponse_ProviderResponse_: {
+            /** Items */
+            items: components["schemas"]["ProviderResponse"][];
+            /** Total */
+            total: number;
+            /**
+             * Limit
+             * @description Number of items per page
+             */
+            limit: number;
+            /**
+             * Offset
+             * @description Number of items skipped
+             */
+            offset: number;
         };
         /**
          * PersonaResponse
@@ -1297,7 +1498,7 @@ export interface components {
          * @description Supported provider types
          * @enum {string}
          */
-        ProviderType: "google" | "openai" | "anthropic" | "openrouter" | "ollama" | "custom";
+        ProviderType: "xai" | "google" | "openai" | "anthropic" | "openrouter" | "ollama" | "custom";
         /**
          * ProviderUpdate
          * @description Schema for updating a provider
@@ -1526,7 +1727,10 @@ export interface operations {
     };
     list_providers_api_providers_get: {
         parameters: {
-            query?: never;
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1539,7 +1743,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProviderResponse"][];
+                    "application/json": components["schemas"]["PaginatedResponse_ProviderResponse_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -1668,6 +1881,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_parameter_definitions_api_model_families_parameter_docs_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
         };
@@ -1822,7 +2055,10 @@ export interface operations {
     };
     list_models_api_models_get: {
         parameters: {
-            query?: never;
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1835,7 +2071,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ModelResponse"][];
+                    "application/json": components["schemas"]["PaginatedResponse_ModelResponse_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -1890,7 +2135,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ModelResponse"];
+                    "application/json": components["schemas"]["ModelDetailResponse"];
                 };
             };
             /** @description Validation Error */
@@ -1970,7 +2215,10 @@ export interface operations {
     };
     list_characters_api_characters_get: {
         parameters: {
-            query?: never;
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1983,7 +2231,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CharacterResponse"][];
+                    "application/json": components["schemas"]["PaginatedResponse_CharacterResponse_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -2180,7 +2437,10 @@ export interface operations {
     };
     list_chats_api_chats_get: {
         parameters: {
-            query?: never;
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2193,7 +2453,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChatResponse"][];
+                    "application/json": components["schemas"]["PaginatedResponse_ChatResponse_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -2392,9 +2661,47 @@ export interface operations {
             };
         };
     };
-    list_personas_api_personas__get: {
+    send_message_stream_api_chats__chat_id__messages_stream_post: {
         parameters: {
             query?: never;
+            header?: never;
+            path: {
+                chat_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MessageCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_personas_api_personas__get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2407,7 +2714,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonaResponse"][];
+                    "application/json": components["schemas"]["PaginatedResponse_PersonaResponse_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -2635,7 +2951,10 @@ export interface operations {
     };
     list_templates_api_prompt_templates__get: {
         parameters: {
-            query?: never;
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2648,7 +2967,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PromptTemplateResponse"][];
+                    "application/json": components["schemas"]["PaginatedResponse_PromptTemplateResponse_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
