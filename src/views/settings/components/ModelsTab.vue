@@ -45,7 +45,6 @@ const total = ref(0)
 const searchQuery = ref('')
 
 // -- COMPUTED --
-// Optimize lookup: Create a map of ID -> Name so we don't .find() inside the v-for loop
 const providerMap = computed(() => {
   const map: Record<string, string> = {}
   props.providers.forEach((p) => {
@@ -94,7 +93,6 @@ const fetchData = async () => {
 }
 
 const toggleFlags = async (model: Model, newValue: boolean, field: 'enabled' | 'use_openrouter') => {
-  // Optimistic update
   const originalValue = model[field]
   model[field] = newValue
 
@@ -104,7 +102,6 @@ const toggleFlags = async (model: Model, newValue: boolean, field: 'enabled' | '
       body: {
         enabled: model.enabled,
         use_openrouter: model.use_openrouter,
-        // Send specific field explicitly to be safe
         [field]: newValue
       },
     })
