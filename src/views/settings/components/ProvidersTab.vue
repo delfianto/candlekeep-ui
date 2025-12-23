@@ -20,11 +20,11 @@ defineProps<{
 </script>
 
 <template>
-  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
+  <div class="grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr w-full min-w-0">
     <Card
       v-for="prov in providers"
       :key="prov.id"
-      class="min-w-0"
+      class="min-w-0 overflow-hidden"
       :class="prov.enabled ? 'border-primary/50 bg-primary/5' : ''"
     >
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2 gap-2">
@@ -59,7 +59,7 @@ defineProps<{
     </Card>
 
     <Card
-      class="flex flex-col items-center justify-center border-dashed border-2 hover:border-primary/50 cursor-pointer transition-colors h-full min-h-45 min-w-0"
+      class="flex flex-col items-center justify-center border-dashed border-2 hover:border-primary/50 cursor-pointer transition-colors h-full min-h-45 min-w-0 overflow-hidden"
     >
       <div class="flex flex-col items-center gap-2 text-muted-foreground">
         <Plus class="size-8" />
