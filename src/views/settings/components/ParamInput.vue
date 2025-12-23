@@ -32,6 +32,8 @@ const emit = defineEmits(['update:modelValue'])
 
 const currentDepth = computed(() => props.depth ?? 0)
 
+const uniqueId = Math.random().toString(36).slice(2, 9)
+
 // -- HELPERS --
 
 const onUpdate = (value: any) => {
@@ -101,15 +103,17 @@ const getPropValue = (key: string, propSchema: any) => {
 <template>
   <div class="w-full text-sm">
     <div v-if="layout === 'horizontal'" class="flex items-center justify-end">
-      <div v-if="isSmartToggle" class="flex items-center gap-2">
-        <span class="text-xs text-muted-foreground capitalize">{{ modelValue }}</span>
-        <Switch v-model:checked="smartToggleValue" />
+      <div v-if="isSmartToggle" class="flex items-center space-x-2">
+        <Switch v-model="smartToggleValue" :id="`toggle-h-${uniqueId}`" />
+        <Label :for="`toggle-h-${uniqueId}`" class="text-xs text-muted-foreground cursor-pointer"
+          >Enabled</Label
+        >
       </div>
 
       <Switch
         v-else-if="schema.type === 'boolean'"
-        :checked="modelValue ?? schema.default"
-        @update:checked="(v: boolean) => onUpdate(v)"
+        :model-value="modelValue ?? schema.default"
+        @update:model-value="(v: boolean) => onUpdate(v)"
       />
 
       <div
@@ -198,10 +202,23 @@ const getPropValue = (key: string, propSchema: any) => {
         class="flex items-center justify-between border rounded-md p-3 bg-background/50"
       >
         <span class="text-sm">Status</span>
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-muted-foreground capitalize">{{ modelValue }}</span>
-          <Switch v-model:checked="smartToggleValue" />
+        <div class="flex items-center space-x-2">
+          <Switch v-model="smartToggleValue" :id="`toggle-${uniqueId}`" />
+          <Label :for="`toggle-${uniqueId}`" class="text-xs text-muted-foreground cursor-pointer"
+            >Enabled</Label
+          >
         </div>
+      </div>
+
+      <div
+        v-else-if="schema.type === 'boolean'"
+        class="flex items-center justify-between border rounded-md p-3 bg-background/50"
+      >
+        <span class="text-sm">Enabled</span>
+        <Switch
+          :model-value="modelValue ?? schema.default"
+          @update:model-value="(v: boolean) => onUpdate(v)"
+        />
       </div>
 
       <div v-else-if="schema.type === 'list'" class="space-y-2">

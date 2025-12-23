@@ -197,10 +197,16 @@ onMounted(async () => {
                 </span>
               </div>
             </div>
-            <Switch
-              :checked="model.enabled"
-              @update:checked="(v: boolean) => { if(model) { model.enabled = v; updateFlags() } }"
-            />
+            <div class="flex items-center space-x-2">
+              <Switch
+                id="header-enabled"
+                v-model="model.enabled"
+                @update:model-value="updateFlags"
+              />
+              <Label for="header-enabled" class="text-xs text-muted-foreground cursor-pointer"
+                >Enabled</Label
+              >
+            </div>
           </CardHeader>
           <CardContent class="space-y-6">
             <div class="grid gap-2">
@@ -219,10 +225,13 @@ onMounted(async () => {
                   Route requests through OpenRouter instead of a direct provider call.
                 </p>
               </div>
-              <Switch
-                :checked="model.use_openrouter"
-                @update:checked="(v: boolean) => { if(model) { model.use_openrouter = v; updateFlags() } }"
-              />
+              <div class="flex items-center space-x-2">
+                <Switch
+                  id="openrouter-enabled"
+                  v-model="model.use_openrouter"
+                  @update:model-value="updateFlags"
+                />
+              </div>
             </div>
 
             <div class="grid gap-2">
