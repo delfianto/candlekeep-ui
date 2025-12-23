@@ -9,13 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import AppPagination from '@/components/shared/AppPagination.vue'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Cpu, Plus, Edit, Search, Loader2 } from 'lucide-vue-next'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import AppPagination from '@/components/shared/AppPagination.vue'
-import { Cpu, Plus, Edit, Search, Loader2 } from 'lucide-vue-next'
 import { client } from '@/api/client'
 import { toast } from 'vue-sonner'
 
