@@ -188,7 +188,7 @@ onMounted(async () => {
             <div class="p-3 bg-primary/10 rounded-full">
               <Cpu class="size-6 text-primary" />
             </div>
-            <div class="space-y-1 flex-1 min-w-[150px]">
+            <div class="space-y-1 flex-1 min-w-40">
               <CardTitle>{{ model.name }}</CardTitle>
               <div class="flex items-center gap-2">
                 <Badge variant="outline">{{ model.model_identifier }}</Badge>
@@ -208,7 +208,9 @@ onMounted(async () => {
               <Input v-model="model.name" />
             </div>
 
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg bg-muted/40">
+            <div
+              class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg bg-muted/40"
+            >
               <div class="space-y-0.5">
                 <Label class="text-base flex items-center gap-2">
                   <Globe class="size-4" /> Use OpenRouter
