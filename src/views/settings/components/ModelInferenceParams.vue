@@ -167,7 +167,7 @@ const handleResetParamsConfirm = async () => {
           <div
             v-for="key in groupedParams.compact"
             :key="key"
-            class="flex items-center justify-between p-4 hover:bg-muted/40 transition-colors"
+            class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between p-4 hover:bg-muted/40 transition-colors"
           >
             <div class="flex flex-col gap-1 overflow-hidden pr-4">
               <div class="flex items-center gap-2">
@@ -227,7 +227,7 @@ const handleResetParamsConfirm = async () => {
           <div
             v-for="key in groupedParams.sliders"
             :key="key"
-            class="flex items-center justify-between p-4 hover:bg-muted/40 transition-colors"
+            class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between p-4 hover:bg-muted/40 transition-colors"
           >
             <div class="flex flex-col gap-1 overflow-hidden pr-4">
               <div class="flex items-center gap-2">

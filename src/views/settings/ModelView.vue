@@ -181,14 +181,14 @@ onMounted(async () => {
       </Button>
     </template>
 
-    <div class="grid gap-6 xl:grid-cols-3">
-      <div class="xl:col-span-2 space-y-6">
+    <div class="grid gap-4 lg:gap-6 lg:grid-cols-3">
+      <div class="lg:col-span-2 space-y-6">
         <Card>
-          <CardHeader class="flex flex-row items-center gap-4">
+          <CardHeader class="flex flex-row flex-wrap items-center gap-4">
             <div class="p-3 bg-primary/10 rounded-full">
               <Cpu class="size-6 text-primary" />
             </div>
-            <div class="space-y-1 flex-1">
+            <div class="space-y-1 flex-1 min-w-[150px]">
               <CardTitle>{{ model.name }}</CardTitle>
               <div class="flex items-center gap-2">
                 <Badge variant="outline">{{ model.model_identifier }}</Badge>
@@ -208,7 +208,7 @@ onMounted(async () => {
               <Input v-model="model.name" />
             </div>
 
-            <div class="flex items-center justify-between p-4 border rounded-lg bg-muted/40">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg bg-muted/40">
               <div class="space-y-0.5">
                 <Label class="text-base flex items-center gap-2">
                   <Globe class="size-4" /> Use OpenRouter
@@ -288,7 +288,7 @@ onMounted(async () => {
             </div>
           </CardContent>
           <CardFooter class="flex flex-col gap-3">
-            <div class="flex w-full gap-2">
+            <div class="flex flex-col sm:flex-row w-full gap-2">
               <Button
                 variant="outline"
                 class="flex-1"

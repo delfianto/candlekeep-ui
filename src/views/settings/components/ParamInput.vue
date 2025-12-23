@@ -114,7 +114,7 @@ const getPropValue = (key: string, propSchema: any) => {
 
       <div
         v-else-if="(schema.type === 'int' || schema.type === 'float') && schema.min_value !== undefined"
-        class="flex items-center gap-3 w-77.5"
+        class="flex items-center gap-3 w-full max-w-[19.375rem]"
       >
         <Slider
           :model-value="[Number(modelValue ?? schema.default)]"
@@ -137,7 +137,7 @@ const getPropValue = (key: string, propSchema: any) => {
         :model-value="modelValue ?? schema.default"
         @update:model-value="(v) => onUpdate(v)"
       >
-        <SelectTrigger class="h-8 w-50 bg-background/50">
+        <SelectTrigger class="h-8 w-full max-w-[12.5rem] bg-background/50">
           <SelectValue placeholder="Select..." class="truncate" />
         </SelectTrigger>
         <SelectContent>
@@ -150,7 +150,7 @@ const getPropValue = (key: string, propSchema: any) => {
       <Input
         v-else-if="schema.type === 'int' || schema.type === 'float' || schema.type === 'string'"
         :type="schema.type === 'string' ? 'text' : 'number'"
-        class="h-8 w-32.5 font-mono text-right bg-background/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        class="h-8 w-full max-w-[8.125rem] font-mono text-right bg-background/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         :model-value="modelValue ?? schema.default"
         @update:model-value="(v) => onUpdate(schema.type === 'string' ? v : Number(v))"
       />
