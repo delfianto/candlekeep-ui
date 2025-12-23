@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useDebounceFn } from '@vueuse/core'
 import {
   Card,
   CardContent,
@@ -9,13 +11,72 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Box, Plus, Edit } from 'lucide-vue-next'
-
-const props = defineProps<{
-  modelFamilies: any[]
-}>()
+import { Input } from '@/components/ui/input'
+import {
+  Pagination,
+  PaginationEllipsis,
+  PaginationFirst,
+  PaginationLast,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
+import { Box, Plus, Edit, Search, Loader2 } from 'lucide-vue-next'
 
 const router = useRouter()
+
+// -- STATE --
+// Force HMR update
+const isLoading = ref(true)
+const items = ref<any[]>([])
+const page = ref(1)
+const limit = ref(10)
+const total = ref(0)
+const searchQuery = ref('')
+
+// -- ACTIONS --
+const fetchData = async () => {
+  isLoading.value = true
+  try {
+    const params = new URLSearchParams()
+    params.append('page', page.value.toString())
+    params.append('limit', limit.value.toString())
+    if (searchQuery.value) {
+      params.append('name', searchQuery.value)
+    }
+
+    const res = await fetch(`/api/model-families?${params.toString()}`)
+    if (res.ok) {
+      const data = await res.json()
+      // Handle both paginated and non-paginated responses for safety
+      if (data.items) {
+        items.value = data.items
+        total.value = data.total_items || data.items.length
+        // Update page if server adjusted it (optional)
+        // page.value = data.current_page 
+      } else {
+        items.value = Array.isArray(data) ? data : []
+        total.value = items.value.length
+      }
+    }
+  } catch (error) {
+    console.error('Failed to load model families:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Debounced search
+const onSearch = useDebounceFn(() => {
+  page.value = 1 // Reset to page 1 on search
+  fetchData()
+}, 300)
+
+watch(searchQuery, onSearch)
+watch(page, fetchData)
+
+onMounted(fetchData)
 </script>
 
 <template>
@@ -25,12 +86,64 @@ const router = useRouter()
         <CardTitle>Model Families</CardTitle>
         <CardDescription>Base configurations for groups of related models.</CardDescription>
       </div>
-      <Button size="sm"><Plus class="size-4 mr-2" /> Create Family</Button>
+      <div class="flex items-center gap-2">
+        <div class="relative w-64">
+          <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
+          <Input 
+            v-model="searchQuery" 
+            placeholder="Search families..." 
+            class="pl-8"
+          />
+        </div>
+        <Button size="sm"><Plus class="size-4 mr-2" /> Create Family</Button>
+      </div>
     </CardHeader>
     <CardContent>
-      <div class="space-y-4">
+      <!-- Top Pagination -->
+      <div class="flex justify-end mb-4" v-if="total > limit">
+        <Pagination
+          v-model:page="page"
+          :total="total"
+          :items-per-page="limit"
+          :sibling-count="1"
+          show-edges
+        >
+          <PaginationContent v-slot="{ items }">
+            <PaginationItem>
+              <PaginationFirst />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationPrevious />
+            </PaginationItem>
+
+            <template v-for="(item, index) in items">
+              <PaginationItem v-if="item.type === 'page'" :key="index" :value="item.value" :is-active="item.value === page">
+                {{ item.value }}
+              </PaginationItem>
+              <PaginationEllipsis v-else :key="item.type" :index="index" />
+            </template>
+
+            <PaginationItem>
+              <PaginationNext />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLast />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
+
+      <div v-if="isLoading" class="flex justify-center py-12">
+        <Loader2 class="size-8 animate-spin text-muted-foreground" />
+      </div>
+
+      <div v-else-if="items.length === 0" class="text-center py-12 text-muted-foreground">
+        No model families found.
+      </div>
+
+      <div v-else class="space-y-4">
         <div
-          v-for="family in modelFamilies"
+          v-for="family in items"
           :key="family.id"
           class="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
         >
@@ -72,6 +185,40 @@ const router = useRouter()
             </Button>
           </div>
         </div>
+      </div>
+
+      <!-- Bottom Pagination -->
+      <div class="flex justify-end mt-4" v-if="total > limit">
+        <Pagination
+          v-model:page="page"
+          :total="total"
+          :items-per-page="limit"
+          :sibling-count="1"
+          show-edges
+        >
+          <PaginationContent v-slot="{ items }">
+            <PaginationItem>
+              <PaginationFirst />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationPrevious />
+            </PaginationItem>
+
+            <template v-for="(item, index) in items">
+              <PaginationItem v-if="item.type === 'page'" :key="index" :value="item.value" :is-active="item.value === page">
+                {{ item.value }}
+              </PaginationItem>
+              <PaginationEllipsis v-else :key="item.type" :index="index" />
+            </template>
+
+            <PaginationItem>
+              <PaginationNext />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLast />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </CardContent>
   </Card>

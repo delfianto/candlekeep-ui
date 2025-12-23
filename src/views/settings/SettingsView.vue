@@ -18,7 +18,6 @@ import AboutTab from './components/AboutTab.vue'
 // e.g., ModelsTab needs Providers data
 const isLoading = ref(true)
 const providers = ref([])
-const modelFamilies = ref([])
 const models = ref([])
 
 const route = useRoute()
@@ -34,21 +33,14 @@ watch(activeTab, (newTab) => {
 const fetchData = async () => {
   isLoading.value = true
   try {
-    const [provRes, famRes, modRes] = await Promise.all([
+    const [provRes, modRes] = await Promise.all([
       fetch('/api/providers'),
-      fetch('/api/model-families'),
       fetch('/api/models')
     ])
 
     if (provRes.ok) {
       const data = await provRes.json()
       providers.value = data.sort((a: any, b: any) => a.name.localeCompare(b.name))
-    }
-
-    if (famRes.ok) {
-      const data = await famRes.json()
-      const items = data.items || data
-      modelFamilies.value = items.sort((a: any, b: any) => a.name.localeCompare(b.name))
     }
 
     if (modRes.ok) {
@@ -94,7 +86,7 @@ onMounted(fetchData)
         </TabsContent>
 
         <TabsContent value="model-families">
-          <ModelFamiliesTab :model-families="modelFamilies" />
+          <ModelFamiliesTab />
         </TabsContent>
 
         <TabsContent value="models">
