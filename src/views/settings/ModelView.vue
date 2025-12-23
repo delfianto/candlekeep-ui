@@ -31,6 +31,7 @@ import {
   ArrowLeft,
   Box,
   Cpu,
+  Globe,
   Loader2,
   RotateCcw,
   Save,
@@ -39,16 +40,21 @@ import {
   Zap,
 } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
+import { client } from '@/api/client'
+import type { components } from '@/api/schema'
+import { toast } from 'vue-sonner'
 
 const route = useRoute()
 const router = useRouter()
 const modelId = route.params.id as string
 
+type Model = components['schemas']['ModelResponse']
+
 // -- STATE --
 const isLoading = ref(true)
 const isSaving = ref(false)
 const isDeleting = ref(false)
-const model = ref<any>(null)
+const model = ref<Model | null>(null)
 
 // Dialog States
 const showResetDialog = ref(false)
@@ -59,40 +65,92 @@ const showDeleteDialog = ref(false)
 const fetchModel = async () => {
   isLoading.value = true
   try {
-    const res = await fetch(`/api/models`)
-    if (res.ok) {
-      const data = await res.json()
-      const items = data.items || data
-      model.value = items.find((m: any) => m.id === modelId)
+    const { data, error } = await client.GET('/api/models/{model_id}', {
+      params: { path: { model_id: modelId } },
+    })
+    if (error) throw error
+    // Ensure nested objects and optional fields are initialized for the UI
+    model.value = {
+      ...data,
+      system_prompt: data.system_prompt ?? '',
+      parameters: data.parameters ?? {},
     }
   } catch (error) {
     console.error('Failed to load model', error)
+    toast.error('Failed to load model details')
   } finally {
     isLoading.value = false
   }
 }
 
+const updateFlags = async () => {
+  if (!model.value) return
+  try {
+    const { error } = await client.PATCH('/api/models/{model_id}/flags', {
+      params: { path: { model_id: modelId } },
+      body: {
+        enabled: model.value.enabled,
+        use_openrouter: model.value.use_openrouter,
+      },
+    })
+    if (error) throw error
+    toast.success('Model flags updated')
+  } catch (error) {
+    console.error('Failed to update model flags', error)
+    toast.error('Failed to update model flags')
+    // Refresh to revert UI state
+    await fetchModel()
+  }
+}
+
 const saveModel = async () => {
+  if (!model.value) return
   isSaving.value = true
-  // Mock API call
-  await new Promise(r => setTimeout(r, 800))
-  isSaving.value = false
+  try {
+    const { error } = await client.PUT('/api/models/{model_id}', {
+      params: { path: { model_id: modelId } },
+      body: {
+        name: model.value.name,
+        system_prompt: model.value.system_prompt,
+        parameters: model.value.parameters as Record<string, any>,
+        provider_id: model.value.provider_id,
+        model_identifier: model.value.model_identifier,
+        model_family_id: model.value.model_family_id,
+        use_openrouter: model.value.use_openrouter,
+        openrouter_identifier: model.value.openrouter_identifier,
+      },
+    })
+    if (error) throw error
+    toast.success('Model settings saved')
+  } catch (error) {
+    console.error('Failed to save model', error)
+    toast.error('Failed to save model settings')
+  } finally {
+    isSaving.value = false
+  }
 }
 
 const handleResetConfirm = async () => {
-  // Re-fetch data to revert changes
   await fetchModel()
   showResetDialog.value = false
 }
 
 const handleDeleteConfirm = async () => {
   isDeleting.value = true
-  // Mock API Delete call
-  await new Promise(r => setTimeout(r, 1000))
-  isDeleting.value = false
-  showDeleteDialog.value = false
-  // Navigate back to settings
-  router.push({ path: '/settings', query: { tab: 'models' } })
+  try {
+    const { error } = await client.DELETE('/api/models/{model_id}', {
+      params: { path: { model_id: modelId } },
+    })
+    if (error) throw error
+    toast.success('Model deleted')
+    router.push({ path: '/settings', query: { tab: 'models' } })
+  } catch (error) {
+    console.error('Failed to delete model', error)
+    toast.error('Failed to delete model')
+  } finally {
+    isDeleting.value = false
+    showDeleteDialog.value = false
+  }
 }
 
 onMounted(fetchModel)
@@ -142,17 +200,50 @@ onMounted(fetchModel)
                 <span class="text-xs text-muted-foreground font-mono">{{ model.id }}</span>
               </div>
             </div>
-            <Switch v-model="model.enabled" />
+            <Switch
+              :checked="model.enabled"
+              @update:checked="
+                (v: boolean) => {
+                  if (model) {
+                    model.enabled = v
+                    updateFlags()
+                  }
+                }
+              "
+            />
           </CardHeader>
-          <CardContent class="space-y-4">
+          <CardContent class="space-y-6">
             <div class="grid gap-2">
               <Label>Display Name</Label>
               <Input v-model="model.name" />
             </div>
+
+            <div class="flex items-center justify-between p-3 border rounded-lg bg-muted/30">
+              <div class="space-y-0.5">
+                <Label class="text-base flex items-center gap-2">
+                  <Globe class="size-4" /> Use OpenRouter
+                </Label>
+                <p class="text-sm text-muted-foreground">
+                  Route requests through OpenRouter instead of a direct provider call.
+                </p>
+              </div>
+              <Switch
+                :checked="model.use_openrouter"
+                @update:checked="
+                  (v: boolean) => {
+                    if (model) {
+                      model.use_openrouter = v
+                      updateFlags()
+                    }
+                  }
+                "
+              />
+            </div>
+
             <div class="grid gap-2">
               <Label>System Prompt Override</Label>
               <Textarea
-                v-model="model.system_prompt"
+                v-model="(model.system_prompt as string)"
                 class="min-h-30 font-mono text-sm"
                 placeholder="Enter a default system prompt for this model..."
               />
@@ -175,11 +266,17 @@ onMounted(fetchModel)
                 <Label class="flex items-center gap-2"
                   ><Thermometer class="size-4" /> Temperature</Label
                 >
-                <span class="font-mono text-sm">{{ model.parameters?.temperature ?? 0.7 }}</span>
+                <span class="font-mono text-sm">{{
+                  (model.parameters?.temperature as number) ?? 0.7
+                }}</span>
               </div>
               <Slider
-                :model-value="[model.parameters?.temperature ?? 0.7]"
-                @update:model-value="(v) => { if (v && v.length > 0) model.parameters.temperature = v[0] }"
+                :model-value="[(model.parameters?.temperature as number) ?? 0.7]"
+                @update:model-value="
+                  (v) => {
+                    if (v && v.length > 0 && model?.parameters) model.parameters.temperature = v[0]
+                  }
+                "
                 :max="2"
                 :step="0.05"
               />
@@ -194,7 +291,12 @@ onMounted(fetchModel)
                 <Input
                   type="number"
                   class="w-24 h-8 text-right font-mono"
-                  v-model.number="model.parameters.max_tokens"
+                  :model-value="(model.parameters?.max_tokens as number)"
+                  @update:model-value="
+                    (v) => {
+                      if (model?.parameters) model.parameters.max_tokens = Number(v)
+                    }
+                  "
                 />
               </div>
               <p class="text-[0.8rem] text-muted-foreground">
@@ -205,11 +307,17 @@ onMounted(fetchModel)
             <div class="space-y-4">
               <div class="flex items-center justify-between">
                 <Label class="flex items-center gap-2"><Zap class="size-4" /> Top P</Label>
-                <span class="font-mono text-sm">{{ model.parameters?.top_p ?? 1.0 }}</span>
+                <span class="font-mono text-sm">{{
+                  (model.parameters?.top_p as number) ?? 1.0
+                }}</span>
               </div>
               <Slider
-                :model-value="[model.parameters?.top_p ?? 1.0]"
-                @update:model-value="(v) => { if (v && v.length > 0) model.parameters.top_p = v[0] }"
+                :model-value="[(model.parameters?.top_p as number) ?? 1.0]"
+                @update:model-value="
+                  (v) => {
+                    if (v && v.length > 0 && model?.parameters) model.parameters.top_p = v[0]
+                  }
+                "
                 :max="1"
                 :step="0.01"
               />
