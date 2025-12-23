@@ -88,12 +88,12 @@ onMounted(fetchData)
               <Menu class="size-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" class="w-[280px] sm:w-[350px]">
+          <SheetContent side="top" class="w-full">
             <SheetHeader>
               <SheetTitle>Settings</SheetTitle>
               <SheetDescription>Manage application preferences.</SheetDescription>
             </SheetHeader>
-            <div class="grid gap-2 py-4">
+            <div class="grid grid-cols-2 gap-2 py-4">
                <Button
                  v-for="tab in tabsConfig"
                  :key="tab.value"
