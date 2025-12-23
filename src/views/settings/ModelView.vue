@@ -5,7 +5,6 @@ import ContentLayout from '@/components/layout/ContentLayout.vue'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -20,25 +19,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { Slider } from '@/components/ui/slider'
 import {
   AlertCircle,
   ArrowLeft,
@@ -48,14 +33,13 @@ import {
   RotateCcw,
   Save,
   Trash2,
-  Info,
-  RefreshCw,
 } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
 import { client } from '@/api/client'
 import type { components } from '@/api/schema'
 import { toast } from 'vue-sonner'
 import { useSettingsStore } from '@/stores/settings'
+import ModelInferenceParams from './components/ModelInferenceParams.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -73,37 +57,8 @@ const model = ref<Model | null>(null)
 // Dialog States
 const showResetDialog = ref(false)
 const showDeleteDialog = ref(false)
-const showResetParamsDialog = ref(false)
-
-// -- HELPERS --
-const getParamDoc = (key: string) => settingsStore.parameterDocs[key]
-
-const getParamLabel = (key: string) => {
-  const doc = getParamDoc(key)
-  if (doc?.label) return doc.label
-  return key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-}
-
-const isOverridden = (key: string) => {
-  if (!model.value || !model.value.parameters) return false
-  return Object.prototype.hasOwnProperty.call(model.value.parameters, key)
-}
-
-const getEffectiveValue = (key: string, config: any) => {
-  if (model.value && model.value.parameters && isOverridden(key)) {
-    return model.value.parameters[key]
-  }
-  return config.default
-}
-
-const formatDefaultValue = (val: any) => {
-  if (Array.isArray(val)) return val.join(', ')
-  if (val === null || val === undefined) return 'None'
-  return String(val)
-}
 
 // -- ACTIONS --
-
 const fetchModel = async () => {
   isLoading.value = true
   try {
@@ -177,15 +132,6 @@ const handleResetConfirm = async () => {
   showResetDialog.value = false
 }
 
-const handleResetParamsConfirm = async () => {
-  if (model.value) {
-    // Wipe local overrides
-    model.value.parameters = {}
-    toast.success('Overrides cleared. Click Save to apply.')
-  }
-  showResetParamsDialog.value = false
-}
-
 const handleDeleteConfirm = async () => {
   isDeleting.value = true
   try {
@@ -201,13 +147,6 @@ const handleDeleteConfirm = async () => {
   } finally {
     isDeleting.value = false
     showDeleteDialog.value = false
-  }
-}
-
-// Handle generic parameter update
-const updateParam = (key: string, value: any) => {
-  if (model.value && model.value.parameters) {
-    model.value.parameters[key] = value
   }
 }
 
@@ -230,12 +169,7 @@ onMounted(async () => {
     </div>
   </ContentLayout>
 
-  <ContentLayout
-    v-else
-    variant="standard"
-    :title="model.name"
-    subtitle="Fine-tune inference parameters and behavior."
-  >
+  <ContentLayout v-else variant="standard">
     <template #header>
       <Button
         variant="ghost"
@@ -258,10 +192,9 @@ onMounted(async () => {
               <CardTitle>{{ model.name }}</CardTitle>
               <div class="flex items-center gap-2">
                 <Badge variant="outline">{{ model.model_identifier }}</Badge>
-                <span
-                  class="text-xs text-muted-foreground font-mono"
-                  >{{ model.model_family.family_identifier }}</span
-                >
+                <span class="text-xs text-muted-foreground font-mono">
+                  {{ model.model_family.family_identifier }}
+                </span>
               </div>
             </div>
             <Switch
@@ -305,155 +238,7 @@ onMounted(async () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader class="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>Inference Parameters</CardTitle>
-              <CardDescription>
-                Customize behavior. Values set here override the model family defaults.
-              </CardDescription>
-            </div>
-            <Button
-              v-if="Object.keys(model.parameters || {}).length > 0"
-              variant="outline"
-              size="sm"
-              class="text-muted-foreground hover:text-destructive hover:border-destructive"
-              @click="showResetParamsDialog = true"
-            >
-              <RefreshCw class="size-3 mr-2" />
-              Reset Defaults
-            </Button>
-          </CardHeader>
-          <CardContent class="space-y-4">
-            <div
-              v-for="(config, key) in (model.model_family.parameters as Record<string, any>)"
-              :key="key"
-              class="relative p-4 rounded-lg border bg-muted/40 transition-colors"
-            >
-              <div v-if="isOverridden(key)" class="absolute top-3 right-3 z-10">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger as-child>
-                      <div
-                        class="size-2 rounded-full bg-blue-500 ring-2 ring-background cursor-help"
-                      ></div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p class="text-xs font-semibold mb-1">Custom Override Active</p>
-                      <p class="text-[10px] text-muted-foreground font-mono">
-                        Family Default: {{ formatDefaultValue(config.default) }}
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-
-              <div class="flex items-center justify-between mb-4">
-                <Label class="flex items-center gap-2 text-sm font-medium">
-                  {{ getParamLabel(key) }}
-                  <TooltipProvider v-if="getParamDoc(key)">
-                    <Tooltip>
-                      <TooltipTrigger as-child>
-                        <Info class="size-3.5 text-muted-foreground cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p class="max-w-xs text-sm">{{ getParamDoc(key).detailed_info }}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </Label>
-              </div>
-
-              <div
-                v-if="(config.type === 'int' || config.type === 'float') && config.min_value !== undefined && config.max_value !== undefined"
-                class="flex items-center gap-4"
-              >
-                <Slider
-                  :model-value="[Number(getEffectiveValue(key, config))]"
-                  @update:model-value="(v) => updateParam(key, v[0])"
-                  :min="config.min_value"
-                  :max="config.max_value"
-                  :step="config.type === 'int' ? 1 : 0.01"
-                  class="flex-1"
-                />
-                <Input
-                  type="number"
-                  class="w-20 h-8 text-right font-mono bg-background"
-                  :model-value="getEffectiveValue(key, config)"
-                  @update:model-value="(v) => updateParam(key, Number(v))"
-                />
-              </div>
-
-              <div v-else-if="config.type === 'int' || config.type === 'float'">
-                <Input
-                  type="number"
-                  class="font-mono bg-background"
-                  :model-value="getEffectiveValue(key, config)"
-                  @update:model-value="(v) => updateParam(key, Number(v))"
-                />
-              </div>
-
-              <div
-                v-else-if="config.type === 'boolean'"
-                class="flex items-center justify-between py-1"
-              >
-                <span class="text-sm text-muted-foreground">Enabled</span>
-                <Switch
-                  :checked="getEffectiveValue(key, config)"
-                  @update:checked="(v) => updateParam(key, v)"
-                />
-              </div>
-
-              <div v-else-if="config.type === 'enum'">
-                <Select
-                  :model-value="getEffectiveValue(key, config)"
-                  @update:model-value="(v) => updateParam(key, v)"
-                >
-                  <SelectTrigger class="bg-background">
-                    <SelectValue :placeholder="`Select ${getParamLabel(key)}`" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem v-for="opt in config.str_values" :key="opt" :value="opt">
-                      {{ opt }}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div v-else-if="config.type === 'list'">
-                <Textarea
-                  :model-value="Array.isArray(getEffectiveValue(key, config)) ? (getEffectiveValue(key, config) as string[]).join(', ') : ''"
-                  @update:model-value="(v) => updateParam(key, (v as string).split(',').map(s => s.trim()).filter(s => s))"
-                  placeholder="Comma separated values..."
-                  class="font-mono text-sm bg-background"
-                />
-              </div>
-
-              <div v-else>
-                <Input
-                  type="text"
-                  class="bg-background"
-                  :model-value="getEffectiveValue(key, config)"
-                  @update:model-value="(v) => updateParam(key, v)"
-                />
-              </div>
-
-              <p
-                class="text-[0.8rem] text-muted-foreground mt-2"
-                v-if="getParamDoc(key)?.short_info"
-              >
-                {{ getParamDoc(key).short_info }}
-              </p>
-            </div>
-
-            <div
-              v-if="Object.keys(model.model_family.parameters || {}).length === 0"
-              class="text-center text-muted-foreground py-4"
-            >
-              No configurable parameters for this model family.
-            </div>
-          </CardContent>
-        </Card>
+        <ModelInferenceParams :model="model" />
       </div>
 
       <div class="space-y-6">
@@ -469,10 +254,9 @@ onMounted(async () => {
 
             <div class="grid gap-1 py-2 border-b">
               <span class="text-muted-foreground text-xs">Family</span>
-              <span
-                class="font-mono text-xs break-all"
-                >{{ model.model_family.family_identifier }}</span
-              >
+              <span class="font-mono text-xs break-all">
+                {{ model.model_family.family_identifier }}
+              </span>
             </div>
 
             <div class="grid gap-2 py-2 border-b">
@@ -546,22 +330,6 @@ onMounted(async () => {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction @click="handleResetConfirm">Confirm Reset</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-
-    <AlertDialog :open="showResetParamsDialog" @update:open="showResetParamsDialog = $event">
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Reset Inference Parameters?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This will clear all parameter overrides for this model. It will inherit all default
-            values from the <strong>{{ model.model_family.name }}</strong> family configuration.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction @click="handleResetParamsConfirm">Confirm Reset</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
