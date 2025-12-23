@@ -63,11 +63,7 @@ onMounted(fetchData)
 </script>
 
 <template>
-  <ContentLayout
-    variant="standard"
-    title="Settings"
-    subtitle="Manage your AI connections, models, and interface preferences."
-  >
+  <ContentLayout variant="standard">
     <Tabs v-model="activeTab" class="space-y-6">
       <TabsList class="grid w-full grid-cols-2 md:w-180 md:grid-cols-5 bg-muted/50 p-1">
         <TabsTrigger value="providers" class="gap-2"
