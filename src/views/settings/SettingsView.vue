@@ -77,7 +77,9 @@ onMounted(fetchData)
   <ContentLayout variant="standard">
     <Tabs v-model="activeTab" class="space-y-6">
       <!-- MOBILE HEADER -->
-      <div class="md:hidden sticky -top-4 -mx-4 -mt-4 p-4 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b flex items-center justify-between mb-4">
+      <div
+        class="md:hidden sticky -top-4 -mx-4 -mt-4 p-4 z-30 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b flex items-center justify-between mb-4"
+      >
         <h2 class="text-lg font-semibold flex items-center gap-2">
           <component :is="tabsConfig.find(t => t.value === activeTab)?.icon" class="size-5" />
           {{ currentTabLabel }}
@@ -94,17 +96,17 @@ onMounted(fetchData)
               <SheetDescription>Manage application preferences.</SheetDescription>
             </SheetHeader>
             <div class="grid grid-cols-2 gap-2 py-4">
-               <Button
-                 v-for="tab in tabsConfig"
-                 :key="tab.value"
-                 variant="ghost"
-                 class="w-full justify-start gap-3"
-                 :class="activeTab === tab.value ? 'bg-secondary' : ''"
-                 @click="activeTab = tab.value"
-               >
-                 <component :is="tab.icon" class="size-4" />
-                 {{ tab.label }}
-               </Button>
+              <Button
+                v-for="tab in tabsConfig"
+                :key="tab.value"
+                variant="ghost"
+                class="w-full justify-start gap-3"
+                :class="activeTab === tab.value ? 'bg-secondary' : ''"
+                @click="activeTab = tab.value"
+              >
+                <component :is="tab.icon" class="size-4" />
+                {{ tab.label }}
+              </Button>
             </div>
           </SheetContent>
         </Sheet>
@@ -112,12 +114,7 @@ onMounted(fetchData)
 
       <!-- DESKTOP TABS LIST -->
       <TabsList class="hidden md:grid w-full md:w-180 md:grid-cols-6 bg-muted/50 p-1">
-        <TabsTrigger
-          v-for="tab in tabsConfig"
-          :key="tab.value"
-          :value="tab.value"
-          class="gap-2"
-        >
+        <TabsTrigger v-for="tab in tabsConfig" :key="tab.value" :value="tab.value" class="gap-2">
           <component :is="tab.icon" class="size-4" />
           {{ tab.label }}
         </TabsTrigger>
