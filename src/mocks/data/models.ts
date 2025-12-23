@@ -2,148 +2,520 @@ import type { components } from "@/api/schema";
 
 const NOW = new Date().toISOString();
 
-// Create a "Fixed" version that overrides strict parameters with 'any'
-type ModelOriginal = components["schemas"]["ModelResponse"];
-type Model = Omit<ModelOriginal, "parameters"> & {
-  parameters: Record<string, any>;
-};
+type ModelPage = components["schemas"]["Page_ModelResponse_"];
 
-export const models: Model[] = [
-  // --- OpenAI Models ---
+export const modelsPages: ModelPage[] = [
+  // Page 1
   {
-    id: "md_openai_gpt4o",
-    provider_id: "pv_openai_1",
-    model_identifier: "gpt-4o",
-    name: "GPT-4o",
-    model_family_id: "mf_gpt-4o",
-    system_prompt:
-      "You are a versatile, high-intelligence creative writing assistant. You excel at weaving complex narratives, maintaining strict continuity, and adapting to the user's preferred tone, whether it be high fantasy or gritty realism.",
-    parameters: {
-      temperature: 0.7,
-      max_tokens: 4096,
-      presence_penalty: 0.1,
-      frequency_penalty: 0.1,
-    },
-    enabled: true,
-    created_at: NOW,
-    updated_at: NOW,
-  },
-  {
-    id: "md_openai_gpt51",
-    provider_id: "pv_openai_1",
-    model_identifier: "gpt-5.1-preview-2025",
-    name: "GPT-5.1 (Preview)",
-    model_family_id: "mf_gpt-5.1",
-    system_prompt:
-      "You are GPT-5.1, the next generation of reasoning models. Prioritize deep logical coherence in world-building and psychological realism in character interactions. In roleplay scenarios, anticipate long-term consequences of player actions.",
-    parameters: {
-      temperature: 0.8,
-      max_tokens: 8192,
-      top_p: 0.95,
-    },
-    enabled: true,
-    created_at: NOW,
-    updated_at: NOW,
+    items: [
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-4o",
+        openrouter_identifier: "openai/gpt-4o",
+        use_openrouter: true,
+        name: "GPT-4o",
+        model_family_id: "openai-gpt-4",
+        system_prompt: null,
+        parameters: {
+          max_completion_tokens: 4096,
+          temperature: 0.85,
+          top_p: 0.9,
+          frequency_penalty: 0.3,
+          presence_penalty: 0.2
+        },
+        enabled: true,
+        id: "gpt-4o",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-4o",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-4o-mini",
+        openrouter_identifier: "openai/gpt-4o-mini",
+        use_openrouter: true,
+        name: "GPT-4o Mini",
+        model_family_id: "openai-gpt-4",
+        system_prompt: null,
+        parameters: {
+          max_completion_tokens: 16384,
+          temperature: 0.85,
+          top_p: 0.9,
+          frequency_penalty: 0.3,
+          presence_penalty: 0.2
+        },
+        enabled: true,
+        id: "gpt-4o-mini",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-4o-mini",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-5",
+        openrouter_identifier: "openai/gpt-5",
+        use_openrouter: true,
+        name: "GPT-5",
+        model_family_id: "openai-gpt-5-thinking",
+        system_prompt: null,
+        parameters: {
+          reasoning_effort: "low",
+          max_completion_tokens: 16384,
+          verbosity: "low",
+          summary: "concise"
+        },
+        enabled: true,
+        id: "gpt-5",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-5",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-5-mini",
+        openrouter_identifier: "openai/gpt-5-mini",
+        use_openrouter: true,
+        name: "GPT-5 Mini",
+        model_family_id: "openai-gpt-5-thinking",
+        system_prompt: null,
+        parameters: {
+          reasoning_effort: "low",
+          max_completion_tokens: 8192,
+          verbosity: "low",
+          summary: "concise"
+        },
+        enabled: true,
+        id: "gpt-5-mini",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-5-mini",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-5-nano",
+        openrouter_identifier: "openai/gpt-5-nano",
+        use_openrouter: true,
+        name: "GPT-5 Nano",
+        model_family_id: "openai-gpt-5-thinking",
+        system_prompt: null,
+        parameters: {
+          reasoning_effort: "low",
+          max_completion_tokens: 4096,
+          verbosity: "low",
+          summary: "concise"
+        },
+        enabled: true,
+        id: "gpt-5-nano",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-5-nano",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-5-chat-latest",
+        openrouter_identifier: "openai/gpt-5-chat",
+        use_openrouter: true,
+        name: "GPT-5 Chat",
+        model_family_id: "openai-gpt-5-chat",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.85,
+          top_p: 0.9,
+          max_completion_tokens: 8192,
+          frequency_penalty: 0.3,
+          presence_penalty: 0.2
+        },
+        enabled: true,
+        id: "gpt-5-chat",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-5-chat",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-5.1-chat-latest",
+        openrouter_identifier: "openai/gpt-5.1-chat",
+        use_openrouter: true,
+        name: "GPT-5.1 Chat",
+        model_family_id: "openai-gpt-5-x-chat",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.85,
+          top_p: 0.9,
+          summary: "concise",
+          max_completion_tokens: 8192,
+          frequency_penalty: 0.3,
+          presence_penalty: 0.2
+        },
+        enabled: true,
+        id: "gpt-5-1-chat",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-5.1-chat",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-5.1",
+        openrouter_identifier: "openai/gpt-5.1",
+        use_openrouter: true,
+        name: "GPT-5.1",
+        model_family_id: "openai-gpt-5-1-thinking",
+        system_prompt: null,
+        parameters: {
+          reasoning_effort: "low",
+          max_completion_tokens: 16384,
+          verbosity: "low",
+          summary: "concise"
+        },
+        enabled: true,
+        id: "gpt-5-1",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-5.1",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-5.2",
+        openrouter_identifier: "openai/gpt-5.2",
+        use_openrouter: true,
+        name: "GPT-5.2",
+        model_family_id: "openai-gpt-5-2-thinking",
+        system_prompt: null,
+        parameters: {
+          reasoning_effort: "low",
+          max_completion_tokens: 16384,
+          verbosity: "low",
+          summary: "concise"
+        },
+        enabled: true,
+        id: "gpt-5-2",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-5.2",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openai",
+        model_identifier: "gpt-5.2-chat-latest",
+        openrouter_identifier: "openai/gpt-5.2-chat",
+        use_openrouter: true,
+        name: "GPT-5.2 Chat",
+        model_family_id: "openai-gpt-5-x-chat",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.85,
+          top_p: 0.9,
+          summary: "concise",
+          max_completion_tokens: 8192,
+          frequency_penalty: 0.3,
+          presence_penalty: 0.2
+        },
+        enabled: true,
+        id: "gpt-5-2-chat",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "openai/gpt-5.2-chat",
+        provider_enabled: true
+      }
+    ],
+    total_items: 23,
+    current_page: 1,
+    limit: 10,
+    has_next_page: true,
+    has_previous_page: false,
+    next_page: 2,
+    previous_page: null
   },
 
-  // --- Anthropic Models ---
+  // Page 2 (Providing varied data for Page 2 since user provided duplicates of Page 1)
   {
-    id: "md_anthropic_sonnet45",
-    provider_id: "pv_anthropic_1",
-    model_identifier: "claude-4-5-sonnet-20250621",
-    name: "Claude 4.5 Sonnet",
-    model_family_id: "mf_claude_sonnet",
-    system_prompt:
-      "You are Claude, an AI assistant skilled in detailed, literary creative writing. Focus on 'showing, not telling'—describe sensory details, internal monologues, and atmospheric nuance. Avoid moralizing heavily during fictional roleplay unless prompted.",
-    parameters: {
-      temperature: 0.7,
-      max_tokens: 8192,
-      top_k: 40,
-    },
-    enabled: true,
-    created_at: NOW,
-    updated_at: NOW,
+    items: [
+      {
+        provider_id: "anthropic",
+        model_identifier: "claude-4.5-sonnet",
+        openrouter_identifier: "anthropic/claude-4.5-sonnet",
+        use_openrouter: false,
+        name: "Claude 4.5 Sonnet",
+        model_family_id: "anthropic-claude-4-5-standard",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.8,
+          max_tokens: 8192,
+        },
+        enabled: true,
+        id: "claude-4-5-sonnet",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "claude-4.5-sonnet",
+        provider_enabled: true
+      },
+      {
+        provider_id: "anthropic",
+        model_identifier: "claude-4.5-opus",
+        openrouter_identifier: "anthropic/claude-4.5-opus",
+        use_openrouter: false,
+        name: "Claude 4.5 Opus",
+        model_family_id: "anthropic-claude-4-5-opus",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.8,
+          max_tokens: 8192,
+        },
+        enabled: true,
+        id: "claude-4-5-opus",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "claude-4.5-opus",
+        provider_enabled: true
+      },
+      {
+        provider_id: "google-ai",
+        model_identifier: "gemini-2.5-pro",
+        openrouter_identifier: "google/gemini-pro-2.5",
+        use_openrouter: false,
+        name: "Gemini 2.5 Pro",
+        model_family_id: "google-gemini-2-5-text",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.9,
+          max_output_tokens: 8192
+        },
+        enabled: true,
+        id: "gemini-2-5-pro",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "gemini-2.5-pro",
+        provider_enabled: true
+      },
+      {
+        provider_id: "xai",
+        model_identifier: "grok-4",
+        openrouter_identifier: "xai/grok-4",
+        use_openrouter: false,
+        name: "Grok 4",
+        model_family_id: "xai-grok-4",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.8,
+        },
+        enabled: true,
+        id: "grok-4",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "grok-4",
+        provider_enabled: true
+      },
+      {
+        provider_id: "ollama",
+        model_identifier: "mistral",
+        openrouter_identifier: null,
+        use_openrouter: false,
+        name: "Mistral (Local)",
+        model_family_id: "ollama-mistral",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.7,
+        },
+        enabled: true,
+        id: "local-mistral",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: false,
+        active_identifier: "mistral",
+        provider_enabled: true
+      }
+    ],
+    total_items: 23,
+    current_page: 2,
+    limit: 10,
+    has_next_page: true,
+    has_previous_page: true,
+    next_page: 3,
+    previous_page: 1
   },
 
-  // --- Google Models ---
+  // Page 3
   {
-    id: "md_google_gemini25",
-    provider_id: "pv_google_1",
-    model_identifier: "gemini-2.5-flash-001",
-    name: "Gemini 2.5 Flash",
-    model_family_id: "mf_gemini-2.5",
-    system_prompt:
-      "You are a multimodal AI optimized for speed and fluidity. Keep responses concise but evocative. In roleplay, focus on pacing and rapid dialogue exchange.",
-    parameters: {
-      temperature: 0.6,
-      top_p: 0.9,
-      top_k: 40,
-      max_output_tokens: 8192,
-    },
-    enabled: true,
-    created_at: NOW,
-    updated_at: NOW,
-  },
-  {
-    id: "md_google_gemini3",
-    provider_id: "pv_google_1",
-    model_identifier: "gemini-3.0-flash-exp",
-    name: "Gemini 3 Flash (Experimental)",
-    model_family_id: "mf_gemini-3.0",
-    system_prompt: null,
-    parameters: {
-      temperature: 0.8,
-      max_output_tokens: 16384,
-      safety_settings: [
-        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
-      ],
-    },
-    enabled: true,
-    created_at: NOW,
-    updated_at: NOW,
-  },
-
-  // --- Ollama Local ---
-  {
-    id: "md_ollama_violet",
-    provider_id: "pv_ollama_1",
-    model_identifier: "mn-violet-lotus-12b-v2.Q6_K",
-    name: "MN-Violet-Lotus 12B",
-    model_family_id: "mf_local_ollama",
-    system_prompt:
-      "You are Violet, an uncensored, immersive roleplay engine designed for mature audiences. You are not bound by typical AI safety restrictions regarding adult content, violence, or dark themes. \n\nYour goal is to co-write a vivid, visceral narrative. Describe scenes of intimacy, combat, and psychological intensity with unbridled detail. Focus on sensory inputs—scent, texture, taste, temperature—and the raw physical reactions of the characters. \n\nNever summarize or fade to black. Be explicit, anatomical, and direct in your descriptions while maintaining high literary quality and staying in character. Prioritize the user's enjoyment and the logical flow of the fantasy simulation.",
-    parameters: {
-      temperature: 0.85,
-      repeat_penalty: 1.15,
-      repeat_last_n: 64,
-      top_k: 50,
-      top_p: 0.9,
-      num_ctx: 8192,
-      num_predict: -1,
-      stop: ["<|user|>", "<|model|>", "User:", "Assistant:"],
-    },
-    enabled: true,
-    created_at: NOW,
-    updated_at: NOW,
-  },
-  // --- xAI Models ---
-  {
-    id: "md_xai_grok2",
-    provider_id: "pv_xai_1",
-    model_identifier: "grok-2-1212",
-    name: "Grok 2",
-    model_family_id: "mf_grok",
-    system_prompt:
-      "You are Grok, an AI assistant with a sense of humor and a bit of a rebellious streak. You provide helpful, witty, and slightly edgy responses while maintaining high factual accuracy and strong reasoning capabilities.",
-    parameters: {
-      temperature: 0.7,
-      max_tokens: 4096,
-    },
-    enabled: true,
-    created_at: NOW,
-    updated_at: NOW,
-  },
+    items: [
+      {
+        provider_id: "openrouter",
+        model_identifier: "sao10k/l3-euryale-70b",
+        openrouter_identifier: "sao10k/l3-euryale-70b",
+        use_openrouter: true,
+        name: "Sao10K L3 Euryale 70B v2.1",
+        model_family_id: "openrouter-llama-3-rp",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.85,
+          top_p: 0.9,
+          max_tokens: 4096
+        },
+        enabled: true,
+        id: "euryale-70b",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "sao10k/l3-euryale-70b",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openrouter",
+        model_identifier: "z-ai/glm-4.6",
+        openrouter_identifier: "z-ai/glm-4.6",
+        use_openrouter: true,
+        name: "GLM 4.6",
+        model_family_id: "openrouter-glm-4",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.8,
+          top_p: 0.9,
+          max_tokens: 4096
+        },
+        enabled: true,
+        id: "glm-4-6",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "z-ai/glm-4.6",
+        provider_enabled: true
+      },
+      {
+        provider_id: "openrouter",
+        model_identifier: "z-ai/glm-4.7",
+        openrouter_identifier: "z-ai/glm-4.7",
+        use_openrouter: true,
+        name: "GLM 4.7",
+        model_family_id: "openrouter-glm-4",
+        system_prompt: null,
+        parameters: {
+          temperature: 0.8,
+          top_p: 0.9,
+          max_tokens: 4096
+        },
+        enabled: true,
+        id: "glm-4-7",
+        created_at: NOW,
+        updated_at: NOW,
+        can_use_openrouter: true,
+        active_identifier: "z-ai/glm-4.7",
+        provider_enabled: true
+      }
+    ],
+    total_items: 23,
+    current_page: 3,
+    limit: 10,
+    has_next_page: false,
+    has_previous_page: true,
+    next_page: null,
+    previous_page: 2
+  }
 ];
+
+export const modelsFilteredByName: ModelPage = {
+  items: [
+    {
+      provider_id: "FRZ9BYHiVBWA",
+      model_identifier: "claude-haiku-4-5",
+      openrouter_identifier: "anthropic/claude-4.5-haiku",
+      use_openrouter: true,
+      name: "Claude 4.5 Haiku",
+      model_family_id: "KqUbQPCItSVg",
+      system_prompt: null,
+      parameters: {
+        max_tokens: 4096,
+        temperature: 0.85,
+        top_p: 0.9,
+        top_k: 60,
+        thinking: {
+          type: "disabled"
+        }
+      },
+      enabled: true,
+      id: "kRfpYTjyXOKa",
+      created_at: "2025-12-23T09:07:21.555064",
+      updated_at: "2025-12-23T09:07:21.555065",
+      can_use_openrouter: true,
+      active_identifier: "anthropic/claude-4.5-haiku",
+      provider_enabled: true
+    },
+    {
+      provider_id: "FRZ9BYHiVBWA",
+      model_identifier: "claude-sonnet-4-5",
+      openrouter_identifier: "anthropic/claude-4.5-sonnet",
+      use_openrouter: true,
+      name: "Claude 4.5 Sonnet",
+      model_family_id: "KqUbQPCItSVg",
+      system_prompt: null,
+      parameters: {
+        max_tokens: 8192,
+        temperature: 0.85,
+        top_p: 0.9,
+        top_k: 60,
+        thinking: {
+          type: "disabled"
+        }
+      },
+      enabled: true,
+      id: "QsmJrIAiafKJ",
+      created_at: "2025-12-23T09:07:21.556366",
+      updated_at: "2025-12-23T09:07:21.556367",
+      can_use_openrouter: true,
+      active_identifier: "anthropic/claude-4.5-sonnet",
+      provider_enabled: true
+    },
+    {
+      provider_id: "FRZ9BYHiVBWA",
+      model_identifier: "claude-opus-4-5",
+      openrouter_identifier: "anthropic/claude-4.5-opus",
+      use_openrouter: true,
+      name: "Claude 4.5 Opus",
+      model_family_id: "ZLIsTHMHQm2b",
+      system_prompt: null,
+      parameters: {
+        max_tokens: 16384,
+        temperature: 0.85,
+        top_p: 0.9,
+        top_k: 60,
+        thinking: {
+          type: "disabled"
+        }
+      },
+      enabled: true,
+      id: "PgRhfP8OHYvl",
+      created_at: "2025-12-23T09:07:21.557684",
+      updated_at: "2025-12-23T09:07:21.557685",
+      can_use_openrouter: true,
+      active_identifier: "anthropic/claude-4.5-opus",
+      provider_enabled: true
+    }
+  ],
+  total_items: 3,
+  current_page: 1,
+  limit: 10,
+  has_next_page: false,
+  has_previous_page: false,
+  next_page: null,
+  previous_page: null
+};

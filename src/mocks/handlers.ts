@@ -3,7 +3,7 @@ import { characters } from "@/mocks/data/characters";
 import { chats } from "@/mocks/data/chats";
 import { messages } from "@/mocks/data/messages";
 import { providers } from "@/mocks/data/providers";
-import { models } from "@/mocks/data/models";
+import { modelsPages, modelsFilteredByName } from "@/mocks/data/models";
 import { personas } from "@/mocks/data/personas";
 import { modelFamiliesPages } from "@/mocks/data/model-families";
 import type { components } from "@/api/schema";
@@ -16,7 +16,7 @@ const db = {
   chats,
   messages,
   providers,
-  models,
+  modelsPages,
   personas,
   modelFamiliesPages,
 };
@@ -123,16 +123,33 @@ export const handlers = [
   }),
 
   // Models
-  http.get("/api/models", async () => {
+  http.get("/api/models", async ({ request }) => {
     await delay(100);
-    return HttpResponse.json(db.models);
+    const url = new URL(request.url);
+    const nameParam = url.searchParams.get("name");
+    
+    if (nameParam && nameParam.toLowerCase().includes("claude")) {
+      return HttpResponse.json(modelsFilteredByName);
+    }
+
+    const pageParam = url.searchParams.get("page");
+    const page = pageParam ? parseInt(pageParam, 10) : 1;
+    const pageData = db.modelsPages.find((p) => p.current_page === page);
+    if (!pageData) return HttpResponse.json(db.modelsPages[0]);
+    return HttpResponse.json(pageData);
   }),
 
   http.get("/api/models/:modelId", async ({ params }) => {
-    const model = db.models.find((m) => m.id === params.modelId);
-    if (!model) return new HttpResponse(null, { status: 404 });
+    const modelId = params.modelId as string;
+    let foundModel = null;
+    for (const page of db.modelsPages) {
+      foundModel = page.items.find((m) => m.id === modelId);
+      if (foundModel) break;
+    }
+
+    if (!foundModel) return new HttpResponse(null, { status: 404 });
     await delay(100);
-    return HttpResponse.json(model);
+    return HttpResponse.json(foundModel);
   }),
 
   // Personas
