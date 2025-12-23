@@ -30,7 +30,6 @@ import { useSettingsStore } from '@/stores/settings'
 import { toast } from 'vue-sonner'
 import type { components } from '@/api/schema'
 import ParamInput from './ParamInput.vue'
-import { Separator } from '@/components/ui/separator'
 
 type Model = components['schemas']['ModelDetailResponse']
 
@@ -207,7 +206,7 @@ const handleResetParamsConfirm = async () => {
               </p>
             </div>
 
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
               <ParamInput
                 :schema="model.model_family.parameters[key]"
                 :model-value="getEffectiveValue(key, model.model_family.parameters[key])"
@@ -267,7 +266,7 @@ const handleResetParamsConfirm = async () => {
               </p>
             </div>
 
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
               <ParamInput
                 :schema="model.model_family.parameters[key]"
                 :model-value="getEffectiveValue(key, model.model_family.parameters[key])"

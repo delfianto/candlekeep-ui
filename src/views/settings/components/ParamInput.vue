@@ -114,7 +114,7 @@ const getPropValue = (key: string, propSchema: any) => {
 
       <div
         v-else-if="(schema.type === 'int' || schema.type === 'float') && schema.min_value !== undefined"
-        class="flex items-center gap-3 w-[300px]"
+        class="flex items-center gap-3 w-77.5"
       >
         <Slider
           :model-value="[Number(modelValue ?? schema.default)]"
@@ -126,7 +126,7 @@ const getPropValue = (key: string, propSchema: any) => {
         />
         <Input
           type="number"
-          class="w-16 h-8 text-right font-mono bg-background/50"
+          class="w-20 h-8 text-right font-mono bg-background/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           :model-value="modelValue ?? schema.default"
           @update:model-value="(v) => onUpdate(Number(v))"
         />
@@ -137,7 +137,7 @@ const getPropValue = (key: string, propSchema: any) => {
         :model-value="modelValue ?? schema.default"
         @update:model-value="(v) => onUpdate(v)"
       >
-        <SelectTrigger class="h-8 w-[200px] bg-background/50">
+        <SelectTrigger class="h-8 w-50 bg-background/50">
           <SelectValue placeholder="Select..." class="truncate" />
         </SelectTrigger>
         <SelectContent>
@@ -150,7 +150,7 @@ const getPropValue = (key: string, propSchema: any) => {
       <Input
         v-else-if="schema.type === 'int' || schema.type === 'float' || schema.type === 'string'"
         :type="schema.type === 'string' ? 'text' : 'number'"
-        class="h-8 w-[120px] font-mono text-right bg-background/50"
+        class="h-8 w-32.5 font-mono text-right bg-background/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         :model-value="modelValue ?? schema.default"
         @update:model-value="(v) => onUpdate(schema.type === 'string' ? v : Number(v))"
       />
@@ -178,7 +178,7 @@ const getPropValue = (key: string, propSchema: any) => {
         />
         <Input
           type="number"
-          class="w-20 h-8 text-right font-mono bg-background/50"
+          class="h-8 text-right font-mono bg-background/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           :model-value="modelValue ?? schema.default"
           @update:model-value="(v) => onUpdate(Number(v))"
         />
@@ -186,7 +186,7 @@ const getPropValue = (key: string, propSchema: any) => {
 
       <div v-else-if="schema.type === 'string'">
         <Textarea
-          class="min-h-[120px] font-mono text-sm bg-background/50 resize-y"
+          class="min-h-30 font-mono text-sm bg-background/50 resize-y"
           placeholder="Enter text..."
           :model-value="modelValue ?? schema.default"
           @update:model-value="(v) => onUpdate(v)"
@@ -207,7 +207,7 @@ const getPropValue = (key: string, propSchema: any) => {
       <div v-else-if="schema.type === 'list'" class="space-y-2">
         <div
           v-if="schema.item_schema?.type === 'string'"
-          class="border rounded-md p-2 bg-background/50 min-h-[40px] flex flex-wrap gap-2"
+          class="border rounded-md p-2 bg-background/50 min-h-10 flex flex-wrap gap-2"
         >
           <div
             v-for="(item, idx) in (modelValue || [])"
@@ -220,7 +220,7 @@ const getPropValue = (key: string, propSchema: any) => {
             </button>
           </div>
           <input
-            class="bg-transparent text-sm outline-none flex-1 min-w-[80px] placeholder:text-muted-foreground/50"
+            class="bg-transparent text-sm outline-none flex-1 min-w-20 placeholder:text-muted-foreground/50"
             placeholder="Add..."
             @keydown.enter.prevent="(e) => {
                const val = (e.target as HTMLInputElement).value.trim();
