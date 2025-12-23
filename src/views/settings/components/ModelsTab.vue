@@ -15,7 +15,9 @@ import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import AppPagination from '@/components/shared/AppPagination.vue'
-import { Cpu, Plus, Edit, Search, Loader2 } from 'lucide-vue-next'
+import { Cpu, Plus, Edit, Search, Loader2, Globe } from 'lucide-vue-next'
+import { client } from '@/api/client'
+import { toast } from 'vue-sonner'
 
 const props = defineProps<{
   providers: any[]
@@ -40,28 +42,49 @@ const getProviderName = (providerId: string) => {
 const fetchData = async () => {
   isLoading.value = true
   try {
-    const params = new URLSearchParams()
-    params.append('page', page.value.toString())
-    params.append('limit', limit.value.toString())
-    if (searchQuery.value) {
-      params.append('name', searchQuery.value)
-    }
+    const { data, error } = await client.GET('/api/models', {
+      params: {
+        query: {
+          page: page.value,
+          limit: limit.value,
+          name: searchQuery.value || undefined,
+        },
+      },
+    })
 
-    const res = await fetch(`/api/models?${params.toString()}`)
-    if (res.ok) {
-      const data = await res.json()
-      if (data.items) {
-        items.value = data.items
-        total.value = data.total_items || data.items.length
-      } else {
-        items.value = Array.isArray(data) ? data : []
-        total.value = items.value.length
-      }
+    if (error) throw error
+
+    if (data.items) {
+      items.value = data.items
+      total.value = data.total_items ?? data.items.length
+    } else {
+      items.value = Array.isArray(data) ? data : []
+      total.value = items.value.length
     }
   } catch (error) {
     console.error('Failed to load models:', error)
+    toast.error('Failed to load models')
   } finally {
     isLoading.value = false
+  }
+}
+
+const toggleFlags = async (model: any) => {
+  try {
+    const { error } = await client.PATCH('/api/models/{model_id}/flags', {
+      params: { path: { model_id: model.id } },
+      body: {
+        enabled: model.enabled,
+        use_openrouter: model.use_openrouter,
+      },
+    })
+    if (error) throw error
+    toast.success(`${model.name} flags updated`)
+  } catch (error) {
+    console.error('Failed to update flags:', error)
+    toast.error('Failed to update flags')
+    // Refresh to revert UI state
+    fetchData()
   }
 }
 
@@ -127,13 +150,45 @@ onMounted(fetchData)
             </div>
           </div>
 
-          <div class="flex items-center gap-4">
-            <div class="flex items-center space-x-2">
-              <Switch :id="`model-${model.id}`" v-model="model.enabled" />
-              <Label :for="`model-${model.id}`" class="text-xs text-muted-foreground"
-                >Enabled</Label
-              >
+          <div class="flex items-center gap-6">
+            <div class="flex items-center gap-4 border-r pr-6">
+              <div class="flex items-center space-x-2">
+                <Switch
+                  :id="`enabled-${model.id}`"
+                  :checked="model.enabled"
+                  @update:checked="
+                    (v: boolean) => {
+                      model.enabled = v
+                      toggleFlags(model)
+                    }
+                  "
+                />
+                <Label :for="`enabled-${model.id}`" class="text-xs text-muted-foreground"
+                  >Enabled</Label
+                >
+              </div>
+
+              <div class="flex items-center space-x-2">
+                <Switch
+                  :id="`openrouter-${model.id}`"
+                  :checked="model.use_openrouter"
+                  @update:checked="
+                    (v: boolean) => {
+                      model.use_openrouter = v
+                      toggleFlags(model)
+                    }
+                  "
+                />
+                <Label
+                  :for="`openrouter-${model.id}`"
+                  class="text-xs text-muted-foreground flex items-center gap-1"
+                >
+                  <Globe class="size-3" />
+                  OpenRouter
+                </Label>
+              </div>
             </div>
+
             <Button
               variant="ghost"
               size="icon"
