@@ -5,7 +5,7 @@ import { messages } from "@/mocks/data/messages";
 import { providers } from "@/mocks/data/providers";
 import { models } from "@/mocks/data/models";
 import { personas } from "@/mocks/data/personas";
-import { modelFamilies } from "@/mocks/data/model-families";
+import { modelFamiliesPages } from "@/mocks/data/model-families";
 import type { components } from "@/api/schema";
 
 type Chat = components["schemas"]["ChatResponse"];
@@ -18,7 +18,7 @@ const db = {
   providers,
   models,
   personas,
-  modelFamilies,
+  modelFamiliesPages,
 };
 
 export const handlers = [
@@ -149,8 +149,21 @@ export const handlers = [
   }),
 
   // Model Families
-  http.get("/api/model-families", async () => {
+  http.get("/api/model-families", async ({ request }) => {
     await delay(100);
-    return HttpResponse.json(db.modelFamilies);
+    const url = new URL(request.url);
+    const pageParam = url.searchParams.get("page");
+    const page = pageParam ? parseInt(pageParam, 10) : 1;
+
+    // Find the page object that matches the requested page number
+    const pageData = db.modelFamiliesPages.find((p) => p.current_page === page);
+
+    // Fallback to empty page or 404 if not found, but for mock let's return first page if out of bounds or empty structure
+    // Since we know we have pages 1, 2, 3
+    if (!pageData) {
+      return HttpResponse.json(db.modelFamiliesPages[0]);
+    }
+
+    return HttpResponse.json(pageData);
   }),
 ];
