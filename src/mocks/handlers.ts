@@ -5,7 +5,7 @@ import { messages } from "@/mocks/data/messages";
 import { providers } from "@/mocks/data/providers";
 import { modelsPages, modelsFilteredByName } from "@/mocks/data/models";
 import { personas } from "@/mocks/data/personas";
-import { modelFamiliesPages } from "@/mocks/data/model-families";
+import { modelFamiliesPages, modelFamiliesFilteredByName } from "@/mocks/data/model-families";
 import type { components } from "@/api/schema";
 
 type Chat = components["schemas"]["ChatResponse"];
@@ -169,6 +169,12 @@ export const handlers = [
   http.get("/api/model-families", async ({ request }) => {
     await delay(100);
     const url = new URL(request.url);
+    const nameParam = url.searchParams.get("name");
+
+    if (nameParam && nameParam.toLowerCase().includes("claude")) {
+      return HttpResponse.json(modelFamiliesFilteredByName);
+    }
+
     const pageParam = url.searchParams.get("page");
     const page = pageParam ? parseInt(pageParam, 10) : 1;
 

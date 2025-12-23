@@ -672,3 +672,172 @@ export const modelFamiliesPages: ModelFamilyPage[] = [
     previous_page: 2,
   },
 ];
+
+export const modelFamiliesFilteredByName: ModelFamilyPage = {
+  "items": [
+    {
+      "name": "Claude 4.5 Standard",
+      "family_identifier": "anthropic/claude-4.5-standard",
+      "description": "Anthropic Claude 4.5 Haiku & Sonnet. Balanced speed/intelligence for RP.",
+      "provider_types": [
+        "anthropic",
+        "openrouter"
+      ],
+      "parameters": {
+        "max_tokens": {
+          "type": "int",
+          "default": 4096,
+          "min_value": 1,
+          "max_value": 16384
+        },
+        "temperature": {
+          "type": "float",
+          "default": 1.0,
+          "min_value": 0.0,
+          "max_value": 2.0
+        },
+        "top_p": {
+          "type": "float",
+          "default": 1.0,
+          "min_value": 0.0,
+          "max_value": 1.0
+        },
+        "top_k": {
+          "type": "int",
+          "default": 40,
+          "min_value": 1,
+          "max_value": 500
+        },
+        "stop_sequences": {
+          "type": "list",
+          "item_schema": {
+            "type": "string"
+          }
+        },
+        "stream": {
+          "type": "boolean",
+          "default": true
+        },
+        "system": {
+          "type": "string"
+        },
+        "thinking": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "enum",
+              "str_values": [
+                "enabled",
+                "disabled"
+              ]
+            },
+            "budget_tokens": {
+              "type": "int",
+              "min_value": 1024,
+              "max_value": 20000
+            }
+          }
+        }
+      },
+      "unsupported_parameters": [],
+      "extra_metadata": {
+        "context_window": 500000,
+        "supports_vision": true,
+        "supports_function_calling": true,
+        "models": [
+          "claude-4.5-haiku",
+          "claude-4.5-sonnet"
+        ]
+      },
+      "id": "KqUbQPCItSVg",
+      "created_at": "2025-12-23T08:19:13.639205",
+      "updated_at": "2025-12-23T08:19:13.639206"
+    },
+    {
+      "name": "Claude 4.5 Opus",
+      "family_identifier": "anthropic/claude-4.5-opus",
+      "description": "Anthropic Claude 4.5 Opus. High-cost, high-fidelity model.",
+      "provider_types": [
+        "anthropic",
+        "openrouter"
+      ],
+      "parameters": {
+        "max_tokens": {
+          "type": "int",
+          "default": 4096,
+          "min_value": 1,
+          "max_value": 32768
+        },
+        "temperature": {
+          "type": "float",
+          "default": 1.0,
+          "min_value": 0.0,
+          "max_value": 2.0
+        },
+        "top_p": {
+          "type": "float",
+          "default": 1.0,
+          "min_value": 0.0,
+          "max_value": 1.0
+        },
+        "top_k": {
+          "type": "int",
+          "default": 40,
+          "min_value": 1
+        },
+        "stop_sequences": {
+          "type": "list",
+          "item_schema": {
+            "type": "string"
+          }
+        },
+        "stream": {
+          "type": "boolean",
+          "default": true
+        },
+        "system": {
+          "type": "string"
+        },
+        "thinking": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "enum",
+              "str_values": [
+                "enabled",
+                "disabled"
+              ]
+            },
+            "budget_tokens": {
+              "type": "int",
+              "min_value": 1024,
+              "max_value": 32000
+            }
+          }
+        },
+        "metadata": {
+          "type": "object"
+        }
+      },
+      "unsupported_parameters": [],
+      "extra_metadata": {
+        "context_window": 1000000,
+        "supports_vision": true,
+        "supports_function_calling": true,
+        "models": [
+          "claude-4.5-opus"
+        ]
+      },
+      "id": "ZLIsTHMHQm2b",
+      "created_at": "2025-12-23T08:19:13.639774",
+      "updated_at": "2025-12-23T08:19:13.639775"
+    }
+  ],
+  "total_items": 2,
+  "current_page": 1,
+  "limit": 10,
+  "has_next_page": false,
+  "has_previous_page": false,
+  "next_page": null,
+  "previous_page": null
+};
