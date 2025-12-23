@@ -112,7 +112,11 @@ onMounted(fetchData)
             <div class="min-w-0 flex-1">
               <h4 class="font-semibold truncate">{{ family.name }}</h4>
               <div class="flex items-center gap-2 text-xs text-muted-foreground">
-                <span class="font-mono text-[10px] opacity-70 truncate" :title="family.family_identifier">{{ family.family_identifier }}</span>
+                <span
+                  class="font-mono text-[10px] opacity-70 truncate"
+                  :title="family.family_identifier"
+                  >{{ family.family_identifier }}</span
+                >
               </div>
               <p v-if="family.description" class="text-xs text-muted-foreground mt-1 line-clamp-1">
                 {{ family.description }}

@@ -225,21 +225,28 @@ onMounted(fetchData)
             </div>
           </CardHeader>
           <CardContent class="space-y-6">
-            <div v-if="Object.keys(family.parameters || {}).length === 0" class="text-sm text-muted-foreground italic py-4">
+            <div
+              v-if="Object.keys(family.parameters || {}).length === 0"
+              class="text-sm text-muted-foreground italic py-4"
+            >
               No parameters defined for this family.
             </div>
-            
+
             <div v-else class="space-y-4">
-              <div 
-                v-for="(schema, key) in (family.parameters as Record<string, any>)" 
+              <div
+                v-for="(schema, key) in (family.parameters as Record<string, any>)"
                 :key="key"
                 class="p-4 border rounded-lg bg-muted/30 space-y-3"
               >
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2">
                     <span class="font-mono font-bold text-sm text-primary">{{ key }}</span>
-                    <Badge variant="secondary" class="text-[10px] uppercase">{{ schema.type }}</Badge>
-                    
+                    <Badge
+                      variant="secondary"
+                      class="text-[10px] uppercase"
+                      >{{ schema.type }}</Badge
+                    >
+
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger as-child>
@@ -247,7 +254,9 @@ onMounted(fetchData)
                         </TooltipTrigger>
                         <TooltipContent v-if="settingsStore.parameterDocs[key]" class="max-w-xs">
                           <p class="font-bold mb-1">{{ settingsStore.parameterDocs[key].label }}</p>
-                          <p class="text-xs">{{ settingsStore.parameterDocs[key].detailed_info }}</p>
+                          <p class="text-xs">
+                            {{ settingsStore.parameterDocs[key].detailed_info }}
+                          </p>
                         </TooltipContent>
                         <TooltipContent v-else>
                           <p class="text-xs italic">No documentation available.</p>
@@ -260,7 +269,9 @@ onMounted(fetchData)
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
                   <div class="space-y-1">
                     <Label class="text-[10px] text-muted-foreground uppercase">Default</Label>
-                    <div class="font-mono">{{ schema.default !== undefined ? schema.default : 'None' }}</div>
+                    <div class="font-mono">
+                      {{ schema.default !== undefined ? schema.default : 'None' }}
+                    </div>
                   </div>
                   <div v-if="schema.min_value !== undefined" class="space-y-1">
                     <Label class="text-[10px] text-muted-foreground uppercase">Min</Label>
@@ -273,7 +284,12 @@ onMounted(fetchData)
                   <div v-if="schema.str_values" class="space-y-1 col-span-2">
                     <Label class="text-[10px] text-muted-foreground uppercase">Options</Label>
                     <div class="flex flex-wrap gap-1 mt-1">
-                      <Badge v-for="val in schema.str_values" :key="val" variant="outline" class="text-[9px]">
+                      <Badge
+                        v-for="val in schema.str_values"
+                        :key="val"
+                        variant="outline"
+                        class="text-[9px]"
+                      >
                         {{ val }}
                       </Badge>
                     </div>
@@ -288,19 +304,24 @@ onMounted(fetchData)
         <Card>
           <CardHeader>
             <CardTitle>Unsupported Parameters</CardTitle>
-            <CardDescription>Parameters explicitly marked as not supported by this family.</CardDescription>
+            <CardDescription
+              >Parameters explicitly marked as not supported by this family.</CardDescription
+            >
           </CardHeader>
           <CardContent>
             <div class="flex flex-wrap gap-2">
-              <Badge 
-                v-for="p in family.unsupported_parameters" 
+              <Badge
+                v-for="p in family.unsupported_parameters"
                 :key="p"
                 variant="destructive"
                 class="bg-destructive/10 text-destructive border-destructive/20 hover:bg-destructive/20"
               >
                 {{ p }}
               </Badge>
-              <div v-if="!family.unsupported_parameters?.length" class="text-sm text-muted-foreground italic">
+              <div
+                v-if="!family.unsupported_parameters?.length"
+                class="text-sm text-muted-foreground italic"
+              >
                 No explicitly unsupported parameters.
               </div>
             </div>
@@ -331,15 +352,26 @@ onMounted(fetchData)
               </span>
             </div>
 
-            <div v-if="family.extra_metadata?.context_window" class="flex justify-between py-2 border-b">
+            <div
+              v-if="family.extra_metadata?.context_window"
+              class="flex justify-between py-2 border-b"
+            >
               <span class="text-muted-foreground">Context Window</span>
-              <span class="font-medium">{{ family.extra_metadata.context_window.toLocaleString() }}</span>
+              <span
+                class="font-medium"
+                >{{ family.extra_metadata.context_window.toLocaleString() }}</span
+              >
             </div>
-            
+
             <div v-if="family.extra_metadata?.models" class="space-y-2 pt-2">
               <Label class="text-muted-foreground">Known Models</Label>
               <div class="flex flex-wrap gap-1">
-                <Badge v-for="m in family.extra_metadata.models" :key="m" variant="outline" class="text-[10px]">
+                <Badge
+                  v-for="m in family.extra_metadata.models"
+                  :key="m"
+                  variant="outline"
+                  class="text-[10px]"
+                >
                   {{ m }}
                 </Badge>
               </div>
@@ -397,8 +429,8 @@ onMounted(fetchData)
         <AlertDialogHeader>
           <AlertDialogTitle>Delete this model family?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete <strong>{{ family.name }}</strong>. 
-            Models relying on this family configuration may lose functionality.
+            This will permanently delete <strong>{{ family.name }}</strong
+            >. Models relying on this family configuration may lose functionality.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

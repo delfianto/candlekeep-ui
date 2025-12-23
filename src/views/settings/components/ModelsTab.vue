@@ -174,13 +174,19 @@ onMounted(fetchData)
                 <Badge variant="secondary" class="text-[10px] shrink-0">
                   {{ getProviderName(model.provider_id) }}
                 </Badge>
-                <span class="font-mono text-[10px] opacity-70 truncate" :title="model.model_identifier">{{ model.model_identifier }}</span>
+                <span
+                  class="font-mono text-[10px] opacity-70 truncate"
+                  :title="model.model_identifier"
+                  >{{ model.model_identifier }}</span
+                >
               </div>
             </div>
           </div>
 
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 border-b sm:border-b-0 sm:border-r pb-4 sm:pb-0 pr-0 sm:pr-6 mr-0 sm:mr-2 w-full sm:w-auto">
+            <div
+              class="flex flex-col sm:flex-row items-start sm:items-center gap-4 border-b sm:border-b-0 sm:border-r pb-4 sm:pb-0 pr-0 sm:pr-6 mr-0 sm:mr-2 w-full sm:w-auto"
+            >
               <div class="flex items-center space-x-2">
                 <Switch
                   :id="`enabled-${model.id}`"

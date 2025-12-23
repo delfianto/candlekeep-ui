@@ -85,7 +85,7 @@ const updateListItem = (index: number, value: any) => {
 // -- OBJECT HANDLERS --
 
 const updateObjectProp = (key: string, value: any) => {
-  const newObj = { ...(props.modelValue || {}) }
+  const newObj = { ...props.modelValue }
   newObj[key] = value
   onUpdate(newObj)
 }

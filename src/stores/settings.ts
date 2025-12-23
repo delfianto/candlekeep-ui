@@ -1,41 +1,41 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import { client } from '@/api/client'
+import { defineStore } from "pinia";
+import { ref } from "vue";
+import { client } from "@/api/client";
 
 export type ParameterDoc = {
-  label: string
-  short_info: string
-  detailed_info: string
-}
+  label: string;
+  short_info: string;
+  detailed_info: string;
+};
 
-export const useSettingsStore = defineStore('settings', () => {
-  const parameterDocs = ref<Record<string, ParameterDoc>>({})
-  const isLoadingDocs = ref(false)
-  const hasLoadedDocs = ref(false)
+export const useSettingsStore = defineStore("settings", () => {
+  const parameterDocs = ref<Record<string, ParameterDoc>>({});
+  const isLoadingDocs = ref(false);
+  const hasLoadedDocs = ref(false);
 
   const fetchParameterDocs = async () => {
-    if (hasLoadedDocs.value || isLoadingDocs.value) return
+    if (hasLoadedDocs.value || isLoadingDocs.value) return;
 
-    isLoadingDocs.value = true
+    isLoadingDocs.value = true;
     try {
-      const { data, error } = await client.GET('/api/model-families/parameter-docs')
-      if (error) throw error
-      
+      const { data, error } = await client.GET("/api/model-families/parameter-docs");
+      if (error) throw error;
+
       if (data) {
-        parameterDocs.value = data as Record<string, ParameterDoc>
-        hasLoadedDocs.value = true
+        parameterDocs.value = data as Record<string, ParameterDoc>;
+        hasLoadedDocs.value = true;
       }
     } catch (error) {
-      console.error('Failed to load parameter docs', error)
+      console.error("Failed to load parameter docs", error);
     } finally {
-      isLoadingDocs.value = false
+      isLoadingDocs.value = false;
     }
-  }
+  };
 
   return {
     parameterDocs,
     isLoadingDocs,
     hasLoadedDocs,
-    fetchParameterDocs
-  }
-})
+    fetchParameterDocs,
+  };
+});
