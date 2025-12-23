@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useSettingsStore } from '@/stores/settings'
 import ContentLayout from '@/components/layout/ContentLayout.vue'
 import BrandIcon from '@/components/shared/BrandIcon.vue'
 import {
@@ -20,11 +21,13 @@ import { ArrowLeft, Save, Trash2, RotateCcw, Loader2, AlertCircle } from 'lucide
 
 const route = useRoute()
 const router = useRouter()
+const settingsStore = useSettingsStore()
 const providerId = route.params.id as string
 
-const isLoading = ref(true)
 const isSaving = ref(false)
 const provider = ref<any>(null)
+
+const isLoading = computed(() => settingsStore.isLoadingProviders)
 
 // Mock "Save" Action
 const saveProvider = async () => {
@@ -37,21 +40,8 @@ const saveProvider = async () => {
 
 // Fetch Logic
 const fetchProvider = async () => {
-  isLoading.value = true
-  try {
-    // We fetch the full list for now since your mock might not have individual endpoints wired perfect yet
-    // Or if you added the :id endpoint, use that.
-    // I'll try the direct ID fetch as per standard REST, fallback to list if needed.
-    const res = await fetch(`/api/providers`)
-    if (res.ok) {
-      const all = await res.json()
-      provider.value = all.find((p: any) => p.id === providerId)
-    }
-  } catch (error) {
-    console.error('Failed to load provider', error)
-  } finally {
-    isLoading.value = false
-  }
+  await settingsStore.fetchProviders()
+  provider.value = settingsStore.providers.find((p: any) => p.id === providerId)
 }
 
 onMounted(fetchProvider)

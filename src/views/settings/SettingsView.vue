@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useSettingsStore } from '@/stores/settings'
 import ContentLayout from '@/components/layout/ContentLayout.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
@@ -25,8 +26,9 @@ import AboutTab from './components/AboutTab.vue'
 // -- STATE --
 // Keep the state here so we can share it
 // e.g., ModelsTab needs Providers data
-const isLoading = ref(true)
-const providers = ref([])
+const settingsStore = useSettingsStore()
+const isLoading = computed(() => settingsStore.isLoadingProviders)
+const providers = computed(() => settingsStore.providers)
 
 const route = useRoute()
 const router = useRouter()
@@ -55,19 +57,7 @@ const currentTabLabel = computed(() => {
 
 // -- ACTIONS --
 const fetchData = async () => {
-  isLoading.value = true
-  try {
-    const res = await fetch('/api/providers')
-
-    if (res.ok) {
-      const data = await res.json()
-      providers.value = data.sort((a: any, b: any) => a.name.localeCompare(b.name))
-    }
-  } catch (error) {
-    console.error('Failed to load settings:', error)
-  } finally {
-    isLoading.value = false
-  }
+  await settingsStore.fetchProviders()
 }
 
 onMounted(fetchData)

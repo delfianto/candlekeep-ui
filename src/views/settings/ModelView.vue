@@ -25,6 +25,13 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
   AlertCircle,
   ArrowLeft,
   Cpu,
@@ -39,6 +46,7 @@ import { client } from '@/api/client'
 import type { components } from '@/api/schema'
 import { toast } from 'vue-sonner'
 import { useSettingsStore } from '@/stores/settings'
+import { computed } from 'vue'
 import ModelInferenceParams from './components/ModelInferenceParams.vue'
 
 const route = useRoute()
@@ -57,6 +65,13 @@ const model = ref<Model | null>(null)
 // Dialog States
 const showResetDialog = ref(false)
 const showDeleteDialog = ref(false)
+
+// -- COMPUTED --
+const filteredProviders = computed(() => {
+  if (!model.value || !settingsStore.providers) return []
+  const allowedTypes = (model.value.model_family as any).provider_types || []
+  return settingsStore.providers.filter((p: any) => allowedTypes.includes(p.provider_type))
+})
 
 // -- ACTIONS --
 const fetchModel = async () => {
@@ -151,8 +166,11 @@ const handleDeleteConfirm = async () => {
 }
 
 onMounted(async () => {
-  await fetchModel()
-  await settingsStore.fetchParameterDocs()
+  await Promise.all([
+    fetchModel(),
+    settingsStore.fetchParameterDocs(),
+    settingsStore.fetchProviders(),
+  ])
 })
 </script>
 
@@ -258,9 +276,23 @@ onMounted(async () => {
             <CardTitle class="text-base">Metadata</CardTitle>
           </CardHeader>
           <CardContent class="space-y-4 text-sm">
-            <div class="grid gap-1 py-2 border-b">
-              <span class="text-muted-foreground text-xs">Provider</span>
-              <span class="font-medium">{{ model.provider_id.toUpperCase() }}</span>
+            <div class="grid gap-2 py-2 border-b">
+              <Label class="text-muted-foreground text-xs">Provider</Label>
+              <Select v-model="model.provider_id">
+                <SelectTrigger class="h-8 text-xs">
+                  <SelectValue placeholder="Select a provider" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem
+                    v-for="prov in filteredProviders"
+                    :key="prov.id"
+                    :value="prov.id"
+                    class="text-xs"
+                  >
+                    {{ prov.name }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div class="grid gap-1 py-2 border-b">

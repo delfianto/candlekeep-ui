@@ -13,6 +13,10 @@ export const useSettingsStore = defineStore("settings", () => {
   const isLoadingDocs = ref(false);
   const hasLoadedDocs = ref(false);
 
+  const providers = ref<any[]>([]);
+  const isLoadingProviders = ref(false);
+  const hasLoadedProviders = ref(false);
+
   const fetchParameterDocs = async () => {
     if (hasLoadedDocs.value || isLoadingDocs.value) return;
 
@@ -32,10 +36,35 @@ export const useSettingsStore = defineStore("settings", () => {
     }
   };
 
+  const fetchProviders = async (force = false) => {
+    if ((hasLoadedProviders.value || isLoadingProviders.value) && !force) return;
+
+    isLoadingProviders.value = true;
+    try {
+      const { data, error } = await client.GET("/api/providers");
+      if (error) throw error;
+
+      if (data) {
+        providers.value = (data as any[]).sort((a: any, b: any) =>
+          a.name.localeCompare(b.name)
+        );
+        hasLoadedProviders.value = true;
+      }
+    } catch (error) {
+      console.error("Failed to load providers", error);
+    } finally {
+      isLoadingProviders.value = false;
+    }
+  };
+
   return {
     parameterDocs,
     isLoadingDocs,
     hasLoadedDocs,
     fetchParameterDocs,
+    providers,
+    isLoadingProviders,
+    hasLoadedProviders,
+    fetchProviders,
   };
 });
