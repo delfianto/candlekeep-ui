@@ -32,6 +32,11 @@ const routes = [
     name: "model-edit",
     component: () => import("@/views/settings/ModelView.vue"),
   },
+  {
+    path: "/settings/model-families/:id",
+    name: "model-family-edit",
+    component: () => import("@/views/settings/ModelFamilyView.vue"),
+  },
 ];
 
 const router = createRouter({

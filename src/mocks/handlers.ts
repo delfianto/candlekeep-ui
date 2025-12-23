@@ -6,6 +6,7 @@ import { providers } from "@/mocks/data/providers";
 import { modelsPages, modelsFilteredByName } from "@/mocks/data/models";
 import { personas } from "@/mocks/data/personas";
 import { modelFamiliesPages, modelFamiliesFilteredByName } from "@/mocks/data/model-families";
+import { modelFamiliesParameterDocs } from "@/mocks/data/model-parameters";
 import type { components } from "@/api/schema";
 
 type Chat = components["schemas"]["ChatResponse"];
@@ -188,5 +189,11 @@ export const handlers = [
     }
 
     return HttpResponse.json(pageData);
+  }),
+
+  // Model Family Parameter Docs
+  http.get("/api/model-families/parameter-docs", async () => {
+    await delay(50);
+    return HttpResponse.json(modelFamiliesParameterDocs);
   }),
 ];
