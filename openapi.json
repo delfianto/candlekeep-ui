@@ -111,6 +111,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Query Http Logs Admin Logs Http Get"
                 }
               }
@@ -234,6 +235,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Query Llm Logs Admin Logs Llm Get"
                 }
               }
@@ -304,6 +306,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Llm Stats Admin Logs Llm Stats Get"
                 }
               }
@@ -379,6 +382,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Query Error Logs Admin Logs Errors Get"
                 }
               }
@@ -555,14 +559,16 @@
             }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/api/providers/{provider_id}/flags": {
+      "patch": {
         "tags": [
           "providers"
         ],
-        "summary": "Delete Provider",
-        "description": "Remove a provider",
-        "operationId": "delete_provider_api_providers__provider_id__delete",
+        "summary": "Update Provider Flags",
+        "description": "Enable or disable a provider",
+        "operationId": "update_provider_flags_api_providers__provider_id__flags_patch",
         "parameters": [
           {
             "name": "provider_id",
@@ -574,9 +580,26 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProviderFlagsUpdate"
+              }
+            }
+          }
+        },
         "responses": {
-          "204": {
-            "description": "Successful Response"
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderResponse"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -1055,6 +1078,59 @@
         "responses": {
           "204": {
             "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/models/{model_id}/flags": {
+      "patch": {
+        "tags": [
+          "models"
+        ],
+        "summary": "Update Model Flags",
+        "description": "Toggle model enabled and OpenRouter routing flags",
+        "operationId": "update_model_flags_api_models__model_id__flags_patch",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Model Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModelFlagsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelResponse"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -2832,6 +2908,7 @@
             "anyOf": [
               {
                 "items": {
+                  "additionalProperties": true,
                   "type": "object"
                 },
                 "type": "array"
@@ -2942,8 +3019,15 @@
             "description": "Character ID"
           },
           "model_id": {
-            "type": "string",
-            "maxLength": 12,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 12
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Model Id",
             "description": "Model ID"
           },
@@ -2963,8 +3047,7 @@
         },
         "type": "object",
         "required": [
-          "character_id",
-          "model_id"
+          "character_id"
         ],
         "title": "ChatCreate",
         "description": "Schema for creating a new chat"
@@ -2978,8 +3061,15 @@
             "description": "Character ID"
           },
           "model_id": {
-            "type": "string",
-            "maxLength": 12,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 12
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Model Id",
             "description": "Model ID"
           },
@@ -3014,7 +3104,6 @@
         "type": "object",
         "required": [
           "character_id",
-          "model_id",
           "id",
           "created_at",
           "updated_at"
@@ -3144,6 +3233,25 @@
             "title": "Model Identifier",
             "description": "Actual API model name"
           },
+          "openrouter_identifier": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Openrouter Identifier",
+            "description": "OpenRouter model name"
+          },
+          "use_openrouter": {
+            "type": "boolean",
+            "title": "Use Openrouter",
+            "description": "Whether to route through OpenRouter",
+            "default": false
+          },
           "name": {
             "type": "string",
             "maxLength": 100,
@@ -3172,6 +3280,7 @@
             "description": "Custom system prompt override"
           },
           "parameters": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Parameters",
             "description": "All model parameters (temperature, max_tokens, etc.)"
@@ -3209,6 +3318,25 @@
             "title": "Model Identifier",
             "description": "Actual API model name"
           },
+          "openrouter_identifier": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Openrouter Identifier",
+            "description": "OpenRouter model name"
+          },
+          "use_openrouter": {
+            "type": "boolean",
+            "title": "Use Openrouter",
+            "description": "Whether to route through OpenRouter",
+            "default": false
+          },
           "name": {
             "type": "string",
             "maxLength": 100,
@@ -3237,6 +3365,7 @@
             "description": "Custom system prompt override"
           },
           "parameters": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Parameters",
             "description": "All model parameters (temperature, max_tokens, etc.)"
@@ -3261,6 +3390,18 @@
             "format": "date-time",
             "title": "Updated At"
           },
+          "can_use_openrouter": {
+            "type": "boolean",
+            "title": "Can Use Openrouter"
+          },
+          "active_identifier": {
+            "type": "string",
+            "title": "Active Identifier"
+          },
+          "provider_enabled": {
+            "type": "boolean",
+            "title": "Provider Enabled"
+          },
           "model_family": {
             "$ref": "#/components/schemas/ModelFamilyResponse"
           }
@@ -3274,6 +3415,9 @@
           "id",
           "created_at",
           "updated_at",
+          "can_use_openrouter",
+          "active_identifier",
+          "provider_enabled",
           "model_family"
         ],
         "title": "ModelDetailResponse",
@@ -3287,6 +3431,12 @@
             "title": "Name",
             "description": "Unique model family name"
           },
+          "family_identifier": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Family Identifier",
+            "description": "URL-safe identifier following provider/model-name pattern"
+          },
           "description": {
             "anyOf": [
               {
@@ -3308,6 +3458,7 @@
             "description": "List of provider types this family belongs to"
           },
           "parameters": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Parameters",
             "description": "Per-parameter configuration: type, default, ranges, etc."
@@ -3323,6 +3474,7 @@
           "extra_metadata": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -3335,7 +3487,8 @@
         },
         "type": "object",
         "required": [
-          "name"
+          "name",
+          "family_identifier"
         ],
         "title": "ModelFamilyCreate",
         "description": "Schema for creating a new model family"
@@ -3347,6 +3500,12 @@
             "maxLength": 100,
             "title": "Name",
             "description": "Unique model family name"
+          },
+          "family_identifier": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Family Identifier",
+            "description": "URL-safe identifier following provider/model-name pattern"
           },
           "description": {
             "anyOf": [
@@ -3369,6 +3528,7 @@
             "description": "List of provider types this family belongs to"
           },
           "parameters": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Parameters",
             "description": "Per-parameter configuration: type, default, ranges, etc."
@@ -3384,6 +3544,7 @@
           "extra_metadata": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -3411,6 +3572,7 @@
         "type": "object",
         "required": [
           "name",
+          "family_identifier",
           "id",
           "created_at",
           "updated_at"
@@ -3431,6 +3593,18 @@
               }
             ],
             "title": "Name"
+          },
+          "family_identifier": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Family Identifier"
           },
           "description": {
             "anyOf": [
@@ -3460,6 +3634,7 @@
           "parameters": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -3485,6 +3660,7 @@
           "extra_metadata": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -3497,6 +3673,35 @@
         "type": "object",
         "title": "ModelFamilyUpdate",
         "description": "Schema for updating a model family"
+      },
+      "ModelFlagsUpdate": {
+        "properties": {
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "use_openrouter": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Openrouter"
+          }
+        },
+        "type": "object",
+        "title": "ModelFlagsUpdate",
+        "description": "Schema for updating model flags only"
       },
       "ModelResponse": {
         "properties": {
@@ -3513,6 +3718,25 @@
             "minLength": 1,
             "title": "Model Identifier",
             "description": "Actual API model name"
+          },
+          "openrouter_identifier": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Openrouter Identifier",
+            "description": "OpenRouter model name"
+          },
+          "use_openrouter": {
+            "type": "boolean",
+            "title": "Use Openrouter",
+            "description": "Whether to route through OpenRouter",
+            "default": false
           },
           "name": {
             "type": "string",
@@ -3542,6 +3766,7 @@
             "description": "Custom system prompt override"
           },
           "parameters": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Parameters",
             "description": "All model parameters (temperature, max_tokens, etc.)"
@@ -3565,6 +3790,18 @@
             "type": "string",
             "format": "date-time",
             "title": "Updated At"
+          },
+          "can_use_openrouter": {
+            "type": "boolean",
+            "title": "Can Use Openrouter"
+          },
+          "active_identifier": {
+            "type": "string",
+            "title": "Active Identifier"
+          },
+          "provider_enabled": {
+            "type": "boolean",
+            "title": "Provider Enabled"
           }
         },
         "type": "object",
@@ -3575,7 +3812,10 @@
           "model_family_id",
           "id",
           "created_at",
-          "updated_at"
+          "updated_at",
+          "can_use_openrouter",
+          "active_identifier",
+          "provider_enabled"
         ],
         "title": "ModelResponse",
         "description": "Schema for model responses (list view)"
@@ -3607,6 +3847,29 @@
               }
             ],
             "title": "Model Identifier"
+          },
+          "openrouter_identifier": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Openrouter Identifier"
+          },
+          "use_openrouter": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Use Openrouter"
           },
           "name": {
             "anyOf": [
@@ -3649,6 +3912,7 @@
           "parameters": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -4465,6 +4729,20 @@
         ],
         "title": "ProviderCreate",
         "description": "Schema for creating a new provider"
+      },
+      "ProviderFlagsUpdate": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "title": "ProviderFlagsUpdate",
+        "description": "Schema for updating provider flags only"
       },
       "ProviderResponse": {
         "properties": {
