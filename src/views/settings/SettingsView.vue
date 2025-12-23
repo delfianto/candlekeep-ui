@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ContentLayout from '@/components/layout/ContentLayout.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Server, Cpu, FileText, Palette, Info, Loader2, Layers } from 'lucide-vue-next'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
+import { Server, Cpu, FileText, Palette, Info, Loader2, Layers, Menu } from 'lucide-vue-next'
 
 // Import Tab Components
 import ProvidersTab from './components/ProvidersTab.vue'
@@ -21,11 +30,27 @@ const providers = ref([])
 
 const route = useRoute()
 const router = useRouter()
+const isMobileMenuOpen = ref(false)
+
+// -- TAB CONFIG --
+const tabsConfig = [
+  { value: 'providers', label: 'Providers', icon: Server },
+  { value: 'model-families', label: 'Families', icon: Layers },
+  { value: 'models', label: 'Models', icon: Cpu },
+  { value: 'templates', label: 'Templates', icon: FileText },
+  { value: 'ui', label: 'Interface', icon: Palette },
+  { value: 'about', label: 'About', icon: Info },
+]
 
 // -- TAB STATE --
 const activeTab = ref<string>((route.query.tab as string) || 'providers')
 watch(activeTab, (newTab) => {
   router.replace({ query: { ...route.query, tab: newTab } })
+  isMobileMenuOpen.value = false
+})
+
+const currentTabLabel = computed(() => {
+  return tabsConfig.find(t => t.value === activeTab.value)?.label || 'Settings'
 })
 
 // -- ACTIONS --
@@ -51,19 +76,51 @@ onMounted(fetchData)
 <template>
   <ContentLayout variant="standard">
     <Tabs v-model="activeTab" class="space-y-6">
-      <TabsList class="grid w-full grid-cols-2 md:w-180 md:grid-cols-6 bg-muted/50 p-1">
-        <TabsTrigger value="providers" class="gap-2"
-          ><Server class="size-4" /> Providers</TabsTrigger
+      <!-- MOBILE HEADER -->
+      <div class="md:hidden sticky -top-4 -mx-4 -mt-4 p-4 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold flex items-center gap-2">
+          <component :is="tabsConfig.find(t => t.value === activeTab)?.icon" class="size-5" />
+          {{ currentTabLabel }}
+        </h2>
+        <Sheet v-model:open="isMobileMenuOpen">
+          <SheetTrigger as-child>
+            <Button variant="ghost" size="icon">
+              <Menu class="size-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" class="w-[280px] sm:w-[350px]">
+            <SheetHeader>
+              <SheetTitle>Settings</SheetTitle>
+              <SheetDescription>Manage application preferences.</SheetDescription>
+            </SheetHeader>
+            <div class="grid gap-2 py-4">
+               <Button
+                 v-for="tab in tabsConfig"
+                 :key="tab.value"
+                 variant="ghost"
+                 class="w-full justify-start gap-3"
+                 :class="activeTab === tab.value ? 'bg-secondary' : ''"
+                 @click="activeTab = tab.value"
+               >
+                 <component :is="tab.icon" class="size-4" />
+                 {{ tab.label }}
+               </Button>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      <!-- DESKTOP TABS LIST -->
+      <TabsList class="hidden md:grid w-full md:w-180 md:grid-cols-6 bg-muted/50 p-1">
+        <TabsTrigger
+          v-for="tab in tabsConfig"
+          :key="tab.value"
+          :value="tab.value"
+          class="gap-2"
         >
-        <TabsTrigger value="model-families" class="gap-2"
-          ><Layers class="size-4" /> Families</TabsTrigger
-        >
-        <TabsTrigger value="models" class="gap-2"><Cpu class="size-4" /> Models</TabsTrigger>
-        <TabsTrigger value="templates" class="gap-2"
-          ><FileText class="size-4" /> Templates</TabsTrigger
-        >
-        <TabsTrigger value="ui" class="gap-2"><Palette class="size-4" /> Interface</TabsTrigger>
-        <TabsTrigger value="about" class="gap-2"><Info class="size-4" /> About</TabsTrigger>
+          <component :is="tab.icon" class="size-4" />
+          {{ tab.label }}
+        </TabsTrigger>
       </TabsList>
 
       <div v-if="isLoading" class="flex justify-center py-12">
