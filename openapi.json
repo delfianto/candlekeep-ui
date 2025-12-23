@@ -640,9 +640,20 @@
           "model-families"
         ],
         "summary": "List Model Families",
-        "description": "List all model families with pagination",
+        "description": "List all model families with pagination and optional name filtering",
         "operationId": "list_model_families_api_model_families_get",
         "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter by name (partial match, case-insensitive)",
+              "title": "Name"
+            },
+            "description": "Filter by name (partial match, case-insensitive)"
+          },
           {
             "name": "page",
             "in": "query",
@@ -869,9 +880,20 @@
           "models"
         ],
         "summary": "List Models",
-        "description": "List model definitions with pagination",
+        "description": "List model definitions with pagination and optional name filtering",
         "operationId": "list_models_api_models_get",
         "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter by name (partial match, case-insensitive)",
+              "title": "Name"
+            },
+            "description": "Filter by name (partial match, case-insensitive)"
+          },
           {
             "name": "page",
             "in": "query",

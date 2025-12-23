@@ -1,6 +1,6 @@
 import type { components } from "@/api/schema";
 
-type ModelFamilyPage = components["schemas"]["Page_ModelFamilyResponse_"];
+type ModelFamilyPage = components["schemas"]["PaginatedResponse_ModelFamilyResponse_"];
 
 const NOW = new Date().toISOString();
 

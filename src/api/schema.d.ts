@@ -181,7 +181,7 @@ export interface paths {
         };
         /**
          * List Model Families
-         * @description List all model families with pagination
+         * @description List all model families with pagination and optional name filtering
          */
         get: operations["list_model_families_api_model_families_get"];
         put?: never;
@@ -233,7 +233,7 @@ export interface paths {
         };
         /**
          * List Models
-         * @description List model definitions with pagination
+         * @description List model definitions with pagination and optional name filtering
          */
         get: operations["list_models_api_models_get"];
         put?: never;
@@ -2185,6 +2185,8 @@ export interface operations {
     list_model_families_api_model_families_get: {
         parameters: {
             query?: {
+                /** @description Filter by name (partial match, case-insensitive) */
+                name?: string;
                 /** @description Page number (1-based) */
                 page?: number;
                 /** @description Items per page */
@@ -2347,6 +2349,8 @@ export interface operations {
     list_models_api_models_get: {
         parameters: {
             query?: {
+                /** @description Filter by name (partial match, case-insensitive) */
+                name?: string;
                 /** @description Page number (1-based) */
                 page?: number;
                 /** @description Items per page */

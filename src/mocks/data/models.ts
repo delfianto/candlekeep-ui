@@ -2,7 +2,7 @@ import type { components } from "@/api/schema";
 
 const NOW = new Date().toISOString();
 
-type ModelPage = components["schemas"]["Page_ModelResponse_"];
+type ModelPage = components["schemas"]["PaginatedResponse_ModelResponse_"];
 
 export const modelsPages: ModelPage[] = [
   // Page 1

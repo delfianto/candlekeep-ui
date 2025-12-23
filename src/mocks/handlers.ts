@@ -143,7 +143,7 @@ export const handlers = [
     const modelId = params.modelId as string;
     let foundModel = null;
     for (const page of db.modelsPages) {
-      foundModel = page.items.find((m) => m.id === modelId);
+      foundModel = page.items.find((m: components["schemas"]["ModelResponse"]) => m.id === modelId);
       if (foundModel) break;
     }
 
