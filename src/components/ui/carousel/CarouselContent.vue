@@ -13,11 +13,7 @@ const carousel = useCarousel()
 </script>
 
 <template>
-  <div
-    ref="carousel.carouselRef"
-    data-slot="carousel-content"
-    class="overflow-hidden"
-  >
+  <div ref="carousel.carouselRef" data-slot="carousel-content" class="overflow-hidden">
     <div
       :class="
         cn(

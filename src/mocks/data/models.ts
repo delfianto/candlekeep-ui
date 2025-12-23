@@ -21,7 +21,7 @@ export const modelsPages: ModelPage[] = [
           temperature: 0.85,
           top_p: 0.9,
           frequency_penalty: 0.3,
-          presence_penalty: 0.2
+          presence_penalty: 0.2,
         },
         enabled: true,
         id: "gpt-4o",
@@ -29,7 +29,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-4o",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openai",
@@ -44,7 +44,7 @@ export const modelsPages: ModelPage[] = [
           temperature: 0.85,
           top_p: 0.9,
           frequency_penalty: 0.3,
-          presence_penalty: 0.2
+          presence_penalty: 0.2,
         },
         enabled: true,
         id: "gpt-4o-mini",
@@ -52,7 +52,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-4o-mini",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openai",
@@ -66,7 +66,7 @@ export const modelsPages: ModelPage[] = [
           reasoning_effort: "low",
           max_completion_tokens: 16384,
           verbosity: "low",
-          summary: "concise"
+          summary: "concise",
         },
         enabled: true,
         id: "gpt-5",
@@ -74,7 +74,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-5",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openai",
@@ -88,7 +88,7 @@ export const modelsPages: ModelPage[] = [
           reasoning_effort: "low",
           max_completion_tokens: 8192,
           verbosity: "low",
-          summary: "concise"
+          summary: "concise",
         },
         enabled: true,
         id: "gpt-5-mini",
@@ -96,7 +96,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-5-mini",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openai",
@@ -110,7 +110,7 @@ export const modelsPages: ModelPage[] = [
           reasoning_effort: "low",
           max_completion_tokens: 4096,
           verbosity: "low",
-          summary: "concise"
+          summary: "concise",
         },
         enabled: true,
         id: "gpt-5-nano",
@@ -118,7 +118,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-5-nano",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openai",
@@ -133,7 +133,7 @@ export const modelsPages: ModelPage[] = [
           top_p: 0.9,
           max_completion_tokens: 8192,
           frequency_penalty: 0.3,
-          presence_penalty: 0.2
+          presence_penalty: 0.2,
         },
         enabled: true,
         id: "gpt-5-chat",
@@ -141,7 +141,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-5-chat",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openai",
@@ -157,7 +157,7 @@ export const modelsPages: ModelPage[] = [
           summary: "concise",
           max_completion_tokens: 8192,
           frequency_penalty: 0.3,
-          presence_penalty: 0.2
+          presence_penalty: 0.2,
         },
         enabled: true,
         id: "gpt-5-1-chat",
@@ -165,7 +165,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-5.1-chat",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openai",
@@ -179,7 +179,7 @@ export const modelsPages: ModelPage[] = [
           reasoning_effort: "low",
           max_completion_tokens: 16384,
           verbosity: "low",
-          summary: "concise"
+          summary: "concise",
         },
         enabled: true,
         id: "gpt-5-1",
@@ -187,7 +187,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-5.1",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openai",
@@ -201,7 +201,7 @@ export const modelsPages: ModelPage[] = [
           reasoning_effort: "low",
           max_completion_tokens: 16384,
           verbosity: "low",
-          summary: "concise"
+          summary: "concise",
         },
         enabled: true,
         id: "gpt-5-2",
@@ -209,7 +209,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-5.2",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openai",
@@ -225,7 +225,7 @@ export const modelsPages: ModelPage[] = [
           summary: "concise",
           max_completion_tokens: 8192,
           frequency_penalty: 0.3,
-          presence_penalty: 0.2
+          presence_penalty: 0.2,
         },
         enabled: true,
         id: "gpt-5-2-chat",
@@ -233,8 +233,8 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "openai/gpt-5.2-chat",
-        provider_enabled: true
-      }
+        provider_enabled: true,
+      },
     ],
     total_items: 23,
     current_page: 1,
@@ -242,7 +242,7 @@ export const modelsPages: ModelPage[] = [
     has_next_page: true,
     has_previous_page: false,
     next_page: 2,
-    previous_page: null
+    previous_page: null,
   },
 
   // Page 2 (Providing varied data for Page 2 since user provided duplicates of Page 1)
@@ -266,7 +266,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "claude-4.5-sonnet",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "anthropic",
@@ -286,7 +286,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "claude-4.5-opus",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "google-ai",
@@ -298,7 +298,7 @@ export const modelsPages: ModelPage[] = [
         system_prompt: null,
         parameters: {
           temperature: 0.9,
-          max_output_tokens: 8192
+          max_output_tokens: 8192,
         },
         enabled: true,
         id: "gemini-2-5-pro",
@@ -306,7 +306,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "gemini-2.5-pro",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "xai",
@@ -325,7 +325,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "grok-4",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "ollama",
@@ -344,8 +344,8 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: false,
         active_identifier: "mistral",
-        provider_enabled: true
-      }
+        provider_enabled: true,
+      },
     ],
     total_items: 23,
     current_page: 2,
@@ -353,7 +353,7 @@ export const modelsPages: ModelPage[] = [
     has_next_page: true,
     has_previous_page: true,
     next_page: 3,
-    previous_page: 1
+    previous_page: 1,
   },
 
   // Page 3
@@ -370,7 +370,7 @@ export const modelsPages: ModelPage[] = [
         parameters: {
           temperature: 0.85,
           top_p: 0.9,
-          max_tokens: 4096
+          max_tokens: 4096,
         },
         enabled: true,
         id: "euryale-70b",
@@ -378,7 +378,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "sao10k/l3-euryale-70b",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openrouter",
@@ -391,7 +391,7 @@ export const modelsPages: ModelPage[] = [
         parameters: {
           temperature: 0.8,
           top_p: 0.9,
-          max_tokens: 4096
+          max_tokens: 4096,
         },
         enabled: true,
         id: "glm-4-6",
@@ -399,7 +399,7 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "z-ai/glm-4.6",
-        provider_enabled: true
+        provider_enabled: true,
       },
       {
         provider_id: "openrouter",
@@ -412,7 +412,7 @@ export const modelsPages: ModelPage[] = [
         parameters: {
           temperature: 0.8,
           top_p: 0.9,
-          max_tokens: 4096
+          max_tokens: 4096,
         },
         enabled: true,
         id: "glm-4-7",
@@ -420,8 +420,8 @@ export const modelsPages: ModelPage[] = [
         updated_at: NOW,
         can_use_openrouter: true,
         active_identifier: "z-ai/glm-4.7",
-        provider_enabled: true
-      }
+        provider_enabled: true,
+      },
     ],
     total_items: 23,
     current_page: 3,
@@ -429,8 +429,8 @@ export const modelsPages: ModelPage[] = [
     has_next_page: false,
     has_previous_page: true,
     next_page: null,
-    previous_page: 2
-  }
+    previous_page: 2,
+  },
 ];
 
 export const modelsFilteredByName: ModelPage = {
@@ -449,8 +449,8 @@ export const modelsFilteredByName: ModelPage = {
         top_p: 0.9,
         top_k: 60,
         thinking: {
-          type: "disabled"
-        }
+          type: "disabled",
+        },
       },
       enabled: true,
       id: "kRfpYTjyXOKa",
@@ -458,7 +458,7 @@ export const modelsFilteredByName: ModelPage = {
       updated_at: "2025-12-23T09:07:21.555065",
       can_use_openrouter: true,
       active_identifier: "anthropic/claude-4.5-haiku",
-      provider_enabled: true
+      provider_enabled: true,
     },
     {
       provider_id: "FRZ9BYHiVBWA",
@@ -474,8 +474,8 @@ export const modelsFilteredByName: ModelPage = {
         top_p: 0.9,
         top_k: 60,
         thinking: {
-          type: "disabled"
-        }
+          type: "disabled",
+        },
       },
       enabled: true,
       id: "QsmJrIAiafKJ",
@@ -483,7 +483,7 @@ export const modelsFilteredByName: ModelPage = {
       updated_at: "2025-12-23T09:07:21.556367",
       can_use_openrouter: true,
       active_identifier: "anthropic/claude-4.5-sonnet",
-      provider_enabled: true
+      provider_enabled: true,
     },
     {
       provider_id: "FRZ9BYHiVBWA",
@@ -499,8 +499,8 @@ export const modelsFilteredByName: ModelPage = {
         top_p: 0.9,
         top_k: 60,
         thinking: {
-          type: "disabled"
-        }
+          type: "disabled",
+        },
       },
       enabled: true,
       id: "PgRhfP8OHYvl",
@@ -508,8 +508,8 @@ export const modelsFilteredByName: ModelPage = {
       updated_at: "2025-12-23T09:07:21.557685",
       can_use_openrouter: true,
       active_identifier: "anthropic/claude-4.5-opus",
-      provider_enabled: true
-    }
+      provider_enabled: true,
+    },
   ],
   total_items: 3,
   current_page: 1,
@@ -517,5 +517,5 @@ export const modelsFilteredByName: ModelPage = {
   has_next_page: false,
   has_previous_page: false,
   next_page: null,
-  previous_page: null
+  previous_page: null,
 };

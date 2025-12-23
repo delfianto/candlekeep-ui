@@ -127,7 +127,7 @@ export const handlers = [
     await delay(100);
     const url = new URL(request.url);
     const nameParam = url.searchParams.get("name");
-    
+
     if (nameParam && nameParam.toLowerCase().includes("claude")) {
       return HttpResponse.json(modelsFilteredByName);
     }

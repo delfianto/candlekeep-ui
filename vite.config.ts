@@ -8,13 +8,14 @@ import Terminal from "vite-plugin-terminal";
 export default defineConfig(({ command }) => ({
   plugins: [
     vue(),
-    command === 'serve' && Terminal({
-      // Directs all browser logs to terminal
-      console: "terminal",
+    command === "serve" &&
+      Terminal({
+        // Directs all browser logs to terminal
+        console: "terminal",
 
-      // Ensures it logs to BOTH terminal AND the browser console (just in case)
-      output: ["console", "terminal"],
-    }),
+        // Ensures it logs to BOTH terminal AND the browser console (just in case)
+        output: ["console", "terminal"],
+      }),
   ],
   css: {
     postcss: {

@@ -88,11 +88,7 @@ onMounted(fetchData)
     <CardContent>
       <!-- Top Pagination -->
       <div class="flex justify-end mb-4" v-if="total > limit">
-        <AppPagination
-          v-model:page="page"
-          :total="total"
-          :limit="limit"
-        />
+        <AppPagination v-model:page="page" :total="total" :limit="limit" />
       </div>
 
       <div v-if="isLoading" class="flex justify-center py-12">
@@ -155,11 +151,7 @@ onMounted(fetchData)
 
       <!-- Bottom Pagination -->
       <div class="flex justify-end mt-4" v-if="total > limit">
-        <AppPagination
-          v-model:page="page"
-          :total="total"
-          :limit="limit"
-        />
+        <AppPagination v-model:page="page" :total="total" :limit="limit" />
       </div>
     </CardContent>
   </Card>
