@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useDebounceFn } from '@vueuse/core'
 import {
   Card,
   CardContent,
@@ -11,19 +13,68 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
-import { Cpu, Plus, Edit } from 'lucide-vue-next'
+import { Input } from '@/components/ui/input'
+import AppPagination from '@/components/shared/AppPagination.vue'
+import { Cpu, Plus, Edit, Search, Loader2 } from 'lucide-vue-next'
 
 const props = defineProps<{
-  models: any[]
   providers: any[]
 }>()
 
 const router = useRouter()
 
+// -- STATE --
+const isLoading = ref(true)
+const items = ref<any[]>([])
+const page = ref(1)
+const limit = ref(10)
+const total = ref(0)
+const searchQuery = ref('')
+
 const getProviderName = (providerId: string) => {
   const p = props.providers.find((p) => p.id === providerId)
   return p ? p.name : 'Unknown'
 }
+
+// -- ACTIONS --
+const fetchData = async () => {
+  isLoading.value = true
+  try {
+    const params = new URLSearchParams()
+    params.append('page', page.value.toString())
+    params.append('limit', limit.value.toString())
+    if (searchQuery.value) {
+      params.append('name', searchQuery.value)
+    }
+
+    const res = await fetch(`/api/models?${params.toString()}`)
+    if (res.ok) {
+      const data = await res.json()
+      if (data.items) {
+        items.value = data.items
+        total.value = data.total_items || data.items.length
+      } else {
+        items.value = Array.isArray(data) ? data : []
+        total.value = items.value.length
+      }
+    }
+  } catch (error) {
+    console.error('Failed to load models:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Debounced search
+const onSearch = useDebounceFn(() => {
+  page.value = 1
+  fetchData()
+}, 300)
+
+watch(searchQuery, onSearch)
+watch(page, fetchData)
+
+onMounted(fetchData)
 </script>
 
 <template>
@@ -33,12 +84,35 @@ const getProviderName = (providerId: string) => {
         <CardTitle>Model Registry</CardTitle>
         <CardDescription>Available models fetched from connected providers.</CardDescription>
       </div>
-      <Button size="sm"><Plus class="size-4 mr-2" /> Add Custom Model</Button>
+      <div class="flex items-center gap-2">
+        <div class="relative w-64">
+          <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
+          <Input v-model="searchQuery" placeholder="Search models..." class="pl-8" />
+        </div>
+        <Button size="sm"><Plus class="size-4 mr-2" /> Add Custom Model</Button>
+      </div>
     </CardHeader>
     <CardContent>
-      <div class="space-y-4">
+      <!-- Top Pagination -->
+      <div class="flex justify-end mb-4" v-if="total > limit">
+        <AppPagination
+          v-model:page="page"
+          :total="total"
+          :limit="limit"
+        />
+      </div>
+
+      <div v-if="isLoading" class="flex justify-center py-12">
+        <Loader2 class="size-8 animate-spin text-muted-foreground" />
+      </div>
+
+      <div v-else-if="items.length === 0" class="text-center py-12 text-muted-foreground">
+        No models found.
+      </div>
+
+      <div v-else class="space-y-4">
         <div
-          v-for="model in models"
+          v-for="model in items"
           :key="model.id"
           class="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
         >
@@ -73,6 +147,15 @@ const getProviderName = (providerId: string) => {
             </Button>
           </div>
         </div>
+      </div>
+
+      <!-- Bottom Pagination -->
+      <div class="flex justify-end mt-4" v-if="total > limit">
+        <AppPagination
+          v-model:page="page"
+          :total="total"
+          :limit="limit"
+        />
       </div>
     </CardContent>
   </Card>

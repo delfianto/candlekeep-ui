@@ -12,16 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import {
-  Pagination,
-  PaginationEllipsis,
-  PaginationFirst,
-  PaginationLast,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
+import AppPagination from '@/components/shared/AppPagination.vue'
 import { Box, Plus, Edit, Search, Loader2 } from 'lucide-vue-next'
 
 const router = useRouter()
@@ -97,43 +88,11 @@ onMounted(fetchData)
     <CardContent>
       <!-- Top Pagination -->
       <div class="flex justify-end mb-4" v-if="total > limit">
-        <Pagination
+        <AppPagination
           v-model:page="page"
           :total="total"
-          :items-per-page="limit"
-          :sibling-count="1"
-          show-edges
-        >
-          <PaginationContent v-slot="{ items }">
-            <li class="flex items-center">
-              <PaginationFirst />
-            </li>
-            <li class="flex items-center">
-              <PaginationPrevious />
-            </li>
-
-            <template v-for="(item, index) in items">
-              <PaginationItem
-                v-if="item.type === 'page'"
-                :key="index"
-                :value="item.value"
-                :is-active="item.value === page"
-              >
-                {{ item.value }}
-              </PaginationItem>
-              <li v-else :key="item.type" class="flex items-center">
-                <PaginationEllipsis :index="index" />
-              </li>
-            </template>
-
-            <li class="flex items-center">
-              <PaginationNext />
-            </li>
-            <li class="flex items-center">
-              <PaginationLast />
-            </li>
-          </PaginationContent>
-        </Pagination>
+          :limit="limit"
+        />
       </div>
 
       <div v-if="isLoading" class="flex justify-center py-12">
@@ -196,43 +155,11 @@ onMounted(fetchData)
 
       <!-- Bottom Pagination -->
       <div class="flex justify-end mt-4" v-if="total > limit">
-        <Pagination
+        <AppPagination
           v-model:page="page"
           :total="total"
-          :items-per-page="limit"
-          :sibling-count="1"
-          show-edges
-        >
-          <PaginationContent v-slot="{ items }">
-            <li class="flex items-center">
-              <PaginationFirst />
-            </li>
-            <li class="flex items-center">
-              <PaginationPrevious />
-            </li>
-
-            <template v-for="(item, index) in items">
-              <PaginationItem
-                v-if="item.type === 'page'"
-                :key="index"
-                :value="item.value"
-                :is-active="item.value === page"
-              >
-                {{ item.value }}
-              </PaginationItem>
-              <li v-else :key="item.type" class="flex items-center">
-                <PaginationEllipsis :index="index" />
-              </li>
-            </template>
-
-            <li class="flex items-center">
-              <PaginationNext />
-            </li>
-            <li class="flex items-center">
-              <PaginationLast />
-            </li>
-          </PaginationContent>
-        </Pagination>
+          :limit="limit"
+        />
       </div>
     </CardContent>
   </Card>

@@ -18,7 +18,6 @@ import AboutTab from './components/AboutTab.vue'
 // e.g., ModelsTab needs Providers data
 const isLoading = ref(true)
 const providers = ref([])
-const models = ref([])
 
 const route = useRoute()
 const router = useRouter()
@@ -33,20 +32,11 @@ watch(activeTab, (newTab) => {
 const fetchData = async () => {
   isLoading.value = true
   try {
-    const [provRes, modRes] = await Promise.all([
-      fetch('/api/providers'),
-      fetch('/api/models')
-    ])
+    const res = await fetch('/api/providers')
 
-    if (provRes.ok) {
-      const data = await provRes.json()
+    if (res.ok) {
+      const data = await res.json()
       providers.value = data.sort((a: any, b: any) => a.name.localeCompare(b.name))
-    }
-
-    if (modRes.ok) {
-      const data = await modRes.json()
-      const items = data.items || data // Fallback if API returns array
-      models.value = items.sort((a: any, b: any) => a.name.localeCompare(b.name))
     }
   } catch (error) {
     console.error('Failed to load settings:', error)
@@ -90,7 +80,7 @@ onMounted(fetchData)
         </TabsContent>
 
         <TabsContent value="models">
-          <ModelsTab :models="models" :providers="providers" />
+          <ModelsTab :providers="providers" />
         </TabsContent>
 
         <TabsContent value="templates">
