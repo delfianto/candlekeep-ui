@@ -2,16 +2,12 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ContentLayout from '@/components/layout/ContentLayout.vue'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs'
-import { Server, Cpu, FileText, Palette, Info, Loader2 } from 'lucide-vue-next'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Server, Cpu, FileText, Palette, Info, Loader2, Layers } from 'lucide-vue-next'
 
 // Import Tab Components
 import ProvidersTab from './components/ProvidersTab.vue'
+import ModelFamiliesTab from './components/ModelFamiliesTab.vue'
 import ModelsTab from './components/ModelsTab.vue'
 import TemplatesTab from './components/TemplatesTab.vue'
 import InterfaceTab from './components/InterfaceTab.vue'
@@ -22,6 +18,7 @@ import AboutTab from './components/AboutTab.vue'
 // e.g., ModelsTab needs Providers data
 const isLoading = ref(true)
 const providers = ref([])
+const modelFamilies = ref([])
 const models = ref([])
 
 const route = useRoute()
@@ -37,14 +34,21 @@ watch(activeTab, (newTab) => {
 const fetchData = async () => {
   isLoading.value = true
   try {
-    const [provRes, modRes] = await Promise.all([
+    const [provRes, famRes, modRes] = await Promise.all([
       fetch('/api/providers'),
+      fetch('/api/model-families'),
       fetch('/api/models')
     ])
 
     if (provRes.ok) {
       const data = await provRes.json()
       providers.value = data.sort((a: any, b: any) => a.name.localeCompare(b.name))
+    }
+
+    if (famRes.ok) {
+      const data = await famRes.json()
+      const items = data.items || data
+      modelFamilies.value = items.sort((a: any, b: any) => a.name.localeCompare(b.name))
     }
 
     if (modRes.ok) {
@@ -65,9 +69,12 @@ onMounted(fetchData)
 <template>
   <ContentLayout variant="standard">
     <Tabs v-model="activeTab" class="space-y-6">
-      <TabsList class="grid w-full grid-cols-2 md:w-180 md:grid-cols-5 bg-muted/50 p-1">
+      <TabsList class="grid w-full grid-cols-2 md:w-180 md:grid-cols-6 bg-muted/50 p-1">
         <TabsTrigger value="providers" class="gap-2"
           ><Server class="size-4" /> Providers</TabsTrigger
+        >
+        <TabsTrigger value="model-families" class="gap-2"
+          ><Layers class="size-4" /> Families</TabsTrigger
         >
         <TabsTrigger value="models" class="gap-2"><Cpu class="size-4" /> Models</TabsTrigger>
         <TabsTrigger value="templates" class="gap-2"
@@ -84,6 +91,10 @@ onMounted(fetchData)
       <template v-else>
         <TabsContent value="providers">
           <ProvidersTab :providers="providers" />
+        </TabsContent>
+
+        <TabsContent value="model-families">
+          <ModelFamiliesTab :model-families="modelFamilies" />
         </TabsContent>
 
         <TabsContent value="models">
