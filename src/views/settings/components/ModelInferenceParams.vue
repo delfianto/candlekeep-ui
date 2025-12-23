@@ -18,28 +18,18 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { Textarea } from '@/components/ui/textarea'
-import { Slider } from '@/components/ui/slider'
 import { Info, RefreshCw } from 'lucide-vue-next'
 import { useSettingsStore } from '@/stores/settings'
 import { toast } from 'vue-sonner'
 import type { components } from '@/api/schema'
+import ParamInput from './ParamInput.vue'
 
 type Model = components['schemas']['ModelDetailResponse']
 
@@ -74,7 +64,8 @@ const getEffectiveValue = (key: string, config: any) => {
 }
 
 const formatDefaultValue = (val: any) => {
-  if (Array.isArray(val)) return val.join(', ')
+  if (Array.isArray(val)) return `List [${val.length}]`
+  if (typeof val === 'object' && val !== null) return 'Object'
   if (val === null || val === undefined) return 'None'
   return String(val)
 }
@@ -82,6 +73,8 @@ const formatDefaultValue = (val: any) => {
 // -- ACTIONS --
 const updateParam = (key: string, value: any) => {
   if (props.model && props.model.parameters) {
+    // This assignment works for primitives and replaces entire objects/lists
+    // ParamInput emits a new copy for objects/lists, so this is safe
     props.model.parameters[key] = value
   }
 }
@@ -140,7 +133,7 @@ const handleResetParamsConfirm = async () => {
           </TooltipProvider>
         </div>
 
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center justify-between mb-2">
           <Label class="flex items-center gap-2 text-sm font-medium">
             {{ getParamLabel(key) }}
             <TooltipProvider v-if="getParamDoc(key)">
@@ -156,76 +149,11 @@ const handleResetParamsConfirm = async () => {
           </Label>
         </div>
 
-        <div
-          v-if="(config.type === 'int' || config.type === 'float') && config.min_value !== undefined && config.max_value !== undefined"
-          class="flex items-center gap-4"
-        >
-          <Slider
-            :model-value="[Number(getEffectiveValue(key, config))]"
-            @update:model-value="(v) => updateParam(key, v[0])"
-            :min="config.min_value"
-            :max="config.max_value"
-            :step="config.type === 'int' ? 1 : 0.01"
-            class="flex-1"
-          />
-          <Input
-            type="number"
-            class="w-20 h-8 text-right font-mono bg-background"
-            :model-value="getEffectiveValue(key, config)"
-            @update:model-value="(v) => updateParam(key, Number(v))"
-          />
-        </div>
-
-        <div v-else-if="config.type === 'int' || config.type === 'float'">
-          <Input
-            type="number"
-            class="font-mono bg-background"
-            :model-value="getEffectiveValue(key, config)"
-            @update:model-value="(v) => updateParam(key, Number(v))"
-          />
-        </div>
-
-        <div v-else-if="config.type === 'boolean'" class="flex items-center justify-between py-1">
-          <span class="text-sm text-muted-foreground">Enabled</span>
-          <Switch
-            :checked="getEffectiveValue(key, config)"
-            @update:checked="(v) => updateParam(key, v)"
-          />
-        </div>
-
-        <div v-else-if="config.type === 'enum'">
-          <Select
-            :model-value="getEffectiveValue(key, config)"
-            @update:model-value="(v) => updateParam(key, v)"
-          >
-            <SelectTrigger class="bg-background">
-              <SelectValue :placeholder="`Select ${getParamLabel(key)}`" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem v-for="opt in config.str_values" :key="opt" :value="opt">
-                {{ opt }}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div v-else-if="config.type === 'list'">
-          <Textarea
-            :model-value="Array.isArray(getEffectiveValue(key, config)) ? (getEffectiveValue(key, config) as string[]).join(', ') : ''"
-            @update:model-value="(v) => updateParam(key, (v as string).split(',').map(s => s.trim()).filter(s => s))"
-            placeholder="Comma separated values..."
-            class="font-mono text-sm bg-background"
-          />
-        </div>
-
-        <div v-else>
-          <Input
-            type="text"
-            class="bg-background"
-            :model-value="getEffectiveValue(key, config)"
-            @update:model-value="(v) => updateParam(key, v)"
-          />
-        </div>
+        <ParamInput
+          :schema="config"
+          :model-value="getEffectiveValue(key, config)"
+          @update:model-value="(v) => updateParam(key, v)"
+        />
 
         <p class="text-[0.8rem] text-muted-foreground mt-2" v-if="getParamDoc(key)?.short_info">
           {{ getParamDoc(key).short_info }}
