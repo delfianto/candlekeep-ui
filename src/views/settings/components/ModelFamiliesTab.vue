@@ -54,7 +54,7 @@ const fetchData = async () => {
         items.value = data.items
         total.value = data.total_items || data.items.length
         // Update page if server adjusted it (optional)
-        // page.value = data.current_page 
+        // page.value = data.current_page
       } else {
         items.value = Array.isArray(data) ? data : []
         total.value = items.value.length
@@ -89,11 +89,7 @@ onMounted(fetchData)
       <div class="flex items-center gap-2">
         <div class="relative w-64">
           <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
-          <Input 
-            v-model="searchQuery" 
-            placeholder="Search families..." 
-            class="pl-8"
-          />
+          <Input v-model="searchQuery" placeholder="Search families..." class="pl-8" />
         </div>
         <Button size="sm"><Plus class="size-4 mr-2" /> Create Family</Button>
       </div>
@@ -109,26 +105,33 @@ onMounted(fetchData)
           show-edges
         >
           <PaginationContent v-slot="{ items }">
-            <PaginationItem>
+            <li class="flex items-center">
               <PaginationFirst />
-            </PaginationItem>
-            <PaginationItem>
+            </li>
+            <li class="flex items-center">
               <PaginationPrevious />
-            </PaginationItem>
+            </li>
 
             <template v-for="(item, index) in items">
-              <PaginationItem v-if="item.type === 'page'" :key="index" :value="item.value" :is-active="item.value === page">
+              <PaginationItem
+                v-if="item.type === 'page'"
+                :key="index"
+                :value="item.value"
+                :is-active="item.value === page"
+              >
                 {{ item.value }}
               </PaginationItem>
-              <PaginationEllipsis v-else :key="item.type" :index="index" />
+              <li v-else :key="item.type" class="flex items-center">
+                <PaginationEllipsis :index="index" />
+              </li>
             </template>
 
-            <PaginationItem>
+            <li class="flex items-center">
               <PaginationNext />
-            </PaginationItem>
-            <PaginationItem>
+            </li>
+            <li class="flex items-center">
               <PaginationLast />
-            </PaginationItem>
+            </li>
           </PaginationContent>
         </Pagination>
       </div>
@@ -163,18 +166,22 @@ onMounted(fetchData)
           </div>
 
           <div class="flex items-center gap-4">
-             <div class="flex gap-1" v-if="family.provider_types">
-                <Badge 
-                    v-for="pt in family.provider_types.slice(0, 3)" 
-                    :key="pt" 
-                    variant="secondary" 
-                    class="text-[10px]"
-                >
-                    {{ pt }}
-                </Badge>
-                <Badge v-if="family.provider_types.length > 3" variant="secondary" class="text-[10px]">
-                    +{{ family.provider_types.length - 3 }}
-                </Badge>
+            <div class="flex gap-1" v-if="family.provider_types">
+              <Badge
+                v-for="pt in family.provider_types.slice(0, 3)"
+                :key="pt"
+                variant="secondary"
+                class="text-[10px]"
+              >
+                {{ pt }}
+              </Badge>
+              <Badge
+                v-if="family.provider_types.length > 3"
+                variant="secondary"
+                class="text-[10px]"
+              >
+                +{{ family.provider_types.length - 3 }}
+              </Badge>
             </div>
             <Button
               variant="ghost"
@@ -197,26 +204,33 @@ onMounted(fetchData)
           show-edges
         >
           <PaginationContent v-slot="{ items }">
-            <PaginationItem>
+            <li class="flex items-center">
               <PaginationFirst />
-            </PaginationItem>
-            <PaginationItem>
+            </li>
+            <li class="flex items-center">
               <PaginationPrevious />
-            </PaginationItem>
+            </li>
 
             <template v-for="(item, index) in items">
-              <PaginationItem v-if="item.type === 'page'" :key="index" :value="item.value" :is-active="item.value === page">
+              <PaginationItem
+                v-if="item.type === 'page'"
+                :key="index"
+                :value="item.value"
+                :is-active="item.value === page"
+              >
                 {{ item.value }}
               </PaginationItem>
-              <PaginationEllipsis v-else :key="item.type" :index="index" />
+              <li v-else :key="item.type" class="flex items-center">
+                <PaginationEllipsis :index="index" />
+              </li>
             </template>
 
-            <PaginationItem>
+            <li class="flex items-center">
               <PaginationNext />
-            </PaginationItem>
-            <PaginationItem>
+            </li>
+            <li class="flex items-center">
               <PaginationLast />
-            </PaginationItem>
+            </li>
           </PaginationContent>
         </Pagination>
       </div>
