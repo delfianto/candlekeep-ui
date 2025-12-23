@@ -126,14 +126,30 @@ export interface paths {
          */
         put: operations["update_provider_api_providers__provider_id__put"];
         post?: never;
-        /**
-         * Delete Provider
-         * @description Remove a provider
-         */
-        delete: operations["delete_provider_api_providers__provider_id__delete"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/providers/{provider_id}/flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update Provider Flags
+         * @description Enable or disable a provider
+         */
+        patch: operations["update_provider_flags_api_providers__provider_id__flags_patch"];
         trace?: never;
     };
     "/api/model-families/parameter-docs": {
@@ -259,6 +275,26 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/models/{model_id}/flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update Model Flags
+         * @description Toggle model enabled and OpenRouter routing flags
+         */
+        patch: operations["update_model_flags_api_models__model_id__flags_patch"];
         trace?: never;
     };
     "/api/characters": {
@@ -793,7 +829,9 @@ export interface components {
              * Example Dialogues
              * @description Array of example conversations
              */
-            example_dialogues?: Record<string, never>[] | null;
+            example_dialogues?: {
+                [key: string]: unknown;
+            }[] | null;
             /**
              * Scenario
              * @description Current scenario context
@@ -840,7 +878,7 @@ export interface components {
              * Model Id
              * @description Model ID
              */
-            model_id: string;
+            model_id?: string | null;
             /**
              * Title
              * @description Chat title
@@ -861,7 +899,7 @@ export interface components {
              * Model Id
              * @description Model ID
              */
-            model_id: string;
+            model_id?: string | null;
             /**
              * Title
              * @description Chat title
@@ -950,6 +988,17 @@ export interface components {
              */
             model_identifier: string;
             /**
+             * Openrouter Identifier
+             * @description OpenRouter model name
+             */
+            openrouter_identifier?: string | null;
+            /**
+             * Use Openrouter
+             * @description Whether to route through OpenRouter
+             * @default false
+             */
+            use_openrouter: boolean;
+            /**
              * Name
              * @description User-friendly display name
              */
@@ -968,7 +1017,9 @@ export interface components {
              * Parameters
              * @description All model parameters (temperature, max_tokens, etc.)
              */
-            parameters?: Record<string, never>;
+            parameters?: {
+                [key: string]: unknown;
+            };
             /**
              * Enabled
              * @description Whether model is available
@@ -992,6 +1043,17 @@ export interface components {
              */
             model_identifier: string;
             /**
+             * Openrouter Identifier
+             * @description OpenRouter model name
+             */
+            openrouter_identifier?: string | null;
+            /**
+             * Use Openrouter
+             * @description Whether to route through OpenRouter
+             * @default false
+             */
+            use_openrouter: boolean;
+            /**
              * Name
              * @description User-friendly display name
              */
@@ -1010,7 +1072,9 @@ export interface components {
              * Parameters
              * @description All model parameters (temperature, max_tokens, etc.)
              */
-            parameters?: Record<string, never>;
+            parameters?: {
+                [key: string]: unknown;
+            };
             /**
              * Enabled
              * @description Whether model is available
@@ -1029,6 +1093,12 @@ export interface components {
              * Format: date-time
              */
             updated_at: string;
+            /** Can Use Openrouter */
+            can_use_openrouter: boolean;
+            /** Active Identifier */
+            active_identifier: string;
+            /** Provider Enabled */
+            provider_enabled: boolean;
             model_family: components["schemas"]["ModelFamilyResponse"];
         };
         /**
@@ -1042,6 +1112,11 @@ export interface components {
              */
             name: string;
             /**
+             * Family Identifier
+             * @description URL-safe identifier following provider/model-name pattern
+             */
+            family_identifier: string;
+            /**
              * Description
              * @description Description of the model family
              */
@@ -1055,7 +1130,9 @@ export interface components {
              * Parameters
              * @description Per-parameter configuration: type, default, ranges, etc.
              */
-            parameters?: Record<string, never>;
+            parameters?: {
+                [key: string]: unknown;
+            };
             /**
              * Unsupported Parameters
              * @description List of parameters explicitly known to be unsupported
@@ -1065,7 +1142,9 @@ export interface components {
              * Extra Metadata
              * @description Additional metadata about the model family
              */
-            extra_metadata?: Record<string, never> | null;
+            extra_metadata?: {
+                [key: string]: unknown;
+            } | null;
         };
         /**
          * ModelFamilyResponse
@@ -1078,6 +1157,11 @@ export interface components {
              */
             name: string;
             /**
+             * Family Identifier
+             * @description URL-safe identifier following provider/model-name pattern
+             */
+            family_identifier: string;
+            /**
              * Description
              * @description Description of the model family
              */
@@ -1091,7 +1175,9 @@ export interface components {
              * Parameters
              * @description Per-parameter configuration: type, default, ranges, etc.
              */
-            parameters?: Record<string, never>;
+            parameters?: {
+                [key: string]: unknown;
+            };
             /**
              * Unsupported Parameters
              * @description List of parameters explicitly known to be unsupported
@@ -1101,7 +1187,9 @@ export interface components {
              * Extra Metadata
              * @description Additional metadata about the model family
              */
-            extra_metadata?: Record<string, never> | null;
+            extra_metadata?: {
+                [key: string]: unknown;
+            } | null;
             /** Id */
             id: string;
             /**
@@ -1122,16 +1210,32 @@ export interface components {
         ModelFamilyUpdate: {
             /** Name */
             name?: string | null;
+            /** Family Identifier */
+            family_identifier?: string | null;
             /** Description */
             description?: string | null;
             /** Provider Types */
             provider_types?: string[] | null;
             /** Parameters */
-            parameters?: Record<string, never> | null;
+            parameters?: {
+                [key: string]: unknown;
+            } | null;
             /** Unsupported Parameters */
             unsupported_parameters?: string[] | null;
             /** Extra Metadata */
-            extra_metadata?: Record<string, never> | null;
+            extra_metadata?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * ModelFlagsUpdate
+         * @description Schema for updating model flags only
+         */
+        ModelFlagsUpdate: {
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Use Openrouter */
+            use_openrouter?: boolean | null;
         };
         /**
          * ModelResponse
@@ -1148,6 +1252,17 @@ export interface components {
              * @description Actual API model name
              */
             model_identifier: string;
+            /**
+             * Openrouter Identifier
+             * @description OpenRouter model name
+             */
+            openrouter_identifier?: string | null;
+            /**
+             * Use Openrouter
+             * @description Whether to route through OpenRouter
+             * @default false
+             */
+            use_openrouter: boolean;
             /**
              * Name
              * @description User-friendly display name
@@ -1167,7 +1282,9 @@ export interface components {
              * Parameters
              * @description All model parameters (temperature, max_tokens, etc.)
              */
-            parameters?: Record<string, never>;
+            parameters?: {
+                [key: string]: unknown;
+            };
             /**
              * Enabled
              * @description Whether model is available
@@ -1186,6 +1303,12 @@ export interface components {
              * Format: date-time
              */
             updated_at: string;
+            /** Can Use Openrouter */
+            can_use_openrouter: boolean;
+            /** Active Identifier */
+            active_identifier: string;
+            /** Provider Enabled */
+            provider_enabled: boolean;
         };
         /**
          * ModelUpdate
@@ -1196,6 +1319,10 @@ export interface components {
             provider_id?: string | null;
             /** Model Identifier */
             model_identifier?: string | null;
+            /** Openrouter Identifier */
+            openrouter_identifier?: string | null;
+            /** Use Openrouter */
+            use_openrouter?: boolean | null;
             /** Name */
             name?: string | null;
             /** Model Family Id */
@@ -1203,7 +1330,9 @@ export interface components {
             /** System Prompt */
             system_prompt?: string | null;
             /** Parameters */
-            parameters?: Record<string, never> | null;
+            parameters?: {
+                [key: string]: unknown;
+            } | null;
             /** Enabled */
             enabled?: boolean | null;
         };
@@ -1596,6 +1725,14 @@ export interface components {
             api_key_env_var?: string | null;
         };
         /**
+         * ProviderFlagsUpdate
+         * @description Schema for updating provider flags only
+         */
+        ProviderFlagsUpdate: {
+            /** Enabled */
+            enabled: boolean;
+        };
+        /**
          * ProviderResponse
          * @description Schema for provider responses
          */
@@ -1748,7 +1885,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
@@ -1784,7 +1923,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
@@ -1816,7 +1957,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
@@ -1849,7 +1992,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
@@ -1982,7 +2127,7 @@ export interface operations {
             };
         };
     };
-    delete_provider_api_providers__provider_id__delete: {
+    update_provider_flags_api_providers__provider_id__flags_patch: {
         parameters: {
             query?: never;
             header?: never;
@@ -1991,14 +2136,20 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProviderFlagsUpdate"];
+            };
+        };
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ProviderResponse"];
+                };
             };
             /** @description Validation Error */
             422: {
@@ -2343,6 +2494,41 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_model_flags_api_models__model_id__flags_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModelFlagsUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModelResponse"];
+                };
             };
             /** @description Validation Error */
             422: {
