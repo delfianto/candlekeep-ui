@@ -39,6 +39,7 @@ import { Badge } from '@/components/ui/badge'
 import { client } from '@/api/client'
 import type { components } from '@/api/schema'
 import { toast } from 'vue-sonner'
+import { useSettingsStore } from '@/stores/settings'
 import {
   Tooltip,
   TooltipContent,
@@ -49,20 +50,15 @@ import {
 const route = useRoute()
 const router = useRouter()
 const familyId = route.params.id as string
+const settingsStore = useSettingsStore()
 
 type ModelFamily = components['schemas']['ModelFamilyResponse']
-type ParameterDoc = {
-  label: string
-  short_info: string
-  detailed_info: string
-}
 
 // -- STATE --
 const isLoading = ref(true)
 const isSaving = ref(false)
 const isDeleting = ref(false)
 const family = ref<ModelFamily | null>(null)
-const parameterDocs = ref<Record<string, ParameterDoc>>({})
 
 // Dialog States
 const showResetDialog = ref(false)
@@ -73,21 +69,18 @@ const showDeleteDialog = ref(false)
 const fetchData = async () => {
   isLoading.value = true
   try {
-    const [familyRes, docsRes] = await Promise.all([
+    // Ensure docs are loaded if user navigates directly here
+    const [familyRes] = await Promise.all([
       client.GET('/api/model-families/{family_id}', {
         params: { path: { family_id: familyId } },
       }),
-      client.GET('/api/model-families/parameter-docs'),
+      settingsStore.fetchParameterDocs()
     ])
 
     if (familyRes.error) throw familyRes.error
     family.value = {
       ...familyRes.data,
       description: familyRes.data.description ?? '',
-    }
-
-    if (!docsRes.error) {
-      parameterDocs.value = docsRes.data as Record<string, ParameterDoc>
     }
   } catch (error) {
     console.error('Failed to load model family data', error)
@@ -252,9 +245,9 @@ onMounted(fetchData)
                         <TooltipTrigger as-child>
                           <Info class="size-3.5 text-muted-foreground cursor-help" />
                         </TooltipTrigger>
-                        <TooltipContent v-if="parameterDocs[key]" class="max-w-xs">
-                          <p class="font-bold mb-1">{{ parameterDocs[key].label }}</p>
-                          <p class="text-xs">{{ parameterDocs[key].detailed_info }}</p>
+                        <TooltipContent v-if="settingsStore.parameterDocs[key]" class="max-w-xs">
+                          <p class="font-bold mb-1">{{ settingsStore.parameterDocs[key].label }}</p>
+                          <p class="text-xs">{{ settingsStore.parameterDocs[key].detailed_info }}</p>
                         </TooltipContent>
                         <TooltipContent v-else>
                           <p class="text-xs italic">No documentation available.</p>
