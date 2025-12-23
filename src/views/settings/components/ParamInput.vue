@@ -55,7 +55,7 @@ const smartToggleValue = computed({
 const addListItem = () => {
   const newList = [...(Array.isArray(props.modelValue) ? props.modelValue : [])]
   // Determine default value for new item
-  let newItem = null
+  let newItem: any = null
   if (props.schema.item_schema?.type === 'object') {
     newItem = {}
     if (props.schema.item_schema.properties) {
@@ -109,7 +109,7 @@ const getPropValue = (key: string, propSchema: any) => {
       <Switch
         v-else-if="schema.type === 'boolean'"
         :checked="modelValue ?? schema.default"
-        @update:checked="(v) => onUpdate(v)"
+        @update:checked="(v: boolean) => onUpdate(v)"
       />
 
       <div
@@ -118,7 +118,7 @@ const getPropValue = (key: string, propSchema: any) => {
       >
         <Slider
           :model-value="[Number(modelValue ?? schema.default)]"
-          @update:model-value="(v) => onUpdate(v[0])"
+          @update:model-value="(v?: number[]) => v && onUpdate(v[0])"
           :min="schema.min_value"
           :max="schema.max_value"
           :step="schema.type === 'int' ? 1 : 0.01"
@@ -170,7 +170,7 @@ const getPropValue = (key: string, propSchema: any) => {
       >
         <Slider
           :model-value="[Number(modelValue ?? schema.default)]"
-          @update:model-value="(v) => onUpdate(v[0])"
+          @update:model-value="(v?: number[]) => v && onUpdate(v[0])"
           :min="schema.min_value"
           :max="schema.max_value"
           :step="schema.type === 'int' ? 1 : 0.01"

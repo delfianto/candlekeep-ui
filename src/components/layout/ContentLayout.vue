@@ -22,7 +22,7 @@ withDefaults(defineProps<{
 <template>
   <div v-if="variant === 'standard'" class="h-full w-full overflow-y-auto bg-background/50">
     <div
-      class="container mx-auto max-w-7xl p-6 md:p-8 lg:p-10 space-y-8 animate-in fade-in duration-300"
+      class="container mx-auto max-w-7xl p-4 md:p-8 lg:p-10 space-y-8 animate-in fade-in duration-300"
     >
       <div v-if="title || $slots.header" class="flex flex-col gap-2">
         <h1 v-if="title" class="text-3xl font-bold tracking-tight">{{ title }}</h1>

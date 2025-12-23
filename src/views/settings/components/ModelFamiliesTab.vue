@@ -72,13 +72,13 @@ onMounted(fetchData)
 
 <template>
   <Card>
-    <CardHeader class="flex flex-row items-center justify-between">
+    <CardHeader class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <CardTitle>Model Families</CardTitle>
         <CardDescription>Base configurations for groups of related models.</CardDescription>
       </div>
-      <div class="flex items-center gap-2">
-        <div class="relative w-64">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
+        <div class="relative w-full sm:w-64">
           <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
           <Input v-model="searchQuery" placeholder="Search families..." class="pl-8" />
         </div>
@@ -103,16 +103,16 @@ onMounted(fetchData)
         <div
           v-for="family in items"
           :key="family.id"
-          class="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+          class="flex flex-col md:flex-row md:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors gap-4"
         >
-          <div class="flex items-center gap-4">
-            <div class="p-2 bg-primary/10 rounded-full">
+          <div class="flex items-center gap-4 min-w-0">
+            <div class="p-2 bg-primary/10 rounded-full shrink-0">
               <Box class="size-5 text-primary" />
             </div>
-            <div>
-              <h4 class="font-semibold">{{ family.name }}</h4>
+            <div class="min-w-0 flex-1">
+              <h4 class="font-semibold truncate">{{ family.name }}</h4>
               <div class="flex items-center gap-2 text-xs text-muted-foreground">
-                <span class="font-mono text-[10px] opacity-70">{{ family.family_identifier }}</span>
+                <span class="font-mono text-[10px] opacity-70 truncate" :title="family.family_identifier">{{ family.family_identifier }}</span>
               </div>
               <p v-if="family.description" class="text-xs text-muted-foreground mt-1 line-clamp-1">
                 {{ family.description }}
@@ -120,8 +120,8 @@ onMounted(fetchData)
             </div>
           </div>
 
-          <div class="flex items-center gap-4">
-            <div class="flex gap-1" v-if="family.provider_types">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
+            <div class="flex flex-wrap gap-1" v-if="family.provider_types">
               <Badge
                 v-for="pt in family.provider_types.slice(0, 3)"
                 :key="pt"
@@ -140,10 +140,12 @@ onMounted(fetchData)
             </div>
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
+              class="w-full sm:w-auto"
               @click="router.push(`/settings/model-families/${family.id}`)"
             >
-              <Edit class="size-4" />
+              <Edit class="size-4 mr-2 sm:mr-0" />
+              <span class="sm:hidden">Edit Family</span>
             </Button>
           </div>
         </div>

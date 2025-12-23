@@ -191,7 +191,7 @@ const handleResetParamsConfirm = async () => {
                       <p class="max-w-xs text-xs">{{ getParamDoc(key).detailed_info }}</p>
                       <p class="text-[10px] text-muted-foreground mt-1 font-mono">
                         Default:
-                        {{ formatDefaultValue(model.model_family.parameters[key].default) }}
+                        {{ formatDefaultValue((model.model_family.parameters![key] as any).default) }}
                       </p>
                     </TooltipContent>
                   </Tooltip>
@@ -208,8 +208,8 @@ const handleResetParamsConfirm = async () => {
 
             <div class="shrink-0">
               <ParamInput
-                :schema="model.model_family.parameters[key]"
-                :model-value="getEffectiveValue(key, model.model_family.parameters[key])"
+                :schema="model.model_family.parameters![key]"
+                :model-value="getEffectiveValue(key, model.model_family.parameters![key])"
                 layout="horizontal"
                 @update:model-value="(v) => updateParam(key, v)"
               />
@@ -251,7 +251,7 @@ const handleResetParamsConfirm = async () => {
                       <p class="max-w-xs text-xs">{{ getParamDoc(key).detailed_info }}</p>
                       <p class="text-[10px] text-muted-foreground mt-1 font-mono">
                         Default:
-                        {{ formatDefaultValue(model.model_family.parameters[key].default) }}
+                        {{ formatDefaultValue((model.model_family.parameters![key] as any).default) }}
                       </p>
                     </TooltipContent>
                   </Tooltip>
@@ -268,8 +268,8 @@ const handleResetParamsConfirm = async () => {
 
             <div class="shrink-0">
               <ParamInput
-                :schema="model.model_family.parameters[key]"
-                :model-value="getEffectiveValue(key, model.model_family.parameters[key])"
+                :schema="model.model_family.parameters![key]"
+                :model-value="getEffectiveValue(key, model.model_family.parameters![key])"
                 layout="horizontal"
                 @update:model-value="(v) => updateParam(key, v)"
               />
@@ -320,8 +320,8 @@ const handleResetParamsConfirm = async () => {
           </div>
 
           <ParamInput
-            :schema="model.model_family.parameters[key]"
-            :model-value="getEffectiveValue(key, model.model_family.parameters[key])"
+            :schema="model.model_family.parameters![key]"
+            :model-value="getEffectiveValue(key, model.model_family.parameters![key])"
             layout="vertical"
             @update:model-value="(v) => updateParam(key, v)"
           />

@@ -199,7 +199,7 @@ onMounted(async () => {
             </div>
             <Switch
               :checked="model.enabled"
-              @update:checked="(v) => { if(model) { model.enabled = v; updateFlags() } }"
+              @update:checked="(v: boolean) => { if(model) { model.enabled = v; updateFlags() } }"
             />
           </CardHeader>
           <CardContent class="space-y-6">
@@ -219,7 +219,7 @@ onMounted(async () => {
               </div>
               <Switch
                 :checked="model.use_openrouter"
-                @update:checked="(v) => { if(model) { model.use_openrouter = v; updateFlags() } }"
+                @update:checked="(v: boolean) => { if(model) { model.use_openrouter = v; updateFlags() } }"
               />
             </div>
 

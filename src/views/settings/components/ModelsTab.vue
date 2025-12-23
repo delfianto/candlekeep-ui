@@ -129,13 +129,13 @@ onMounted(fetchData)
 
 <template>
   <Card>
-    <CardHeader class="flex flex-row items-center justify-between">
+    <CardHeader class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <CardTitle>Model Registry</CardTitle>
         <CardDescription>Available models fetched from connected providers.</CardDescription>
       </div>
-      <div class="flex items-center gap-2">
-        <div class="relative w-64">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
+        <div class="relative w-full sm:w-64">
           <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
           <Input v-model="searchQuery" placeholder="Search models..." class="pl-8" />
         </div>
@@ -162,25 +162,25 @@ onMounted(fetchData)
         <div
           v-for="model in items"
           :key="model.id"
-          class="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+          class="flex flex-col md:flex-row md:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors gap-4"
         >
-          <div class="flex items-center gap-4">
-            <div class="p-2 bg-primary/10 rounded-full">
+          <div class="flex items-center gap-4 min-w-0">
+            <div class="p-2 bg-primary/10 rounded-full shrink-0">
               <Cpu class="size-5 text-primary" />
             </div>
-            <div>
-              <h4 class="font-semibold">{{ model.name }}</h4>
-              <div class="flex items-center gap-2 text-xs text-muted-foreground">
-                <Badge variant="secondary" class="text-[10px]">
+            <div class="min-w-0 flex-1">
+              <h4 class="font-semibold truncate">{{ model.name }}</h4>
+              <div class="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mt-1">
+                <Badge variant="secondary" class="text-[10px] shrink-0">
                   {{ getProviderName(model.provider_id) }}
                 </Badge>
-                <span class="font-mono text-[10px] opacity-70">{{ model.model_identifier }}</span>
+                <span class="font-mono text-[10px] opacity-70 truncate" :title="model.model_identifier">{{ model.model_identifier }}</span>
               </div>
             </div>
           </div>
 
-          <div class="flex items-center gap-4">
-            <div class="flex items-center gap-4 border-r pr-6 mr-2">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 border-b sm:border-b-0 sm:border-r pb-4 sm:pb-0 pr-0 sm:pr-6 mr-0 sm:mr-2 w-full sm:w-auto">
               <div class="flex items-center space-x-2">
                 <Switch
                   :id="`enabled-${model.id}`"
@@ -211,10 +211,12 @@ onMounted(fetchData)
 
             <Button
               variant="ghost"
-              size="icon"
+              size="sm"
+              class="w-full sm:w-auto"
               @click="router.push(`/settings/models/${model.id}`)"
             >
-              <Edit class="size-4" />
+              <Edit class="size-4 mr-2 sm:mr-0" />
+              <span class="sm:hidden">Edit Model</span>
             </Button>
           </div>
         </div>

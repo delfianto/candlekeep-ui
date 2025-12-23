@@ -26,12 +26,12 @@ defineProps<{
       :key="prov.id"
       :class="prov.enabled ? 'border-primary/50 bg-primary/5' : ''"
     >
-      <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div class="flex items-center gap-3">
-          <BrandIcon :name="prov.provider_type" class="size-5" />
-          <CardTitle class="text-lg font-bold">{{ prov.name }}</CardTitle>
+      <CardHeader class="flex flex-row items-start justify-between space-y-0 pb-2 gap-2">
+        <div class="flex items-center gap-3 min-w-0">
+          <BrandIcon :name="prov.provider_type" class="size-5 shrink-0" />
+          <CardTitle class="text-lg font-bold truncate" :title="prov.name">{{ prov.name }}</CardTitle>
         </div>
-        <Badge :variant="prov.enabled ? 'default' : 'outline'">
+        <Badge :variant="prov.enabled ? 'default' : 'outline'" class="shrink-0">
           {{ prov.enabled ? 'Active' : 'Disabled' }}
         </Badge>
       </CardHeader>
