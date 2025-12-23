@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Slider } from '@/components/ui/slider'
+import { Textarea } from '@/components/ui/textarea'
 import { Plus, X } from 'lucide-vue-next'
 
 // Self-reference for recursion
@@ -21,6 +22,9 @@ const props = defineProps<{
   schema: any
   modelValue: any
   label?: string
+  // 'horizontal' is for the [KEY] ... [VAL] layout (Compact group & Sliders in List)
+  // 'vertical' is for full-width inputs (Complex, Textareas)
+  layout?: 'horizontal' | 'vertical'
   depth?: number
 }>()
 
@@ -34,6 +38,18 @@ const onUpdate = (value: any) => {
   emit('update:modelValue', value)
 }
 
+// Detect if an enum is effectively a boolean toggle (e.g. "enabled"/"disabled")
+const isSmartToggle = computed(() => {
+  if (props.schema.type !== 'enum' || !props.schema.str_values) return false
+  const values = props.schema.str_values.map((v: string) => v.toLowerCase())
+  return values.includes('enabled') && values.includes('disabled') && values.length === 2
+})
+
+const smartToggleValue = computed({
+  get: () => props.modelValue === 'enabled',
+  set: (checked: boolean) => onUpdate(checked ? 'enabled' : 'disabled')
+})
+
 // -- LIST HANDLERS --
 
 const addListItem = () => {
@@ -42,7 +58,6 @@ const addListItem = () => {
   let newItem = null
   if (props.schema.item_schema?.type === 'object') {
     newItem = {}
-    // Pre-fill defaults if available
     if (props.schema.item_schema.properties) {
        Object.entries(props.schema.item_schema.properties).forEach(([k, v]: [string, any]) => {
          if (v.default !== undefined) newItem[k] = v.default
@@ -76,9 +91,6 @@ const updateObjectProp = (key: string, value: any) => {
 }
 
 const getPropValue = (key: string, propSchema: any) => {
-  // If the value exists in the object, use it.
-  // Otherwise, use the default from the schema.
-  // We do NOT mutate the object here; we just compute what to show.
   if (props.modelValue && props.modelValue[key] !== undefined) {
     return props.modelValue[key]
   }
@@ -87,16 +99,23 @@ const getPropValue = (key: string, propSchema: any) => {
 </script>
 
 <template>
-  <div class="w-full space-y-2">
-    <Label
-      v-if="label"
-      class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1 block"
-    >
-      {{ label }}
-    </Label>
+  <div class="w-full text-sm">
+    <div v-if="layout === 'horizontal'" class="flex items-center justify-end">
+      <div v-if="isSmartToggle" class="flex items-center gap-2">
+        <span class="text-xs text-muted-foreground capitalize">{{ modelValue }}</span>
+        <Switch v-model:checked="smartToggleValue" />
+      </div>
 
-    <div v-if="schema.type === 'int' || schema.type === 'float'" class="flex items-center gap-4">
-      <template v-if="schema.min_value !== undefined && schema.max_value !== undefined">
+      <Switch
+        v-else-if="schema.type === 'boolean'"
+        :checked="modelValue ?? schema.default"
+        @update:checked="(v) => onUpdate(v)"
+      />
+
+      <div
+        v-else-if="(schema.type === 'int' || schema.type === 'float') && schema.min_value !== undefined"
+        class="flex items-center gap-3 w-[300px]"
+      >
         <Slider
           :model-value="[Number(modelValue ?? schema.default)]"
           @update:model-value="(v) => onUpdate(v[0])"
@@ -107,29 +126,19 @@ const getPropValue = (key: string, propSchema: any) => {
         />
         <Input
           type="number"
-          class="w-20 h-8 text-right font-mono bg-background"
+          class="w-16 h-8 text-right font-mono bg-background/50"
           :model-value="modelValue ?? schema.default"
           @update:model-value="(v) => onUpdate(Number(v))"
         />
-      </template>
-      <Input
-        v-else
-        type="number"
-        class="font-mono bg-background"
+      </div>
+
+      <Select
+        v-else-if="schema.type === 'enum'"
         :model-value="modelValue ?? schema.default"
-        @update:model-value="(v) => onUpdate(Number(v))"
-      />
-    </div>
-
-    <div v-else-if="schema.type === 'boolean'" class="flex items-center justify-between py-1">
-      <span class="text-sm text-muted-foreground" v-if="!label">Enabled</span>
-      <Switch :checked="modelValue ?? schema.default" @update:checked="(v) => onUpdate(v)" />
-    </div>
-
-    <div v-else-if="schema.type === 'enum'">
-      <Select :model-value="modelValue ?? schema.default" @update:model-value="(v) => onUpdate(v)">
-        <SelectTrigger class="bg-background h-8 text-sm">
-          <SelectValue :placeholder="`Select...`" />
+        @update:model-value="(v) => onUpdate(v)"
+      >
+        <SelectTrigger class="h-8 w-[200px] bg-background/50">
+          <SelectValue placeholder="Select..." class="truncate" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem v-for="opt in schema.str_values" :key="opt" :value="opt">
@@ -137,23 +146,69 @@ const getPropValue = (key: string, propSchema: any) => {
           </SelectItem>
         </SelectContent>
       </Select>
-    </div>
 
-    <div v-else-if="schema.type === 'string'">
       <Input
-        type="text"
-        class="bg-background h-8"
+        v-else-if="schema.type === 'int' || schema.type === 'float' || schema.type === 'string'"
+        :type="schema.type === 'string' ? 'text' : 'number'"
+        class="h-8 w-[120px] font-mono text-right bg-background/50"
         :model-value="modelValue ?? schema.default"
-        @update:model-value="(v) => onUpdate(v)"
+        @update:model-value="(v) => onUpdate(schema.type === 'string' ? v : Number(v))"
       />
     </div>
 
-    <div v-else-if="schema.type === 'list'" class="space-y-3">
-      <div
-        v-if="schema.item_schema?.type === 'string'"
-        class="border rounded-md p-2 bg-background min-h-15"
+    <div v-else class="space-y-3 py-2">
+      <Label
+        v-if="label"
+        class="text-xs font-semibold text-muted-foreground uppercase tracking-wider block"
       >
-        <div class="flex flex-wrap gap-2">
+        {{ label }}
+      </Label>
+
+      <div
+        v-if="(schema.type === 'int' || schema.type === 'float') && schema.min_value !== undefined"
+        class="flex items-center gap-4"
+      >
+        <Slider
+          :model-value="[Number(modelValue ?? schema.default)]"
+          @update:model-value="(v) => onUpdate(v[0])"
+          :min="schema.min_value"
+          :max="schema.max_value"
+          :step="schema.type === 'int' ? 1 : 0.01"
+          class="flex-1"
+        />
+        <Input
+          type="number"
+          class="w-20 h-8 text-right font-mono bg-background/50"
+          :model-value="modelValue ?? schema.default"
+          @update:model-value="(v) => onUpdate(Number(v))"
+        />
+      </div>
+
+      <div v-else-if="schema.type === 'string'">
+        <Textarea
+          class="min-h-[120px] font-mono text-sm bg-background/50 resize-y"
+          placeholder="Enter text..."
+          :model-value="modelValue ?? schema.default"
+          @update:model-value="(v) => onUpdate(v)"
+        />
+      </div>
+
+      <div
+        v-else-if="isSmartToggle"
+        class="flex items-center justify-between border rounded-md p-3 bg-background/50"
+      >
+        <span class="text-sm">Status</span>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-muted-foreground capitalize">{{ modelValue }}</span>
+          <Switch v-model:checked="smartToggleValue" />
+        </div>
+      </div>
+
+      <div v-else-if="schema.type === 'list'" class="space-y-2">
+        <div
+          v-if="schema.item_schema?.type === 'string'"
+          class="border rounded-md p-2 bg-background/50 min-h-[40px] flex flex-wrap gap-2"
+        >
           <div
             v-for="(item, idx) in (modelValue || [])"
             :key="idx"
@@ -164,65 +219,73 @@ const getPropValue = (key: string, propSchema: any) => {
               <X class="size-3" />
             </button>
           </div>
-          <div class="flex-1 min-w-30 flex items-center gap-1">
-            <Plus class="size-3 text-muted-foreground" />
-            <input
-              class="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/50"
-              placeholder="Add item (Enter)..."
-              @keydown.enter.prevent="(e) => {
-                 const val = (e.target as HTMLInputElement).value.trim();
-                 if(val) {
-                   const list = [...(modelValue || [])];
-                   list.push(val);
-                   onUpdate(list);
-                   (e.target as HTMLInputElement).value = '';
-                 }
-               }"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div v-else class="space-y-2">
-        <div
-          v-for="(item, idx) in (modelValue || [])"
-          :key="idx"
-          class="relative border rounded-lg p-3 bg-background/50"
-        >
-          <Button
-            variant="ghost"
-            size="icon"
-            class="absolute top-1 right-1 h-6 w-6 text-muted-foreground hover:text-destructive"
-            @click="removeListItem(idx)"
-          >
-            <X class="size-3" />
-          </Button>
-
-          <ParamInput
-            :schema="schema.item_schema"
-            :model-value="item"
-            :depth="currentDepth + 1"
-            @update:model-value="(v) => updateListItem(idx, v)"
+          <input
+            class="bg-transparent text-sm outline-none flex-1 min-w-[80px] placeholder:text-muted-foreground/50"
+            placeholder="Add..."
+            @keydown.enter.prevent="(e) => {
+               const val = (e.target as HTMLInputElement).value.trim();
+               if(val) {
+                 const list = [...(modelValue || [])];
+                 list.push(val);
+                 onUpdate(list);
+                 (e.target as HTMLInputElement).value = '';
+               }
+             }"
           />
         </div>
-        <Button variant="outline" size="sm" class="w-full border-dashed" @click="addListItem">
-          <Plus class="size-3 mr-2" /> Add Item
-        </Button>
-      </div>
-    </div>
 
-    <div v-else-if="schema.type === 'object'" class="space-y-3 pt-1">
-      <div class="grid gap-4" :class="currentDepth > 0 ? 'pl-2 border-l-2 border-muted' : ''">
+        <div v-else class="space-y-2">
+          <div
+            v-for="(item, idx) in (modelValue || [])"
+            :key="idx"
+            class="relative border rounded-lg p-3 bg-background/30"
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              class="absolute top-2 right-2 h-6 w-6 text-muted-foreground hover:text-destructive z-10"
+              @click="removeListItem(idx)"
+            >
+              <X class="size-3" />
+            </Button>
+
+            <ParamInput
+              :schema="schema.item_schema"
+              :model-value="item"
+              :depth="currentDepth + 1"
+              layout="vertical"
+              @update:model-value="(v) => updateListItem(idx, v)"
+            />
+          </div>
+          <Button variant="outline" size="sm" class="w-full border-dashed" @click="addListItem">
+            <Plus class="size-3 mr-2" /> Add Item
+          </Button>
+        </div>
+      </div>
+
+      <div v-else-if="schema.type === 'object'" class="space-y-2">
         <div v-for="(propSchema, propKey) in schema.properties" :key="propKey">
           <ParamInput
             :schema="propSchema"
-            :label="String(propKey)"
+            :label="String(propKey).replace(/_/g, ' ')"
             :model-value="getPropValue(String(propKey), propSchema)"
             :depth="currentDepth + 1"
+            :layout="(propSchema.type === 'object' || propSchema.type === 'list' || propSchema.type === 'string' || (propSchema.min_value !== undefined)) ? 'vertical' : 'horizontal'"
             @update:model-value="(v) => updateObjectProp(String(propKey), v)"
           />
+          <div
+            class="h-px bg-border/50 my-1"
+            v-if="propSchema.type !== 'object' && propSchema.type !== 'list'"
+          ></div>
         </div>
       </div>
+
+      <Input
+        v-else
+        :model-value="modelValue ?? schema.default"
+        @update:model-value="(v) => onUpdate(v)"
+        class="bg-background/50"
+      />
     </div>
   </div>
 </template>
