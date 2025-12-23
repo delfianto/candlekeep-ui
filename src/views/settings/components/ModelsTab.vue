@@ -27,7 +27,6 @@ interface Model {
   model_identifier: string
   enabled: boolean
   use_openrouter: boolean
-  // Add other fields as needed
 }
 
 const props = defineProps<{
