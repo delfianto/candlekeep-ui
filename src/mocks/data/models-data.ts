@@ -1,17 +1,18 @@
 import type { components } from "@/api/schema";
 
-type ModelResponse = components["schemas"]["ModelResponse"];
+type ModelItem = components["schemas"]["ModelResponse"];
 
 const NOW = new Date().toISOString();
 
-export const modelDetails: ModelResponse[] = [
+export const allModelsMock: ModelItem[] = [
+  // --- Page 1 Data (OpenAI) ---
   {
     provider_id: "openai",
     model_identifier: "gpt-4o",
     openrouter_identifier: "openai/gpt-4o",
     use_openrouter: true,
     name: "GPT-4o",
-    model_family_id: "openai-gpt-4",
+    model_family_id: "4821-openai-gpt-4",
     system_prompt: null,
     parameters: {
       max_completion_tokens: 4096,
@@ -34,7 +35,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "openai/gpt-4o-mini",
     use_openrouter: true,
     name: "GPT-4o Mini",
-    model_family_id: "openai-gpt-4",
+    model_family_id: "4821-openai-gpt-4",
     system_prompt: null,
     parameters: {
       max_completion_tokens: 16384,
@@ -57,7 +58,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "openai/gpt-5",
     use_openrouter: true,
     name: "GPT-5",
-    model_family_id: "openai-gpt-5-thinking",
+    model_family_id: "9283-openai-gpt-5-thinking",
     system_prompt: null,
     parameters: {
       reasoning_effort: "low",
@@ -79,7 +80,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "openai/gpt-5-mini",
     use_openrouter: true,
     name: "GPT-5 Mini",
-    model_family_id: "openai-gpt-5-thinking",
+    model_family_id: "9283-openai-gpt-5-thinking",
     system_prompt: null,
     parameters: {
       reasoning_effort: "low",
@@ -101,7 +102,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "openai/gpt-5-nano",
     use_openrouter: true,
     name: "GPT-5 Nano",
-    model_family_id: "openai-gpt-5-thinking",
+    model_family_id: "9283-openai-gpt-5-thinking",
     system_prompt: null,
     parameters: {
       reasoning_effort: "low",
@@ -123,7 +124,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "openai/gpt-5-chat",
     use_openrouter: true,
     name: "GPT-5 Chat",
-    model_family_id: "openai-gpt-5-chat",
+    model_family_id: "3391-openai-gpt-5-chat",
     system_prompt: null,
     parameters: {
       temperature: 0.85,
@@ -146,7 +147,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "openai/gpt-5.1-chat",
     use_openrouter: true,
     name: "GPT-5.1 Chat",
-    model_family_id: "openai-gpt-5-x-chat",
+    model_family_id: "6612-openai-gpt-5-x-chat",
     system_prompt: null,
     parameters: {
       temperature: 0.85,
@@ -170,7 +171,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "openai/gpt-5.1",
     use_openrouter: true,
     name: "GPT-5.1",
-    model_family_id: "openai-gpt-5-1-thinking",
+    model_family_id: "1029-openai-gpt-5-1-thinking",
     system_prompt: null,
     parameters: {
       reasoning_effort: "low",
@@ -192,7 +193,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "openai/gpt-5.2",
     use_openrouter: true,
     name: "GPT-5.2",
-    model_family_id: "openai-gpt-5-2-thinking",
+    model_family_id: "7732-openai-gpt-5-2-thinking",
     system_prompt: null,
     parameters: {
       reasoning_effort: "low",
@@ -214,7 +215,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "openai/gpt-5.2-chat",
     use_openrouter: true,
     name: "GPT-5.2 Chat",
-    model_family_id: "openai-gpt-5-x-chat",
+    model_family_id: "6612-openai-gpt-5-x-chat",
     system_prompt: null,
     parameters: {
       temperature: 0.85,
@@ -232,13 +233,15 @@ export const modelDetails: ModelResponse[] = [
     active_identifier: "openai/gpt-5.2-chat",
     provider_enabled: true,
   },
+
+  // --- Page 2 Data (Anthropic, Google, xAI, Ollama) ---
   {
     provider_id: "anthropic",
     model_identifier: "claude-4.5-sonnet",
     openrouter_identifier: "anthropic/claude-4.5-sonnet",
     use_openrouter: false,
     name: "Claude 4.5 Sonnet",
-    model_family_id: "anthropic-claude-4-5-standard",
+    model_family_id: "2281-anthropic-claude-4-5-standard",
     system_prompt: null,
     parameters: {
       temperature: 0.8,
@@ -258,7 +261,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "anthropic/claude-4.5-opus",
     use_openrouter: false,
     name: "Claude 4.5 Opus",
-    model_family_id: "anthropic-claude-4-5-opus",
+    model_family_id: "1992-anthropic-claude-4-5-opus",
     system_prompt: null,
     parameters: {
       temperature: 0.8,
@@ -278,7 +281,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "google/gemini-pro-2.5",
     use_openrouter: false,
     name: "Gemini 2.5 Pro",
-    model_family_id: "google-gemini-2-5-text",
+    model_family_id: "8473-google-gemini-2-5-text",
     system_prompt: null,
     parameters: {
       temperature: 0.9,
@@ -298,7 +301,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "xai/grok-4",
     use_openrouter: false,
     name: "Grok 4",
-    model_family_id: "xai-grok-4",
+    model_family_id: "3319-xai-grok-4",
     system_prompt: null,
     parameters: {
       temperature: 0.8,
@@ -317,7 +320,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: null,
     use_openrouter: false,
     name: "Mistral (Local)",
-    model_family_id: "ollama-mistral",
+    model_family_id: "6628-ollama-mistral",
     system_prompt: null,
     parameters: {
       temperature: 0.7,
@@ -330,13 +333,15 @@ export const modelDetails: ModelResponse[] = [
     active_identifier: "mistral",
     provider_enabled: true,
   },
+
+  // --- Page 3 Data (OpenRouter specific) ---
   {
     provider_id: "openrouter",
     model_identifier: "sao10k/l3-euryale-70b",
     openrouter_identifier: "sao10k/l3-euryale-70b",
     use_openrouter: true,
     name: "Sao10K L3 Euryale 70B v2.1",
-    model_family_id: "openrouter-llama-3-rp",
+    model_family_id: "7721-openrouter-llama-3-rp",
     system_prompt: null,
     parameters: {
       temperature: 0.85,
@@ -357,7 +362,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "z-ai/glm-4.6",
     use_openrouter: true,
     name: "GLM 4.6",
-    model_family_id: "openrouter-glm-4",
+    model_family_id: "4472-openrouter-glm-4",
     system_prompt: null,
     parameters: {
       temperature: 0.8,
@@ -378,7 +383,7 @@ export const modelDetails: ModelResponse[] = [
     openrouter_identifier: "z-ai/glm-4.7",
     use_openrouter: true,
     name: "GLM 4.7",
-    model_family_id: "openrouter-glm-4",
+    model_family_id: "4472-openrouter-glm-4",
     system_prompt: null,
     parameters: {
       temperature: 0.8,

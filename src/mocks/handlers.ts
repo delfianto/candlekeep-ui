@@ -4,8 +4,10 @@ import { chats } from "@/mocks/data/chats";
 import { messages } from "@/mocks/data/messages";
 import { providers } from "@/mocks/data/providers";
 import { modelsPages, modelsFilteredByName } from "@/mocks/data/models";
+import { allModelsMock } from "@/mocks/data/models-data";
 import { personas } from "@/mocks/data/personas";
 import { modelFamiliesPages, modelFamiliesFilteredByName } from "@/mocks/data/model-families";
+import { allModelFamiliesMock } from "@/mocks/data/model-families-data";
 import { modelFamiliesParameterDocs } from "@/mocks/data/model-parameters";
 import type { components } from "@/api/schema";
 
@@ -18,8 +20,10 @@ const db = {
   messages,
   providers,
   modelsPages,
+  allModelsMock,
   personas,
   modelFamiliesPages,
+  allModelFamiliesMock,
 };
 
 export const handlers = [
@@ -123,7 +127,7 @@ export const handlers = [
     return HttpResponse.json(db.providers);
   }),
 
-  // Models
+  // Models List
   http.get("/api/models", async ({ request }) => {
     await delay(100);
     const url = new URL(request.url);
@@ -140,17 +144,28 @@ export const handlers = [
     return HttpResponse.json(pageData);
   }),
 
+  // Models Detail (Joined with Model Family)
   http.get("/api/models/:modelId", async ({ params }) => {
     const modelId = params.modelId as string;
-    let foundModel = null;
-    for (const page of db.modelsPages) {
-      foundModel = page.items.find((m: components["schemas"]["ModelResponse"]) => m.id === modelId);
-      if (foundModel) break;
+
+    // 1. Find the model in the raw data
+    const foundModel = db.allModelsMock.find((m) => m.id === modelId);
+
+    if (!foundModel) {
+      return new HttpResponse(null, { status: 404 });
     }
 
-    if (!foundModel) return new HttpResponse(null, { status: 404 });
+    // 2. Perform relational lookup for the Model Family
+    const family = db.allModelFamiliesMock.find((f) => f.id === foundModel.model_family_id);
+
+    // 3. Construct the response with the nested family object
+    const responseData = {
+      ...foundModel,
+      model_family: family || null, // Should ideally always exist if data is consistent
+    };
+
     await delay(100);
-    return HttpResponse.json(foundModel);
+    return HttpResponse.json(responseData);
   }),
 
   // Personas
@@ -166,7 +181,7 @@ export const handlers = [
     return HttpResponse.json(persona);
   }),
 
-  // Model Families
+  // Model Families List
   http.get("/api/model-families", async ({ request }) => {
     await delay(100);
     const url = new URL(request.url);
@@ -179,11 +194,8 @@ export const handlers = [
     const pageParam = url.searchParams.get("page");
     const page = pageParam ? parseInt(pageParam, 10) : 1;
 
-    // Find the page object that matches the requested page number
     const pageData = db.modelFamiliesPages.find((p) => p.current_page === page);
 
-    // Fallback to empty page or 404 if not found, but for mock let's return first page if out of bounds or empty structure
-    // Since we know we have pages 1, 2, 3
     if (!pageData) {
       return HttpResponse.json(db.modelFamiliesPages[0]);
     }
@@ -191,9 +203,21 @@ export const handlers = [
     return HttpResponse.json(pageData);
   }),
 
-  // Model Family Parameter Docs
+  // Model Families Detail
   http.get("/api/model-families/parameter-docs", async () => {
     await delay(50);
     return HttpResponse.json(modelFamiliesParameterDocs);
+  }),
+
+  http.get("/api/model-families/:id", async ({ params }) => {
+    const id = params.id as string;
+    const family = db.allModelFamiliesMock.find((f) => f.id === id);
+
+    if (!family) {
+      return new HttpResponse(null, { status: 404 });
+    }
+
+    await delay(100);
+    return HttpResponse.json(family);
   }),
 ];
