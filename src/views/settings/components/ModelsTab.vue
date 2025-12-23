@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDebounceFn } from '@vueuse/core'
 import {
@@ -15,9 +15,20 @@ import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import AppPagination from '@/components/shared/AppPagination.vue'
-import { Cpu, Plus, Edit, Search, Loader2, Globe } from 'lucide-vue-next'
+import { Cpu, Plus, Edit, Search, Loader2 } from 'lucide-vue-next'
 import { client } from '@/api/client'
 import { toast } from 'vue-sonner'
+
+// -- TYPES --
+interface Model {
+  id: string
+  name: string
+  provider_id: string
+  model_identifier: string
+  enabled: boolean
+  use_openrouter: boolean
+  // Add other fields as needed
+}
 
 const props = defineProps<{
   providers: any[]
@@ -27,15 +38,24 @@ const router = useRouter()
 
 // -- STATE --
 const isLoading = ref(true)
-const items = ref<any[]>([])
+const items = ref<Model[]>([])
 const page = ref(1)
 const limit = ref(10)
 const total = ref(0)
 const searchQuery = ref('')
 
+// -- COMPUTED --
+// Optimize lookup: Create a map of ID -> Name so we don't .find() inside the v-for loop
+const providerMap = computed(() => {
+  const map: Record<string, string> = {}
+  props.providers.forEach((p) => {
+    map[p.id] = p.name
+  })
+  return map
+})
+
 const getProviderName = (providerId: string) => {
-  const p = props.providers.find((p) => p.id === providerId)
-  return p ? p.name : 'Unknown'
+  return providerMap.value[providerId] || 'Unknown'
 }
 
 // -- ACTIONS --
@@ -54,37 +74,48 @@ const fetchData = async () => {
 
     if (error) throw error
 
-    if (data.items) {
-      items.value = data.items
-      total.value = data.total_items ?? data.items.length
-    } else {
-      items.value = Array.isArray(data) ? data : []
+    if (data && 'items' in data) {
+      items.value = (data.items as Model[]) || []
+      total.value = data.total_items ?? items.value.length
+    } else if (Array.isArray(data)) {
+      items.value = data as Model[]
       total.value = items.value.length
+    } else {
+      items.value = []
+      total.value = 0
     }
   } catch (error) {
     console.error('Failed to load models:', error)
     toast.error('Failed to load models')
+    items.value = []
   } finally {
     isLoading.value = false
   }
 }
 
-const toggleFlags = async (model: any) => {
+const toggleFlags = async (model: Model, newValue: boolean, field: 'enabled' | 'use_openrouter') => {
+  // Optimistic update
+  const originalValue = model[field]
+  model[field] = newValue
+
   try {
     const { error } = await client.PATCH('/api/models/{model_id}/flags', {
       params: { path: { model_id: model.id } },
       body: {
         enabled: model.enabled,
         use_openrouter: model.use_openrouter,
+        // Send specific field explicitly to be safe
+        [field]: newValue
       },
     })
+
     if (error) throw error
-    toast.success(`${model.name} flags updated`)
+    toast.success(`${model.name} updated`)
   } catch (error) {
     console.error('Failed to update flags:', error)
     toast.error('Failed to update flags')
-    // Refresh to revert UI state
-    fetchData()
+    // Revert on error
+    model[field] = originalValue
   }
 }
 
@@ -112,11 +143,13 @@ onMounted(fetchData)
           <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
           <Input v-model="searchQuery" placeholder="Search models..." class="pl-8" />
         </div>
-        <Button size="sm"><Plus class="size-4 mr-2" /> Add Custom Model</Button>
+        <Button size="sm" @click="router.push('/settings/models/new')">
+          <Plus class="size-4 mr-2" />
+          Add Custom Model
+        </Button>
       </div>
     </CardHeader>
     <CardContent>
-      <!-- Top Pagination -->
       <div class="flex justify-end mb-4" v-if="total > limit">
         <AppPagination v-model:page="page" :total="total" :limit="limit" />
       </div>
@@ -150,20 +183,17 @@ onMounted(fetchData)
             </div>
           </div>
 
-          <div class="flex items-center gap-6">
-            <div class="flex items-center gap-4 border-r pr-6">
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 border-r pr-6 mr-2">
               <div class="flex items-center space-x-2">
                 <Switch
                   :id="`enabled-${model.id}`"
-                  :checked="model.enabled"
-                  @update:checked="
-                    (v: boolean) => {
-                      model.enabled = v
-                      toggleFlags(model)
-                    }
-                  "
+                  :model-value="model.enabled"
+                  @update:model-value="(val) => toggleFlags(model, val, 'enabled')"
                 />
-                <Label :for="`enabled-${model.id}`" class="text-xs text-muted-foreground"
+                <Label
+                  :for="`enabled-${model.id}`"
+                  class="text-xs text-muted-foreground cursor-pointer"
                   >Enabled</Label
                 >
               </div>
@@ -171,19 +201,13 @@ onMounted(fetchData)
               <div class="flex items-center space-x-2">
                 <Switch
                   :id="`openrouter-${model.id}`"
-                  :checked="model.use_openrouter"
-                  @update:checked="
-                    (v: boolean) => {
-                      model.use_openrouter = v
-                      toggleFlags(model)
-                    }
-                  "
+                  :model-value="model.use_openrouter"
+                  @update:model-value="(val) => toggleFlags(model, val, 'use_openrouter')"
                 />
                 <Label
                   :for="`openrouter-${model.id}`"
-                  class="text-xs text-muted-foreground flex items-center gap-1"
+                  class="text-xs text-muted-foreground flex items-center gap-1 cursor-pointer"
                 >
-                  <Globe class="size-3" />
                   OpenRouter
                 </Label>
               </div>
@@ -200,7 +224,6 @@ onMounted(fetchData)
         </div>
       </div>
 
-      <!-- Bottom Pagination -->
       <div class="flex justify-end mt-4" v-if="total > limit">
         <AppPagination v-model:page="page" :total="total" :limit="limit" />
       </div>
