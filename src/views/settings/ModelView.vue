@@ -5,6 +5,7 @@ import ContentLayout from '@/components/layout/ContentLayout.vue'
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -273,61 +274,67 @@ onMounted(async () => {
       <div class="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle class="text-base">Metadata</CardTitle>
+            <CardTitle>Metadata</CardTitle>
+            <CardDescription>
+              Core configuration and identifiers for this model instance.
+            </CardDescription>
           </CardHeader>
-          <CardContent class="space-y-4 text-sm">
-            <div class="grid gap-2 py-2 border-b">
-              <Label class="text-muted-foreground text-xs">Provider</Label>
-              <Select v-model="model.provider_id">
-                <SelectTrigger class="h-8 text-xs">
-                  <SelectValue placeholder="Select a provider" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem
-                    v-for="prov in filteredProviders"
-                    :key="prov.id"
-                    :value="prov.id"
-                    class="text-xs"
-                  >
-                    {{ prov.name }}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <CardContent class="space-y-6">
+            <div class="space-y-4">
+              <div class="rounded-lg border bg-muted/20 divide-y divide-border/50">
+                <div class="flex flex-col gap-2 p-4 hover:bg-muted/40 transition-colors">
+                  <Label class="text-sm font-medium">Provider</Label>
+                  <Select v-model="model.provider_id">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a provider" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem
+                        v-for="prov in filteredProviders"
+                        :key="prov.id"
+                        :value="prov.id"
+                      >
+                        {{ prov.name }}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            <div class="grid gap-1 py-2 border-b">
-              <span class="text-muted-foreground text-xs">Family</span>
-              <span class="font-mono text-xs break-all">
-                {{ model.model_family.family_identifier }}
-              </span>
-            </div>
+                <div class="flex flex-col gap-2 p-4 hover:bg-muted/40 transition-colors">
+                  <Label class="text-sm font-medium text-muted-foreground">Family</Label>
+                  <span class="font-mono text-sm break-all">
+                    {{ model.model_family.family_identifier }}
+                  </span>
+                </div>
 
-            <div class="grid gap-2 py-2 border-b">
-              <Label class="text-muted-foreground text-xs">Native Model Name</Label>
-              <Input v-model="model.model_identifier" class="h-8 font-mono text-xs" />
-            </div>
+                <div class="flex flex-col gap-2 p-4 hover:bg-muted/40 transition-colors">
+                  <Label class="text-sm font-medium">Native Model Name</Label>
+                  <Input v-model="model.model_identifier" class="font-mono" />
+                </div>
 
-            <div class="grid gap-2 py-2 border-b">
-              <Label class="text-muted-foreground text-xs">OpenRouter Name</Label>
-              <Input
-                v-model="(model.openrouter_identifier as string)"
-                class="h-8 font-mono text-xs"
-                placeholder="Optional..."
-              />
-            </div>
+                <div class="flex flex-col gap-2 p-4 hover:bg-muted/40 transition-colors">
+                  <Label class="text-sm font-medium">OpenRouter Name</Label>
+                  <Input
+                    v-model="(model.openrouter_identifier as string)"
+                    class="font-mono"
+                    placeholder="Optional..."
+                  />
+                </div>
 
-            <div class="grid gap-1 py-2 border-b">
-              <span class="text-muted-foreground text-xs">Created</span>
-              <span class="font-medium">
-                {{ new Date(model.created_at).toLocaleDateString() }}
-              </span>
-            </div>
+                <div class="flex flex-col gap-2 p-4 hover:bg-muted/40 transition-colors">
+                  <span class="text-sm font-medium text-muted-foreground">Created</span>
+                  <span class="text-sm">
+                    {{ new Date(model.created_at).toLocaleDateString() }}
+                  </span>
+                </div>
 
-            <div class="grid gap-1 py-2">
-              <span class="text-muted-foreground text-xs">Updated</span>
-              <span class="font-medium">
-                {{ new Date(model.updated_at).toLocaleDateString() }}
-              </span>
+                <div class="flex flex-col gap-2 p-4 hover:bg-muted/40 transition-colors">
+                  <span class="text-sm font-medium text-muted-foreground">Updated</span>
+                  <span class="text-sm">
+                    {{ new Date(model.updated_at).toLocaleDateString() }}
+                  </span>
+                </div>
+              </div>
             </div>
           </CardContent>
           <CardFooter class="flex flex-col gap-3">
