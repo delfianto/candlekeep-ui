@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Candlekeep UI is a greenfield project built from scratch, aiming to deliver a modern, high-fidelity UI for Roleplay (RP) chat with Large Language Models (LLMs). It serves as the official frontend for [Candlekeep Core](https://github.com/delfianto/candlekeep-core/tree/develop), a Python-based backend. The project focuses on providing a rich, immersive user experience leveraging Vue 3, Vite, and the `shadcn-vue` component library for a polished, accessible design system.
+Candlekeep UI is a greenfield project built from scratch, aiming to deliver a modern, high-fidelity UI for Roleplay (RP) chat with Large Language Models (LLMs). It serves as the official frontend for [Candlekeep Core](https://github.com/delfianto/candlekeep-core/tree/develop), a Python-based backend. The project is build on top of Vue 3, Vite, and the `shadcn-vue` component library.
 
 ## Tech Stack
 
@@ -41,9 +41,9 @@ Candlekeep UI is a greenfield project built from scratch, aiming to deliver a mo
 ### API Management
 
 - **Generate API Schema:** `bun run api:gen`
-  - Re-generates `src/api/schema.d.ts` from `openapi.json`.
+    - Re-generates `src/api/schema.d.ts` from `openapi.json`.
 
-  - Run this after updating the backend `openapi.json` file.
+    - Run this after updating the backend `openapi.json` file.
 
 ## Project Structure & Conventions
 
