@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import AppPagination from '@/components/shared/AppPagination.vue'
 import { Box, Plus, Edit, Search, Loader2 } from 'lucide-vue-next'
+import { client } from '@/api/client'
 
 const router = useRouter()
 
@@ -30,18 +31,21 @@ const searchQuery = ref('')
 const fetchData = async () => {
   isLoading.value = true
   try {
-    const params = new URLSearchParams()
-    params.append('page', page.value.toString())
-    params.append('limit', limit.value.toString())
-    if (searchQuery.value) {
-      params.append('name', searchQuery.value)
-    }
+    const { data, error } = await client.GET('/api/model-families', {
+      params: {
+        query: {
+          page: page.value,
+          limit: limit.value,
+          name: searchQuery.value || undefined,
+        },
+      },
+    })
 
-    const res = await fetch(`/api/model-families?${params.toString()}`)
-    if (res.ok) {
-      const data = await res.json()
+    if (error) throw error
+
+    if (data) {
       // Handle both paginated and non-paginated responses for safety
-      if (data.items) {
+      if ('items' in data) {
         items.value = data.items
         total.value = data.meta?.total || data.items.length
       } else {

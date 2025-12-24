@@ -1,6 +1,7 @@
 // src/composables/useChatMessages.ts
 import { ref, watch } from "vue";
 import type { components } from "@/api/schema";
+import { client } from "@/api/client";
 
 type Message = components["schemas"]["MessageResponse"];
 
@@ -25,49 +26,45 @@ export function useChatMessages(getChatId: () => string | null, options: UseChat
     error.value = null;
 
     try {
-      const params = new URLSearchParams();
-      params.append("limit", pageSize.toString());
-      if (cursor) {
-        params.append("cursor", cursor);
+      const { data, error: apiError } = await client.GET("/api/chats/{chat_id}/messages", {
+        params: {
+          path: { chat_id: currentChatId },
+          query: {
+            limit: pageSize,
+            cursor: cursor || undefined,
+          },
+        },
+      });
+
+      if (apiError) {
+        throw new Error(`Failed to load messages: ${JSON.stringify(apiError)}`);
       }
 
-      const response = await fetch(
-        `/api/chats/${currentChatId}/messages?${params.toString()}`,
-      );
+      if (data) {
+        // Handle both old array format (just in case) and new object format
+        const newMessages: Message[] = Array.isArray(data) ? data : data.items;
+        const meta = Array.isArray(data) ? null : data.meta;
 
-      if (!response.ok) {
-        throw new Error(`Failed to load messages: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      // Handle both old array format (just in case) and new object format
-      const newMessages: Message[] = Array.isArray(data) ? data : data.items;
-      const meta = Array.isArray(data) ? null : data.meta;
-
-      if (meta) {
-        hasMore.value = meta.has_more;
-      } else {
-        // Fallback for old API or missing meta
-        const hasMoreHeader = response.headers.get("X-Has-More");
-        if (hasMoreHeader !== null) {
-          hasMore.value = hasMoreHeader === "true";
+        if (meta) {
+          hasMore.value = meta.has_more;
         } else {
-           if (newMessages.length < pageSize) {
-             hasMore.value = false;
-           }
+          // Fallback for old API or missing meta
+          if (newMessages.length < pageSize) {
+            hasMore.value = false;
+          }
         }
-      }
 
-      // The API returns Newest -> Oldest.
-      // We want to display Oldest -> Newest.
-      const sortedBatch = [...newMessages].reverse();
+        // The API returns Newest -> Oldest.
+        // We want to display Oldest -> Newest.
+        const sortedBatch = [...newMessages].reverse();
 
-      if (cursor) {
-        // Prepend older messages
-        messages.value = [...sortedBatch, ...messages.value];
-      } else {
-        // Initial load (replace)
-        messages.value = sortedBatch;
+        if (cursor) {
+          // Prepend older messages
+          messages.value = [...sortedBatch, ...messages.value];
+        } else {
+          // Initial load (replace)
+          messages.value = sortedBatch;
+        }
       }
     } catch (err) {
       error.value = err instanceof Error ? err : new Error("Unknown error");

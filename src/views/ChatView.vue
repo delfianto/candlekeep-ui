@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useChatMessages } from '@/composables/useChatMessages'
+import { client } from '@/api/client'
 import type { components } from '@/api/schema'
 import {
   Search,
@@ -40,9 +41,10 @@ const chatsLoading = ref(true)
 
 onMounted(async () => {
   try {
-    const response = await fetch('/api/chats')
-    if (response.ok) {
-      const data = await response.json()
+    const { data, error: apiError } = await client.GET('/api/chats')
+    if (apiError) throw apiError
+
+    if (data) {
       // Handle both array and paginated response
       chatSessions.value = Array.isArray(data) ? data : data.items
       
