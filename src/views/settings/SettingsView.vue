@@ -15,7 +15,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Server, Cpu, FileText, Palette, Info, Loader2, Layers, Menu } from 'lucide-vue-next'
 
-// Import Tab Components
 import ProvidersTab from './components/ProvidersTab.vue'
 import ModelFamiliesTab from './components/ModelFamiliesTab.vue'
 import ModelsTab from './components/ModelsTab.vue'
@@ -23,7 +22,6 @@ import TemplatesTab from './components/TemplatesTab.vue'
 import InterfaceTab from './components/InterfaceTab.vue'
 import AboutTab from './components/AboutTab.vue'
 
-// -- STATE --
 // Keep the state here so we can share it
 // e.g., ModelsTab needs Providers data
 const settingsStore = useSettingsStore()
@@ -34,7 +32,6 @@ const route = useRoute()
 const router = useRouter()
 const isMobileMenuOpen = ref(false)
 
-// -- TAB CONFIG --
 const tabsConfig = [
   { value: 'providers', label: 'Providers', icon: Server },
   { value: 'model-families', label: 'Families', icon: Layers },
@@ -44,7 +41,6 @@ const tabsConfig = [
   { value: 'about', label: 'About', icon: Info },
 ]
 
-// -- TAB STATE --
 const activeTab = ref<string>((route.query.tab as string) || 'providers')
 watch(activeTab, (newTab) => {
   router.replace({ query: { ...route.query, tab: newTab } })
@@ -55,7 +51,6 @@ const currentTabLabel = computed(() => {
   return tabsConfig.find(t => t.value === activeTab.value)?.label || 'Settings'
 })
 
-// -- ACTIONS --
 const fetchData = async () => {
   await settingsStore.fetchProviders()
 }

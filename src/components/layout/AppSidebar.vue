@@ -24,10 +24,10 @@ import {
   Flame,
 } from 'lucide-vue-next'
 import { useColorMode } from '@vueuse/core'
-import { useRoute } from 'vue-router' // <--- Required for active state
+import { useRoute } from 'vue-router'
 
 const mode = useColorMode()
-const route = useRoute() // <--- Get current route
+const route = useRoute()
 
 const toggleTheme = () => {
   mode.value = mode.value === 'dark' ? 'light' : 'dark'

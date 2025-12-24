@@ -1,4 +1,3 @@
-// src/composables/useChatMessages.ts
 import { ref, watch } from "vue";
 import type { components } from "@/api/schema";
 import { client } from "@/api/client";
@@ -60,13 +59,12 @@ export function useChatMessages(
         }
 
         // We want to display Oldest -> Newest in the UI state.
-        const sortedBatch = [...newMessages].reverse(); // [Oldest_in_batch, ..., Latest_in_batch]
+        // [Oldest_in_batch, ..., Latest_in_batch]
+        const sortedBatch = [...newMessages].reverse();
 
         if (cursor) {
-          // Prepend older messages
           messages.value = [...sortedBatch, ...messages.value];
         } else {
-          // Initial load
           messages.value = sortedBatch;
         }
       }

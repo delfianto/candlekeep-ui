@@ -18,17 +18,11 @@ class ConversationCache {
   private loaders: Map<string, () => Promise<YamlScenario>> = new Map();
   private metadata: Map<string, { daysAgoStart: number; messageCount?: number }> = new Map();
 
-  /**
-   * Register a conversation with lazy loading
-   */
   register(chatId: string, loader: () => Promise<YamlScenario>, daysAgoStart: number = 7) {
     this.loaders.set(chatId, loader);
     this.metadata.set(chatId, { daysAgoStart });
   }
 
-  /**
-   * Get conversation - loads if not cached
-   */
   async get(chatId: string): Promise<Message[] | null> {
     if (this.cache.has(chatId)) {
       return this.cache.get(chatId)!;
@@ -66,14 +60,12 @@ class ConversationCache {
       return null;
     }
 
-    // 1. Sort all messages Newest -> Oldest
     const sortedMessages = [...allMessages].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
     );
 
     let filteredMessages = sortedMessages;
 
-    // 2. Apply Cursor (return messages OLDER than cursor)
     if (cursor) {
       const cursorTime = new Date(cursor).getTime();
       filteredMessages = sortedMessages.filter(
@@ -81,18 +73,13 @@ class ConversationCache {
       );
     }
 
-    // 3. Check if we have more than limit
     const hasMore = filteredMessages.length > limit;
 
-    // 4. Apply Limit
     const messages = filteredMessages.slice(0, limit);
 
     return { messages, hasMore };
   }
 
-  /**
-   * Get paginated messages (Page-based)
-   */
   async getPaginated(
     chatId: string,
     page: number = 1,
@@ -114,31 +101,19 @@ class ConversationCache {
     };
   }
 
-  /**
-   * Get message count without loading full conversation
-   */
   getMessageCount(chatId: string): number | null {
     const metadata = this.metadata.get(chatId);
     return metadata?.messageCount ?? null;
   }
 
-  /**
-   * Check if conversation exists
-   */
   has(chatId: string): boolean {
     return this.loaders.has(chatId);
   }
 
-  /**
-   * Preload a conversation (useful for prefetching)
-   */
   async preload(chatId: string): Promise<void> {
     await this.get(chatId);
   }
 
-  /**
-   * Clear cache for a specific chat or all chats
-   */
   clearCache(chatId?: string): void {
     if (chatId) {
       this.cache.delete(chatId);
@@ -152,9 +127,6 @@ class ConversationCache {
     }
   }
 
-  /**
-   * Get cache statistics
-   */
   getStats() {
     return {
       registered: this.loaders.size,
@@ -179,7 +151,6 @@ class ConversationCache {
   }
 }
 
-// Export singleton instance
 export const conversationCache = new ConversationCache();
 
 /**

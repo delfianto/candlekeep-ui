@@ -18,9 +18,7 @@ const icons = import.meta.glob('@/assets/icons/*.svg', {
   eager: true
 })
 
-// Compute the correct SVG content based on the 'name' prop
 const iconContent = computed(() => {
-  // Try to find the file. Matches "github", "openai", etc.
   const path = `/src/assets/icons/${props.name.toLowerCase()}.svg`
   const rawIcon = icons[path] as string | undefined
 
@@ -30,7 +28,6 @@ const iconContent = computed(() => {
   }
 
   // OPTIONAL: Strip hardcoded width/height so Tailwind classes control the size
-  // This removes width="..." and height="..." attributes from the raw string
   return rawIcon
     .replace(/width=".*?"/g, '')
     .replace(/height=".*?"/g, '')

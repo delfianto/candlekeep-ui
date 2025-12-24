@@ -17,7 +17,6 @@ type Chat = components["schemas"]["ChatResponse"];
 const db = {
   characters,
   chats,
-  // Remove: messages - now handled by conversationCache
   providers,
   modelsPages,
   allModelsMock,
@@ -114,18 +113,15 @@ export const handlers = [
     return HttpResponse.json(chat);
   }),
 
-  // UPDATED: Messages endpoint with lazy loading and cursor-based pagination
+  // Messages endpoint with lazy loading and cursor-based pagination
   http.get("/api/chats/:chatId/messages", async ({ params, request }) => {
     const chatId = params.chatId as string;
     const url = new URL(request.url);
 
-    // Parse pagination parameters
     const limit = parseInt(url.searchParams.get("limit") || "20", 10);
     const cursor = url.searchParams.get("cursor") || undefined;
 
-    // Check if conversation exists
     if (!conversationCache.has(chatId)) {
-      // Fallback: If chat exists in DB but not in cache (no YAML), generate a mock message
       const chatExists = db.chats.find((c) => c.id === chatId);
       if (chatExists) {
         await delay(100);
@@ -163,7 +159,6 @@ export const handlers = [
 
     await delay(100);
 
-    // Return cursor-based paginated response
     const result = await conversationCache.getCursorPaginated(chatId, limit, cursor);
 
     if (!result) {
@@ -187,7 +182,7 @@ export const handlers = [
     });
   }),
 
-  // UPDATED: Post message handler
+  // Post message handler
   http.post("/api/chats/:chatId/messages", async ({ params, request }) => {
     const chatId = params.chatId as string;
     const body = (await request.json()) as any;
@@ -210,7 +205,7 @@ export const handlers = [
     return HttpResponse.json(aiMsg);
   }),
 
-  // NEW: Prefetch endpoint (optional)
+  // Prefetch endpoint (optional)
   http.post("/api/chats/:chatId/prefetch", async ({ params }) => {
     const chatId = params.chatId as string;
 
@@ -223,7 +218,7 @@ export const handlers = [
     return HttpResponse.json({ status: "prefetching" });
   }),
 
-  // NEW: Cache management endpoint (optional, for debugging)
+  // Cache management endpoint (optional, for debugging)
   http.post("/api/cache/clear", async ({ request }) => {
     const body = (await request.json()) as any;
     const chatId = body?.chatId;
@@ -236,7 +231,7 @@ export const handlers = [
     });
   }),
 
-  // UPDATED: Health check with cache stats
+  // Health check with cache stats
   http.get("/api/health", () => {
     return HttpResponse.json({
       status: "ok",
@@ -272,17 +267,17 @@ export const handlers = [
   http.get("/api/models/:modelId", async ({ params }) => {
     const modelId = params.modelId as string;
 
-    // 1. Find the model in the raw data
+    // Find the model in the raw data
     const foundModel = db.allModelsMock.find((m) => m.id === modelId);
 
     if (!foundModel) {
       return new HttpResponse(null, { status: 404 });
     }
 
-    // 2. Perform relational lookup for the Model Family
+    // Perform relational lookup for the Model Family
     const family = db.allModelFamiliesMock.find((f) => f.id === foundModel.model_family_id);
 
-    // 3. Construct the response with the nested family object
+    // Construct the response with the nested family object
     const responseData = {
       ...foundModel,
       model_family: family || null, // Should ideally always exist if data is consistent

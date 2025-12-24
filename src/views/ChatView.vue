@@ -15,10 +15,9 @@ import {
   Loader2
 } from 'lucide-vue-next'
 
-// UI Components
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area' // Keep for Sidebar only
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
 import {
@@ -28,12 +27,10 @@ import {
 } from '@/components/ui/resizable'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
-// --- ROUTING ---
 const router = useRouter()
 const route = useRoute()
 const chatId = computed(() => route.params.chatId as string || null)
 
-// --- SIDEBAR LOGIC (Cursor Pagination) ---
 const {
   chatSessions,
   loading: chatsLoading,
@@ -48,7 +45,6 @@ watch(chatSessions, (newChats) => {
   }
 }, { immediate: true })
 
-// --- MESSAGE LOGIC ---
 const { messages, loading, hasMore, loadMore, error } = useChatMessages(() => chatId.value, {
   pageSize: 20,
   autoLoad: true
@@ -347,9 +343,9 @@ const handleLoadMore = async () => {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--muted-foreground) / 0.1); /* Lighter default */
+  background-color: hsl(var(--muted-foreground) / 0.1);
   border-radius: 9999px;
-  border: 3px solid transparent; /* Creates padding effect */
+  border: 3px solid transparent;
   background-clip: content-box;
 }
 
@@ -357,7 +353,6 @@ const handleLoadMore = async () => {
   background-color: hsl(var(--muted-foreground) / 0.3);
 }
 
-/* Firefox */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: hsl(var(--muted-foreground) / 0.1) transparent;

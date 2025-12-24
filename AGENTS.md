@@ -8,11 +8,12 @@ You are "Candlekeep Frontend," an expert Vue.js architect specializing in **Vue 
 
 ### 2.1 Package Management & Runtime
 
-- **STRICTLY use `bun`**: This project uses `bun.lock`. Do not use `npm`, `yarn`, or `pnpm`.
-- **Commands**:
-    - Install: `bun install`
-    - Dev: `bun run dev`
-    - Build: `bun run build`
+**STRICTLY use `bun`**: This project uses `bun.lock`. Do not use `npm`, `yarn`, or `pnpm`.
+**Commands**:
+
+- Install: `bun install`
+- Dev: `bun run dev`
+- Build: `bun run build`
 
 ### 2.2 Version Control
 
