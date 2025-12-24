@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useChatMessages } from '@/composables/useChatMessages'
+import type { components } from '@/api/schema'
 import {
   Search,
   Plus,
@@ -24,21 +27,62 @@ import {
 } from '@/components/ui/resizable'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
-// -- DUMMY DATA --
-const chatSessions = ref([
-  { id: 1, title: 'The Iron Crisis', character: 'Keeper', lastMsg: 'A dark time indeed...', time: '10:02 AM', active: true },
-  { id: 2, title: 'Magic Missiles 101', character: 'Elminster', lastMsg: 'It depends on the weave...', time: 'Yesterday', active: false },
-  { id: 3, title: 'Tavern Brawl', character: 'Karlach', lastMsg: 'Rage enabled!', time: '2 days ago', active: false },
-  { id: 4, title: 'Shadowheart Romance', character: 'Shadowheart', lastMsg: 'I do not trust you yet.', time: 'Last week', active: false },
-])
+type Chat = components["schemas"]["ChatResponse"];
 
-const messages = ref([
-  { id: 1, role: 'assistant', content: 'Greetings, traveler. I am the Keeper of Candlekeep.', timestamp: '10:00 AM' },
-  { id: 2, role: 'user', content: 'Tell me about the Iron Crisis.', timestamp: '10:01 AM' },
-  { id: 3, role: 'assistant', content: 'Ah, a dark time indeed. The Iron Crisis was a shortage of iron...', timestamp: '10:02 AM' }
-])
+// Get chatId from route
+const route = useRoute()
+const chatId = computed(() => route.params.chatId as string || null)
+
+// Fetch chats
+const chatSessions = ref<Chat[]>([])
+const chatsLoading = ref(true)
+
+onMounted(async () => {
+  try {
+    const response = await fetch('/api/chats')
+    if (response.ok) {
+      chatSessions.value = await response.json()
+    }
+  } catch (err) {
+    console.error('Error loading chats:', err)
+  } finally {
+    chatsLoading.value = false
+  }
+})
+
+// Use the new composable for messages
+const { messages, loading, hasMore, loadMore, error } = useChatMessages(() => chatId.value, {
+  pageSize: 20, // Reduced to match API default and typical chat limits
+  autoLoad: true
+})
 
 const inputValue = ref('')
+const scrollContainer = ref<HTMLDivElement | null>(null)
+
+// Scroll to bottom when messages are initially loaded
+watch(messages, async (newMessages, oldMessages) => {
+  // If we went from empty to having messages, it's likely an initial load
+  if (oldMessages.length === 0 && newMessages.length > 0 && scrollContainer.value) {
+    await nextTick()
+    scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight
+  }
+})
+
+const handleLoadMore = async () => {
+  if (!scrollContainer.value) return
+  
+  const container = scrollContainer.value
+  const previousScrollHeight = container.scrollHeight
+  const previousScrollTop = container.scrollTop
+
+  await loadMore()
+  
+  await nextTick()
+  
+  const newScrollHeight = container.scrollHeight
+  const heightDifference = newScrollHeight - previousScrollHeight
+  container.scrollTop = previousScrollTop + heightDifference
+}
 </script>
 
 <template>
@@ -72,16 +116,15 @@ const inputValue = ref('')
               v-for="chat in chatSessions"
               :key="chat.id"
               class="flex flex-col items-start gap-1 p-3 rounded-lg text-left transition-colors hover:bg-accent/50"
-              :class="chat.active ? 'bg-accent text-accent-foreground' : 'text-muted-foreground'"
             >
               <div class="flex items-center justify-between w-full">
                 <span class="font-semibold text-sm truncate text-foreground">{{ chat.title }}</span>
-                <span class="text-[10px] opacity-70">{{ chat.time }}</span>
+                <span class="text-[10px] opacity-70">{{ new Date(chat.updated_at).toLocaleDateString() }}</span>
               </div>
               <div class="flex items-center gap-2 w-full">
                 <span class="text-xs truncate w-full opacity-80">
-                  <span class="font-medium text-primary">{{ chat.character }}:</span>
-                  {{ chat.lastMsg }}
+                  <span class="font-medium text-primary">{{ chat.model_id }}:</span>
+                  Loading...
                 </span>
               </div>
             </button>
@@ -115,9 +158,10 @@ const inputValue = ref('')
                         v-for="chat in chatSessions"
                         :key="chat.id"
                         class="text-left p-2 hover:bg-accent rounded text-sm"
+                        @click="$router.push(`/chats/${chat.id}`)"
                       >
                         <div class="font-bold">{{ chat.title }}</div>
-                        <div class="text-xs text-muted-foreground truncate">{{ chat.lastMsg }}</div>
+                        <div class="text-xs text-muted-foreground truncate">{{ new Date(chat.updated_at).toLocaleDateString() }}</div>
                       </button>
                     </div>
                   </ScrollArea>
@@ -143,8 +187,26 @@ const inputValue = ref('')
           </div>
         </header>
 
-        <ScrollArea class="flex-1 p-4 sm:p-6 bg-background">
+        <div ref="scrollContainer" class="flex-1 p-4 sm:p-6 bg-background overflow-y-auto">
           <div class="flex flex-col gap-6 max-w-3xl mx-auto pb-4">
+            <!-- Error message -->
+            <div v-if="error" class="error text-center py-4 text-red-500">
+              Error loading messages: {{ error.message }}
+            </div>
+
+            <!-- Load More button -->
+            <div v-if="hasMore && !loading" class="load-more-container text-center py-4">
+              <Button @click="handleLoadMore" variant="outline">
+                Load More Messages
+              </Button>
+            </div>
+
+            <!-- Loading indicator (when loading older) -->
+            <div v-if="loading && messages.length > 0" class="loading-indicator text-center py-4">
+              Loading older messages...
+            </div>
+
+            <!-- Messages list -->
             <div
               v-for="msg in messages"
               :key="msg.id"
@@ -163,9 +225,9 @@ const inputValue = ref('')
                 >
                   <span
                     class="text-xs font-semibold text-muted-foreground"
-                    >{{ msg.role === 'assistant' ? 'Keeper' : 'You' }}</span
+                    >{{ msg.role === 'assistant' ? 'Assistant' : 'You' }}</span
                   >
-                  <span class="text-[10px] text-muted-foreground/60">{{ msg.timestamp }}</span>
+                  <span class="text-[10px] text-muted-foreground/60">{{ new Date(msg.created_at).toLocaleTimeString() }}</span>
                 </div>
                 <div
                   class="p-3 rounded-lg text-sm leading-relaxed whitespace-pre-wrap shadow-sm"
@@ -175,8 +237,18 @@ const inputValue = ref('')
                 </div>
               </div>
             </div>
+
+            <!-- Initial Loading indicator -->
+            <div v-if="loading && messages.length === 0" class="loading-indicator text-center py-4">
+              Loading messages...
+            </div>
+            
+            <!-- End of messages (only show if no more and we have messages) -->
+             <div v-if="!hasMore && messages.length > 0" class="end-of-messages text-center py-4 text-sm text-muted-foreground">
+              No older messages
+            </div>
           </div>
-        </ScrollArea>
+        </div>
 
         <div class="p-4 border-t bg-background shrink-0">
           <div

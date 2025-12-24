@@ -1,7 +1,6 @@
 import { http, HttpResponse, delay } from "msw";
 import { characters } from "@/mocks/data/characters";
 import { chats } from "@/mocks/data/chats";
-import { messages } from "@/mocks/data/messages";
 import { providers } from "@/mocks/data/providers";
 import { modelsPages, modelsFilteredByName } from "@/mocks/data/models";
 import { allModelsMock } from "@/mocks/data/models-data";
@@ -9,15 +8,16 @@ import { personas } from "@/mocks/data/personas";
 import { modelFamiliesPages, modelFamiliesFilteredByName } from "@/mocks/data/model-families";
 import { allModelFamiliesMock } from "@/mocks/data/model-families-data";
 import { modelFamiliesParameterDocs } from "@/mocks/data/model-parameters";
+import { conversationCache } from "@/mocks/loader";
+import "@/mocks/data/messages"; // Initialize registrations
 import type { components } from "@/api/schema";
 
 type Chat = components["schemas"]["ChatResponse"];
-type Message = components["schemas"]["MessageResponse"];
 
 const db = {
   characters,
   chats,
-  messages,
+  // Remove: messages - now handled by conversationCache
   providers,
   modelsPages,
   allModelsMock,
@@ -66,7 +66,8 @@ export const handlers = [
       updated_at: new Date().toISOString(),
     };
     db.chats.unshift(newChat);
-    db.messages[newChat.id] = [];
+    // Note: For new chats, there's no need to initialize in conversationCache
+    // as it will be handled by the dynamic import when messages are requested
     await delay(400);
     return HttpResponse.json(newChat);
   }),
@@ -78,30 +79,38 @@ export const handlers = [
     return HttpResponse.json(chat);
   }),
 
-  // Messages
-  http.get("/api/chats/:chatId/messages", async ({ params }) => {
+  // UPDATED: Messages endpoint with lazy loading and cursor-based pagination
+  http.get("/api/chats/:chatId/messages", async ({ params, request }) => {
     const chatId = params.chatId as string;
-    const chatMessages = db.messages[chatId] || [];
+    const url = new URL(request.url);
+
+    // Parse pagination parameters
+    const limit = parseInt(url.searchParams.get("limit") || "20", 10);
+    const cursor = url.searchParams.get("cursor") || undefined;
+
+    // Check if conversation exists
+    if (!conversationCache.has(chatId)) {
+      await delay(100);
+      return HttpResponse.json([]);
+    }
+
     await delay(100);
-    return HttpResponse.json(chatMessages);
+
+    // Return cursor-based paginated response
+    const messages = await conversationCache.getCursorPaginated(chatId, limit, cursor);
+
+    if (!messages) {
+      return HttpResponse.json([]);
+    }
+
+    return HttpResponse.json(messages);
   }),
 
+  // UPDATED: Post message handler
   http.post("/api/chats/:chatId/messages", async ({ params, request }) => {
     const chatId = params.chatId as string;
     const body = (await request.json()) as any;
 
-    const userMsg: Message = {
-      id: `msg-${Date.now()}`,
-      chat_id: chatId,
-      role: "user",
-      content: body.content,
-      created_at: new Date().toISOString(),
-    };
-
-    if (!db.messages[chatId]) db.messages[chatId] = [];
-    db.messages[chatId].push(userMsg);
-
-    // update chat's updated_at
     const chat = db.chats.find((c) => c.id === chatId);
     if (chat) {
       chat.updated_at = new Date().toISOString();
@@ -109,16 +118,50 @@ export const handlers = [
 
     await delay(800);
 
-    const aiMsg: Message = {
+    const aiMsg = {
       id: `msg-${Date.now() + 1}`,
       chat_id: chatId,
-      role: "assistant",
+      role: "assistant" as const,
       content: `[Mock AI Response] You said: "${body.content}". This is a simulated reply.`,
       created_at: new Date(Date.now() + 1).toISOString(),
     };
-    db.messages[chatId].push(aiMsg);
 
     return HttpResponse.json(aiMsg);
+  }),
+
+  // NEW: Prefetch endpoint (optional)
+  http.post("/api/chats/:chatId/prefetch", async ({ params }) => {
+    const chatId = params.chatId as string;
+
+    if (!conversationCache.has(chatId)) {
+      return new HttpResponse(null, { status: 404 });
+    }
+
+    conversationCache.preload(chatId).catch(console.error);
+
+    return HttpResponse.json({ status: "prefetching" });
+  }),
+
+  // NEW: Cache management endpoint (optional, for debugging)
+  http.post("/api/cache/clear", async ({ request }) => {
+    const body = await request.json() as any;
+    const chatId = body?.chatId;
+
+    conversationCache.clearCache(chatId);
+
+    return HttpResponse.json({
+      status: "cleared",
+      stats: conversationCache.getStats(),
+    });
+  }),
+
+  // UPDATED: Health check with cache stats
+  http.get("/api/health", () => {
+    return HttpResponse.json({
+      status: "ok",
+      timestamp: new Date().toISOString(),
+      cache_stats: conversationCache.getStats(),
+    });
   }),
 
   // LLM Providers

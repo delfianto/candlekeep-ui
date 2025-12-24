@@ -1712,7 +1712,7 @@
           "messages"
         ],
         "summary": "Get Chat Messages",
-        "description": "Get all messages in a chat",
+        "description": "Get chat messages with cursor-based pagination.\n\n* **Initial Load**: Call without `cursor`. Returns latest `limit` messages.\n* **Load More**: Call with `cursor` set to the `created_at` of the oldest message in your view.",
         "operationId": "get_chat_messages_api_chats__chat_id__messages_get",
         "parameters": [
           {
@@ -1723,6 +1723,38 @@
               "type": "string",
               "title": "Chat Id"
             }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Number of messages to load",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Number of messages to load"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "ISO datetime of the oldest loaded message",
+              "title": "Cursor"
+            },
+            "description": "ISO datetime of the oldest loaded message"
           }
         ],
         "responses": {
