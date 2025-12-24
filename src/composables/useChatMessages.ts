@@ -41,8 +41,14 @@ export function useChatMessages(getChatId: () => string | null, options: UseChat
 
       const newMessages: Message[] = await response.json();
 
-      if (newMessages.length < pageSize) {
-        hasMore.value = false;
+      const hasMoreHeader = response.headers.get("X-Has-More");
+      if (hasMoreHeader !== null) {
+        hasMore.value = hasMoreHeader === "true";
+      } else {
+        // Fallback if header is missing
+        if (newMessages.length < pageSize) {
+          hasMore.value = false;
+        }
       }
 
       // The API returns Newest -> Oldest.

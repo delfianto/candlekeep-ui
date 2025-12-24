@@ -60,14 +60,13 @@ class ConversationCache {
     chatId: string,
     limit: number = 20,
     cursor?: string,
-  ): Promise<Message[] | null> {
+  ): Promise<{ messages: Message[]; hasMore: boolean } | null> {
     const allMessages = await this.get(chatId);
     if (!allMessages) {
       return null;
     }
 
     // 1. Sort all messages Newest -> Oldest
-    // Note: this.get() returns Oldest -> Newest (hydrated order)
     const sortedMessages = [...allMessages].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
     );
@@ -82,8 +81,13 @@ class ConversationCache {
       );
     }
 
-    // 3. Apply Limit
-    return filteredMessages.slice(0, limit);
+    // 3. Check if we have more than limit
+    const hasMore = filteredMessages.length > limit;
+    
+    // 4. Apply Limit
+    const messages = filteredMessages.slice(0, limit);
+
+    return { messages, hasMore };
   }
 
   /**

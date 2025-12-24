@@ -97,13 +97,17 @@ export const handlers = [
     await delay(100);
 
     // Return cursor-based paginated response
-    const messages = await conversationCache.getCursorPaginated(chatId, limit, cursor);
+    const result = await conversationCache.getCursorPaginated(chatId, limit, cursor);
 
-    if (!messages) {
+    if (!result) {
       return HttpResponse.json([]);
     }
 
-    return HttpResponse.json(messages);
+    return HttpResponse.json(result.messages, {
+      headers: {
+        "X-Has-More": result.hasMore.toString(),
+      },
+    });
   }),
 
   // UPDATED: Post message handler
