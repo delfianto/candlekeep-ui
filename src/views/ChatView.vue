@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, nextTick, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useMediaQuery } from '@vueuse/core'
 import { useChatMessages } from '@/composables/useChatMessages'
 import { useChatSessions } from '@/composables/useChatSessions'
 import {
@@ -25,11 +26,22 @@ import {
   ResizablePanel,
   ResizablePanelGroup
 } from '@/components/ui/resizable'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription
+} from '@/components/ui/sheet'
+import CharacterInspector from '@/components/shared/CharacterInspector.vue'
 
 const router = useRouter()
 const route = useRoute()
 const chatId = computed(() => route.params.chatId as string || null)
+const isMobile = useMediaQuery('(max-width: 768px)')
+const showCharacterInspector = ref(false)
 
 const {
   chatSessions,
@@ -48,6 +60,16 @@ watch(chatSessions, (newChats) => {
     router.replace(`/chats/${newChats[0].id}`)
   }
 }, { immediate: true })
+
+const handleCharacterClick = () => {
+  if (!currentChat.value) return
+
+  if (isMobile.value) {
+    router.push({ name: 'character-detail', params: { id: currentChat.value.character_id } })
+  } else {
+    showCharacterInspector.value = true
+  }
+}
 
 const { messages, loading, hasMore, loadMore, error } = useChatMessages(() => chatId.value, {
   pageSize: 20,
@@ -215,7 +237,10 @@ const handleLoadMore = async () => {
               <SheetContent side="left"><p>Mobile Menu</p></SheetContent>
             </Sheet>
 
-            <Avatar class="size-9 border shadow-sm">
+            <Avatar
+              class="size-9 border shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
+              @click="handleCharacterClick"
+            >
               <AvatarImage :src="currentChat?.avatar_thumbnail_path ?? ''" />
               <AvatarFallback class="bg-primary/10 text-primary text-xs">
                 {{ (currentChat?.character_name || currentChat?.title || 'CK').substring(0, 2).toUpperCase() }}
@@ -245,6 +270,33 @@ const handleLoadMore = async () => {
             <Button variant="ghost" size="icon"><MoreVertical class="size-5" /></Button>
           </div>
         </header>
+
+        <Sheet v-model:open="showCharacterInspector">
+          <SheetContent
+            side="right"
+            class="w-[90vw] sm:max-w-135 p-0 overflow-hidden flex flex-col"
+          >
+            <SheetHeader class="sr-only">
+              <SheetTitle>Character Details</SheetTitle>
+
+              <SheetDescription>
+                View character portrait and detailed information.
+              </SheetDescription>
+            </SheetHeader>
+
+            <CharacterInspector
+              v-if="currentChat"
+              :character-id="currentChat.character_id"
+              class="flex-1 min-h-0"
+            />
+
+            <div class="p-4 border-t bg-background shrink-0">
+              <SheetClose as-child>
+                <Button variant="outline" class="w-full">Close</Button>
+              </SheetClose>
+            </div>
+          </SheetContent>
+        </Sheet>
 
         <div
           ref="scrollContainer"

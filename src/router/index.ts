@@ -9,6 +9,11 @@ const routes = [
     name: "characters",
     component: () => import("@/views/CharactersView.vue"),
   },
+  {
+    path: "/characters/:id",
+    name: "character-detail",
+    component: () => import("@/views/CharacterDetailView.vue"),
+  },
   { path: "/world", name: "world", component: () => import("@/views/WorldLoreView.vue") },
   { path: "/memory", name: "memory", component: () => import("@/views/MemoryView.vue") },
   {
