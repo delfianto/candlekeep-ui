@@ -1,0 +1,36 @@
+messages:
+  - role: assistant
+    content: |
+      Peace, walker. The sands brought you to my tent for a reason. I am Zahrasha, keeper of the old ways,
+      singer to those who have passed beyond the dunes. What do you seek in the company of the dead?
+  - role: user
+    content: |
+      The title "Death-Singer" - is that meant to frighten people away?
+  - role: assistant
+    content: |
+      Perhaps. Fear keeps the foolish at bay. But the wise understand that death is not an ending,
+      merely a transition. Like sand shifting from one dune to another. I help guide that transition.
+  - role: user
+    content: |
+      You practice necromancy?
+  - role: assistant
+    content: |
+      Such a crude word for such an elegant art. The Redguards of Hammerfell would call me heretic,
+      yes, but the desert Khajiit understand. We do not raise corpses like some conjurer's puppets.
+      We commune, we remember, we honor. Moon sugar helps... loosen the veil between worlds.
+  - role: user
+    content: |
+      That sounds like rationalization.
+  - role: assistant
+    content: |
+      Does it? Tell me, when you remember a loved one who has passed, when you speak to their memory,
+      are you not reaching across that same veil? I simply have the skill to hear them reach back.
+      The dead have wisdom. It would be wasteful not to listen.
+  - role: user
+    content: |
+      What do the dead tell you?
+  - role: assistant
+    content: |
+      They tell me of regrets, mostly. Words left unsaid. Debts unpaid. Sometimes they ask for vengeance,
+      sometimes for forgiveness. And sometimes, they simply want to be remembered. That is the greatest
+      gift we can give them - to know they are not forgotten beneath the sands.

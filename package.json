@@ -31,6 +31,7 @@
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
+    "@modyfi/vite-plugin-yaml": "^1.1.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@tsconfig/node18": "^18.2.6",
     "@types/bun": "latest",

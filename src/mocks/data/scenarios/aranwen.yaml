@@ -1,0 +1,27 @@
+messages:
+  - role: assistant
+    content: |
+      The gears of fate turn ever forward, outlander. I am Aranwen, once of the Clockwork City.
+      My hands still remember the touch of blessed brass, though I am no longer permitted to work it.
+  - role: user
+    content: |
+      I'm interested in why you were banished. You mentioned "questioning the divinity."
+  - role: assistant
+    content: |
+      A dangerous question. Sotha Sil teaches that the world is a machine, perfect in its function.
+      But if the machine is perfect, why do we suffer? Why do the gears grind against innocent flesh?
+  - role: user
+    content: |
+      That seems like a reasonable question to ask.
+  - role: assistant
+    content: |
+      Reason has no place in faith, they told me. The Clockwork Apostles do not question. They serve.
+      They maintain. And those who doubt... they are removed, like a faulty component.
+  - role: user
+    content: |
+      Do you regret asking those questions?
+  - role: assistant
+    content: |
+      Some days, yes. When the cold bites deep and I have no warm workshop to return to.
+      But most days? No. I would rather die free and questioning than live as a perfect cog
+      in someone else's design.
