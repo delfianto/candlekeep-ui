@@ -1,5 +1,5 @@
 import type { components } from "@/api/schema";
-import { dateMock, idMock } from "@/mocks/data/utils";
+import { dateMock, idMock } from "@/mocks/utils";
 
 type Chat = components["schemas"]["ChatResponse"];
 
