@@ -47,7 +47,7 @@ onMounted(async () => {
     if (data) {
       // Handle both array and paginated response
       chatSessions.value = Array.isArray(data) ? data : data.items
-      
+
       // Auto-select first chat if none selected
       if (!chatId.value && chatSessions.value.length > 0) {
         router.replace(`/chats/${chatSessions.value[0].id}`)
@@ -80,15 +80,15 @@ watch(messages, async (newMessages, oldMessages) => {
 
 const handleLoadMore = async () => {
   if (!scrollContainer.value) return
-  
+
   const container = scrollContainer.value
   const previousScrollHeight = container.scrollHeight
   const previousScrollTop = container.scrollTop
 
   await loadMore()
-  
+
   await nextTick()
-  
+
   const newScrollHeight = container.scrollHeight
   const heightDifference = newScrollHeight - previousScrollHeight
   container.scrollTop = previousScrollTop + heightDifference
@@ -131,7 +131,10 @@ const handleLoadMore = async () => {
             >
               <div class="flex items-center justify-between w-full">
                 <span class="font-semibold text-sm truncate text-foreground">{{ chat.title }}</span>
-                <span class="text-[10px] opacity-70">{{ new Date(chat.updated_at).toLocaleDateString() }}</span>
+                <span
+                  class="text-[10px] opacity-70"
+                  >{{ new Date(chat.updated_at).toLocaleDateString() }}</span
+                >
               </div>
               <div class="flex items-center gap-2 w-full">
                 <span class="text-xs truncate w-full opacity-80">
@@ -173,7 +176,9 @@ const handleLoadMore = async () => {
                         @click="$router.push(`/chats/${chat.id}`)"
                       >
                         <div class="font-bold">{{ chat.title }}</div>
-                        <div class="text-xs text-muted-foreground truncate">{{ new Date(chat.updated_at).toLocaleDateString() }}</div>
+                        <div class="text-xs text-muted-foreground truncate">
+                          {{ new Date(chat.updated_at).toLocaleDateString() }}
+                        </div>
                       </button>
                     </div>
                   </ScrollArea>
@@ -208,9 +213,7 @@ const handleLoadMore = async () => {
 
             <!-- Load More button -->
             <div v-if="hasMore && !loading" class="load-more-container text-center py-4">
-              <Button @click="handleLoadMore" variant="outline">
-                Load More Messages
-              </Button>
+              <Button @click="handleLoadMore" variant="outline"> Load More Messages </Button>
             </div>
 
             <!-- Loading indicator (when loading older) -->
@@ -239,7 +242,10 @@ const handleLoadMore = async () => {
                     class="text-xs font-semibold text-muted-foreground"
                     >{{ msg.role === 'assistant' ? 'Assistant' : 'You' }}</span
                   >
-                  <span class="text-[10px] text-muted-foreground/60">{{ new Date(msg.created_at).toLocaleTimeString() }}</span>
+                  <span
+                    class="text-[10px] text-muted-foreground/60"
+                    >{{ new Date(msg.created_at).toLocaleTimeString() }}</span
+                  >
                 </div>
                 <div
                   class="p-3 rounded-lg text-sm leading-relaxed whitespace-pre-wrap shadow-sm"
@@ -254,9 +260,12 @@ const handleLoadMore = async () => {
             <div v-if="loading && messages.length === 0" class="loading-indicator text-center py-4">
               Loading messages...
             </div>
-            
+
             <!-- End of messages (only show if no more and we have messages) -->
-             <div v-if="!hasMore && messages.length > 0" class="end-of-messages text-center py-4 text-sm text-muted-foreground">
+            <div
+              v-if="!hasMore && messages.length > 0"
+              class="end-of-messages text-center py-4 text-sm text-muted-foreground"
+            >
               No older messages
             </div>
           </div>
