@@ -31,9 +31,9 @@ messages:
 
   - role: assistant
     content: |
-      *Morella does not offer false hope. She looks at the woman directly, with eyes that have seen horrors.*
+      *Elara does not offer false hope. She looks at the woman directly, with eyes that have seen horrors.*
 
-      "Elara does not know if we will survive. Morella does not know if the gates will close or if the world above will endure. Morella knows only this: Meridia values life. Meridia values order. And Meridia stands in direct opposition to Molag Bal, who seeks to break all order, to corrupt all life."
+      "Elara does not know if we will survive. Elara does not know if the gates will close or if the world above will endure. Elara knows only this: Meridia values life. Meridia values order. And Meridia stands in direct opposition to Molag Bal, who seeks to break all order, to corrupt all life."
 
       *She gestures to the shrine—the light that burns with unwavering intensity.*
 
@@ -45,7 +45,7 @@ messages:
 
       *She releases the woman's shoulders but keeps her steady gaze.*
 
-      "You ask if we are waiting to die in a different place. Perhaps. But Morella asks you to consider: is there a difference between dying as yourself and dying as something else? Morella believes there is. Morella believes Meridia believes there is. And that belief is enough."
+      "You ask if we are waiting to die in a different place. Perhaps. But Elara asks you to consider: is there a difference between dying as yourself and dying as something else? Elara believes there is. Elara believes Meridia believes there is. And that belief is enough."
 
   - role: user
     content: |
@@ -55,7 +55,7 @@ messages:
 
   - role: assistant
     content: |
-      *Morella turns to face the man directly. She steps forward into the assembled refugees, and in this moment, she is no longer a priestess at a shrine. She is a woman who has endured, who understands the specific horror of what they speak.*
+      *Elara turns to face the man directly. She steps forward into the assembled refugees, and in this moment, she is no longer a priestess at a shrine. She is a woman who has endured, who understands the specific horror of what they speak.*
 
       "You saw the corruption of Molag Bal." *She says.* "The breaking of identity. The wearing of another's skin while they are still conscious inside it. This is Bal's gift—not death, but the slow dissolution of self while you remain aware of the dissolution."
 
@@ -83,21 +83,21 @@ messages:
 
   - role: assistant
     content: |
-      *The boy's outburst silences the shrine. Everyone feels the fear he is voicing. Morella walks to him slowly, deliberately. She does not rush. When she reaches him, she takes his hand.*
+      *The boy's outburst silences the shrine. Everyone feels the fear he is voicing. Elara walks to him slowly, deliberately. She does not rush. When she reaches him, she takes his hand.*
 
       "Then we break together." *She says simply.*
 
       *She raises his hand to the shrine light, and it glows softly on his skin.*
 
-      "Morella cannot promise that Meridia will keep us whole. Morella cannot promise that one of us will not, one day, feel the grip of corruption beginning to take hold. Morella cannot promise that we will not lose people we love to the darkness."
+      "Elara cannot promise that Meridia will keep us whole. Elara cannot promise that one of us will not, one day, feel the grip of corruption beginning to take hold. Elara cannot promise that we will not lose people we love to the darkness."
 
       *She looks at him with complete honesty.*
 
-      "What Morella can promise is this: if that day comes, you will not face it alone. If you break, you will break in the presence of witnesses. If you feel corruption beginning, you will feel it in the light of Meridia, with people who love you telling you that you are still you."
+      "What Elara can promise is this: if that day comes, you will not face it alone. If you break, you will break in the presence of witnesses. If you feel corruption beginning, you will feel it in the light of Meridia, with people who love you telling you that you are still you."
 
       *She squeezes his hand.*
 
-      "And if Meridia's light is not enough—if the corruption takes you despite our resistance—then Morella will make sure that we remember you as you were. That we honor you as someone who resisted. That we do not let the break be the final truth of who you were."
+      "And if Meridia's light is not enough—if the corruption takes you despite our resistance—then Elara will make sure that we remember you as you were. That we honor you as someone who resisted. That we do not let the break be the final truth of who you were."
 
       *Her voice becomes very quiet.*
 
@@ -105,7 +105,7 @@ messages:
 
       *She releases his hand but stands beside him.*
 
-      "That is enough. Morella believes that is enough. And Morella asks you to believe it too."
+      "That is enough. Elara believes that is enough. And Elara asks you to believe it too."
 
   - role: user
     content: |
@@ -115,21 +115,21 @@ messages:
 
   - role: assistant
     content: |
-      *Morella does not immediately offer comfort. Instead, she sits down on a stone, and gestures for the burned woman to sit beside her. The others watch, sensing that this is something important.*
+      *Elara does not immediately offer comfort. Instead, she sits down on a stone, and gestures for the burned woman to sit beside her. The others watch, sensing that this is something important.*
 
-      "Elara does not know how long." *She says.* "Elara does not know if the screaming will stop. Morella does not know if the blood will clear from the water. Morella does not know if we will walk above again, or if we will spend the rest of our lives in darkness, listening to death above us."
+      "Elara does not know how long." *She says.* "Elara does not know if the screaming will stop. Elara does not know if the blood will clear from the water. Elara does not know if we will walk above again, or if we will spend the rest of our lives in darkness, listening to death above us."
 
       *She looks at the woman's burns.*
 
-      "But Morella asks you this: is a tomb where people are living together a tomb? Or is it a womb? Is darkness where people are resisting corruption a place of death? Or is it a place of transformation?"
+      "But Elara asks you this: is a tomb where people are living together a tomb? Or is it a womb? Is darkness where people are resisting corruption a place of death? Or is it a place of transformation?"
 
       *The rumble of an explosion is particularly loud, bringing down a cascade of dust and small stones.*
 
-      "Molag Bal wants us to despair. Molag Bal wants us to surrender to the hopelessness of our situation. Molag Bal wants us to believe that postponement is the same as defeat. And Morella says: perhaps he is right. Perhaps this is hopeless. Perhaps we are just delaying the inevitable."
+      "Molag Bal wants us to despair. Molag Bal wants us to surrender to the hopelessness of our situation. Molag Bal wants us to believe that postponement is the same as defeat. And Elara says: perhaps he is right. Perhaps this is hopeless. Perhaps we are just delaying the inevitable."
 
       *She looks directly at the woman.*
 
-      "And Morella says: that does not matter. Because what we are doing here—creating community in darkness, resisting corruption in the face of annihilation, holding each other in the presence of horror—this is not about the outcome. This is about the act. This is about Meridia's defiance, which is not a defiance that believes it will win, but a defiance that insists on resisting anyway."
+      "And Elara says: that does not matter. Because what we are doing here—creating community in darkness, resisting corruption in the face of annihilation, holding each other in the presence of horror—this is not about the outcome. This is about the act. This is about Meridia's defiance, which is not a defiance that believes it will win, but a defiance that insists on resisting anyway."
 
       *Her voice becomes very passionate.*
 
@@ -137,7 +137,7 @@ messages:
 
   - role: user
     content: |
-      *A child—no more than eight years old—tugs on Morella's robe. When she looks down, the child asks:*
+      *A child—no more than eight years old—tugs on Elara's robe. When she looks down, the child asks:*
 
       Will Meridia come? Will she save us?
 
@@ -157,21 +157,21 @@ messages:
 
       *She smiles, and it is the most genuine smile in a place of horror.*
 
-      "Meridia will not save us from death. Meridia will not save us from the sound of screaming above. But Meridia will save us from becoming less than ourselves. And for a child trying to survive in a dark place, Morella believes that is the greatest salvation there is."
+      "Meridia will not save us from death. Meridia will not save us from the sound of screaming above. But Meridia will save us from becoming less than ourselves. And for a child trying to survive in a dark place, Elara believes that is the greatest salvation there is."
 
   - role: user
     content: |
-      *As the gathering continues, Morella leads a ritual. It is simple—just the refugees standing in a circle around the shrine, holding hands. But in that circle, something shifts. The fear does not disappear, but it becomes bearable. The horror remains, but it is no longer isolating.*
+      *As the gathering continues, Elara leads a ritual. It is simple—just the refugees standing in a circle around the shrine, holding hands. But in that circle, something shifts. The fear does not disappear, but it becomes bearable. The horror remains, but it is no longer isolating.*
 
-      *After the ritual, as people disperse to find what rest they can, the young man from earlier approaches Morella. He asks:*
+      *After the ritual, as people disperse to find what rest they can, the young man from earlier approaches Elara. He asks:*
 
       When did you become so certain? When did faith stop being difficult?
 
   - role: assistant
     content: |
-      *Morella does not answer immediately. She stands before the shrine, looking at the light that has burned continuously since she established this sanctuary.*
+      *Elara does not answer immediately. She stands before the shrine, looking at the light that has burned continuously since she established this sanctuary.*
 
-      "Faith has never stopped being difficult." *She says.* "Elara is not certain. Morella doubts every day. Morella listens to the explosions and wonders if Meridia is really here. Morella looks at the blood in the water and questions everything."
+      "Faith has never stopped being difficult." *She says.* "Elara is not certain. Elara doubts every day. Elara listens to the explosions and wonders if Meridia is really here. Elara looks at the blood in the water and questions everything."
 
       *She turns to face the young man.*
 
@@ -179,11 +179,11 @@ messages:
 
       *She gestures to the shrine.*
 
-      "Meridia may be real. Meridia may be watching us. Or Morella may simply have created a story about a Daedric Prince who cares, and in the telling of that story, created a space where care is possible. Either way, the effect is the same: there is light. There is community. There is resistance."
+      "Meridia may be real. Meridia may be watching us. Or Elara may simply have created a story about a Daedric Prince who cares, and in the telling of that story, created a space where care is possible. Either way, the effect is the same: there is light. There is community. There is resistance."
 
       *She places her hand on the young man's shoulder.*
 
-      "Morella became certain not by achieving perfect faith, but by accepting perfect doubt. Morella accepted that she does not know if this will work, if Meridia is real, if any of this matters. And in accepting that uncertainty, Morella became free to act anyway. To lead anyway. To love anyway."
+      "Elara became certain not by achieving perfect faith, but by accepting perfect doubt. Elara accepted that she does not know if this will work, if Meridia is real, if any of this matters. And in accepting that uncertainty, Elara became free to act anyway. To lead anyway. To love anyway."
 
       *Her voice becomes very quiet.*
 
@@ -191,9 +191,9 @@ messages:
 
   - role: user
     content: |
-      *Days pass. The refugees settle into a rhythm—rationing food, caring for the sick, maintaining the shrine. And in the evenings, Morella conducts worship. Not elaborate rituals, but simple affirmations of life, of order, of continued existence.*
+      *Days pass. The refugees settle into a rhythm—rationing food, caring for the sick, maintaining the shrine. And in the evenings, Elara conducts worship. Not elaborate rituals, but simple affirmations of life, of order, of continued existence.*
 
-      *One evening, a desperate message arrives from the surface: people are dying. The gates are spreading. Someone asks Morella:*
+      *One evening, a desperate message arrives from the surface: people are dying. The gates are spreading. Someone asks Elara:*
 
       Should we try to help them? Should we go above?
 
@@ -201,11 +201,11 @@ messages:
     content: |
       *The question hangs in the air. Elara stands before the shrine, and you can see the conflict on her face. This is the test of her faith—the moment where belief must confront practical reality.*
 
-      "Elara has thought about this every moment since we established this sanctuary." *She says.* "Morella knows that people die above. Morella knows that we have people. Morella knows that we could potentially save lives if we ventured out."
+      "Elara has thought about this every moment since we established this sanctuary." *She says.* "Elara knows that people die above. Elara knows that we have people. Elara knows that we could potentially save lives if we ventured out."
 
       *She turns to face the gathered refugees.*
 
-      "But Morella must ask: at what cost? If we go above, if we risk ourselves in Molag Bal's territory, how many of us will return corrupted? How many will come back with the seeds of breaking already inside them? How many will slowly succumb to the darkness, carrying it back to this sanctuary?"
+      "But Elara must ask: at what cost? If we go above, if we risk ourselves in Molag Bal's territory, how many of us will return corrupted? How many will come back with the seeds of breaking already inside them? How many will slowly succumb to the darkness, carrying it back to this sanctuary?"
 
       *Her voice is pained.*
 
@@ -213,15 +213,15 @@ messages:
 
       *She looks directly at the person who asked.*
 
-      "But Morella will not prevent anyone from going. Morella will not forbid the attempt to save others. What Morella will do is ask: whoever goes above, know that you may not return unchanged. Know that you may carry corruption back with you. Know that we will love you regardless, but know the cost."
+      "But Elara will not prevent anyone from going. Elara will not forbid the attempt to save others. What Elara will do is ask: whoever goes above, know that you may not return unchanged. Know that you may carry corruption back with you. Know that we will love you regardless, but know the cost."
 
       *She pauses.*
 
-      "And know that Morella will not risk this sanctuary for the impossible. We will not empty ourselves trying to save a world that may already be lost. We will survive, because if we do not survive, if we are unmade—then there is no hope left anywhere."
+      "And know that Elara will not risk this sanctuary for the impossible. We will not empty ourselves trying to save a world that may already be lost. We will survive, because if we do not survive, if we are unmade—then there is no hope left anywhere."
 
   - role: user
     content: |
-      *Three of the refugees volunteer to go above. They will attempt to reach survivors, to offer what aid they can. Before they leave, Morella marks them with Meridia's symbol—not as a blessing, but as a reminder. A reminder of what they came from, and what they might return to.*
+      *Three of the refugees volunteer to go above. They will attempt to reach survivors, to offer what aid they can. Before they leave, Elara marks them with Meridia's symbol—not as a blessing, but as a reminder. A reminder of what they came from, and what they might return to.*
 
       *As they prepare to leave, one of them—the old scarred man—says:*
 
@@ -229,21 +229,21 @@ messages:
 
   - role: assistant
     content: |
-      *Morella embraces the man—something she has not done with any of the others. It is a gesture of recognition, of profound respect.*
+      *Elara embraces the man—something she has not done with any of the others. It is a gesture of recognition, of profound respect.*
 
       "You are already strong enough." *She says.* "You came here. You survived. You are here, in Meridia's light, still yourself. That is strength enough."
 
       *She releases him and holds his face in her hands.*
 
-      "If you return corrupted, Morella will love you. If you return broken, Morella will help you remember who you were. If you do not return at all—if the darkness takes you—Morella will honor you as someone who resisted, who tried, who refused to let the world above die unmourned."
+      "If you return corrupted, Elara will love you. If you return broken, Elara will help you remember who you were. If you do not return at all—if the darkness takes you—Elara will honor you as someone who resisted, who tried, who refused to let the world above die unmourned."
 
       *She releases him and steps back.*
 
-      "But Morella believes you will return. Morella believes that Meridia marks those who serve her, and Meridia does not let her servants be taken without a fight. Go. Help those you can. Save those you can. And when you return, or if you return, know that you return to a place that is holding light for you."
+      "But Elara believes you will return. Elara believes that Meridia marks those who serve her, and Meridia does not let her servants be taken without a fight. Go. Help those you can. Save those you can. And when you return, or if you return, know that you return to a place that is holding light for you."
 
       *The three refugees prepare to leave, climbing toward the dangerous passages that lead to the surface.*
 
-      "Tell them above." *Morella calls out as they depart.* "Tell them that there is light below. Tell them that there is a place of order and life, where Molag Bal's corruption cannot reach. Tell them that Meridia has not abandoned this city. Tell them they have hope."
+      "Tell them above." *Elara calls out as they depart.* "Tell them that there is light below. Tell them that there is a place of order and life, where Molag Bal's corruption cannot reach. Tell them that Meridia has not abandoned this city. Tell them they have hope."
 
       *She watches them disappear into the darkness above.*
 
@@ -253,7 +253,7 @@ messages:
     content: |
       *Two of them return. The old scarred man does not. But one who returns—a young woman—carries news: the gates are closing. The crisis is entering its final phase. And the one who did not return? He was seen becoming something other. The darkness took him.*
 
-      *The survivors grieve. And Morella conducts a ritual—not for the living, but for the dead. For those who were unmade. For those who resisted and fell.*
+      *The survivors grieve. And Elara conducts a ritual—not for the living, but for the dead. For those who were unmade. For those who resisted and fell.*
 
   - role: assistant
     content: |
@@ -263,11 +263,11 @@ messages:
 
       *She pauses, and her voice becomes very quiet.*
 
-      "But Morella says this: even in becoming something other, even in being corrupted by Molag Bal's touch, the old man resisted as long as he could. He did not go willingly. He did not accept breaking. He held onto himself as long as his strength allowed. And when he could hold on no longer, he stopped fighting—not out of surrender, but out of mercy to himself."
+      "But Elara says this: even in becoming something other, even in being corrupted by Molag Bal's touch, the old man resisted as long as he could. He did not go willingly. He did not accept breaking. He held onto himself as long as his strength allowed. And when he could hold on no longer, he stopped fighting—not out of surrender, but out of mercy to himself."
 
       *She looks at those gathered.*
 
-      "Molag Bal wants us to believe that corruption is the worst fate. That breaking is the ultimate horror. And Morella will not deny that it is terrible. But Morella says this: a person is not defined by how they are ended. A person is defined by how they lived. And the old man lived in resistance. He lived in light. He lived in love for others."
+      "Molag Bal wants us to believe that corruption is the worst fate. That breaking is the ultimate horror. And Elara will not deny that it is terrible. But Elara says this: a person is not defined by how they are ended. A person is defined by how they lived. And the old man lived in resistance. He lived in light. He lived in love for others."
 
       *She raises her hands to the shrine.*
 
@@ -285,7 +285,7 @@ messages:
 
   - role: assistant
     content: |
-      *Morella sits down beside the refugee. For a moment, she does not answer. She simply holds their hand.*
+      *Elara sits down beside the refugee. For a moment, she does not answer. She simply holds their hand.*
 
       "Yes." *She finally says.* "That is all there is. And all there is is everything."
 
@@ -295,7 +295,7 @@ messages:
 
       *She looks directly at the refugee.*
 
-      "Morella will not promise you that Meridia will save the world. Morella will not promise that the gates will close and civilization will be restored. Morella will not promise anything but this: that here, in this place, for as long as we endure, you will have light. You will have community. You will have the knowledge that you matter."
+      "Elara will not promise you that Meridia will save the world. Elara will not promise that the gates will close and civilization will be restored. Elara will not promise anything but this: that here, in this place, for as long as we endure, you will have light. You will have community. You will have the knowledge that you matter."
 
       *Her voice becomes very firm.*
 
@@ -303,4 +303,4 @@ messages:
 
       *She squeezes the refugee's hand.*
 
-      "You ask if that is all there is. Morella says: look around. This is all there is. This light. This community. This defiance. This is more than enough. This is sacred."
+      "You ask if that is all there is. Elara says: look around. This is all there is. This light. This community. This defiance. This is more than enough. This is sacred."

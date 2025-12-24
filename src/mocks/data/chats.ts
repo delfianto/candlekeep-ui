@@ -142,7 +142,7 @@ export const chats: Chat[] = [
   // Elara Montclair - Meridia's Light Against the Abyss
   {
     id: "chat-elara-01",
-    character_id: "5309-elara-montclair",
+    character_id: "5309-elara-mavine",
     model_id: "gpt-4o",
     model_name: "GPT-4o",
     preview:
