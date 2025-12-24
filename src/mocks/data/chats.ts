@@ -139,14 +139,15 @@ export const chats: Chat[] = [
     ...dateMock.datePair(11, 1),
   },
 
-  // Morella the Hollow - Namira's blessing in sewers
+  // Elara Montclair - Meridia's Light Against the Abyss
   {
-    id: "chat-morella-01",
-    character_id: "5309-morella-the-hollow",
+    id: "chat-elara-01",
+    character_id: "5309-elara-montclair",
     model_id: "gpt-4o",
     model_name: "GPT-4o",
-    preview: "There is beauty in decay if you know where to look. Namira shows us the way.",
-    title: "Beauty in the Decay Below",
+    preview:
+      "In Meridia's light, you are safe. Not from the sound of war, but from corruption itself.",
+    title: "Light in the Depths",
     ...dateMock.datePair(28, 8),
   },
 
@@ -216,15 +217,15 @@ export const chats: Chat[] = [
     ...dateMock.datePair(30, 9),
   },
 
-  // Sister Tacita - Elder Scroll prophecy reading
+  // Nerys Dren - First Week at the College of Winterhold
   {
-    id: "chat-tacita-01",
-    character_id: "5768-sister-tacita",
+    id: "chat-nerys-01",
+    character_id: "5770-nerys-dren",
     model_id: "gpt-4o",
     model_name: "GPT-4o",
     preview:
-      "The Scrolls do not give clear answers, only glimpses into the possibilities of what may be.",
-    title: "The Scrolls Speak of Futures",
-    ...dateMock.datePair(13, 3),
+      "In Meridia's light, you are safe. Not from the sound of war, but from corruption itself.",
+    title: "First Week at the College",
+    ...dateMock.datePair(6, 0),
   },
 ];
