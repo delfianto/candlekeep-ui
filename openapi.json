@@ -1606,21 +1606,26 @@
           "chats"
         ],
         "summary": "List Chats",
-        "description": "List chats with pagination and filtering",
+        "description": "List chats with cursor-based pagination and filtering",
         "operationId": "list_chats_api_chats_get",
         "parameters": [
           {
-            "name": "page",
+            "name": "cursor",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "description": "Page number (1-based)",
-              "default": 1,
-              "title": "Page"
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "ISO 8601 timestamp cursor for pagination",
+              "title": "Cursor"
             },
-            "description": "Page number (1-based)"
+            "description": "ISO 8601 timestamp cursor for pagination"
           },
           {
             "name": "limit",
@@ -1631,7 +1636,7 @@
               "maximum": 100,
               "minimum": 1,
               "description": "Items per page",
-              "default": 10,
+              "default": 20,
               "title": "Limit"
             },
             "description": "Items per page"
@@ -3538,6 +3543,28 @@
             "type": "string",
             "format": "date-time",
             "title": "Updated At"
+          },
+          "preview": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview"
+          },
+          "model_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Name"
           }
         },
         "type": "object",

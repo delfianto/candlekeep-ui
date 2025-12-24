@@ -54,19 +54,38 @@ export const handlers = [
   }),
 
   // Chats
-  http.get("/api/chats", async () => {
+  http.get("/api/chats", async ({ request }) => {
+    const url = new URL(request.url);
+    const limit = parseInt(url.searchParams.get("limit") || "20", 10);
+    const cursor = url.searchParams.get("cursor") || undefined;
+
     await delay(200);
-    // Return chats sorted by updated_at descending
-    const sortedChats = [...db.chats].sort((a, b) => {
+
+    // Sort chats by updated_at descending
+    const allChats = [...db.chats].sort((a, b) => {
       return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
     });
+
+    let startIndex = 0;
+    if (cursor) {
+      // Find the index of the chat with updated_at <= cursor
+      // (Simplified logic: find the first chat with updated_at < cursor)
+      const cursorDate = new Date(cursor).getTime();
+      startIndex = allChats.findIndex((chat) => new Date(chat.updated_at).getTime() < cursorDate);
+      if (startIndex === -1) startIndex = allChats.length;
+    }
+
+    const paginatedChats = allChats.slice(startIndex, startIndex + limit);
+    const hasMore = startIndex + limit < allChats.length;
+    const nextCursor = hasMore ? paginatedChats[paginatedChats.length - 1].updated_at : null;
+
     return HttpResponse.json({
-      items: sortedChats,
+      items: paginatedChats,
       meta: {
-        limit: 100, // Assuming default limit
-        has_more: false,
-        total: sortedChats.length,
-        page: 1,
+        limit,
+        has_more: hasMore,
+        cursor: nextCursor,
+        total: allChats.length,
       },
     });
   }),
@@ -107,15 +126,15 @@ export const handlers = [
     // Check if conversation exists
     if (!conversationCache.has(chatId)) {
       // Fallback: If chat exists in DB but not in cache (no YAML), generate a mock message
-      const chatExists = db.chats.find(c => c.id === chatId);
+      const chatExists = db.chats.find((c) => c.id === chatId);
       if (chatExists) {
         await delay(100);
         const mockMsg = {
-           id: `msg-default-${chatId}`,
-           chat_id: chatId,
-           role: "assistant" as const,
-           content: `[Mock] This conversation with ${chatExists.title} hasn't been implemented in YAML yet. This is a placeholder message.`,
-           created_at: new Date().toISOString(),
+          id: `msg-default-${chatId}`,
+          chat_id: chatId,
+          role: "assistant" as const,
+          content: `[Mock] This conversation with ${chatExists.title} hasn't been implemented in YAML yet. This is a placeholder message.`,
+          created_at: new Date().toISOString(),
         };
         return HttpResponse.json({
           items: [mockMsg],
@@ -124,11 +143,11 @@ export const handlers = [
             has_more: false,
             cursor: null,
             total: 1,
-            page: 1
-          }
+            page: 1,
+          },
         });
       }
-      
+
       await delay(100);
       return HttpResponse.json({
         items: [],
@@ -137,8 +156,8 @@ export const handlers = [
           has_more: false,
           cursor: null,
           total: 0,
-          page: 1
-        }
+          page: 1,
+        },
       });
     }
 
@@ -163,7 +182,7 @@ export const handlers = [
       meta: {
         limit,
         has_more: result.hasMore,
-        cursor: result.hasMore ? result.messages[0]?.created_at : null, // Assuming cursor is the timestamp of the oldest message
+        cursor: result.hasMore ? result.messages[result.messages.length - 1]?.created_at : null, // Cursor is the timestamp of the oldest message in the batch
       },
     });
   }),
@@ -206,7 +225,7 @@ export const handlers = [
 
   // NEW: Cache management endpoint (optional, for debugging)
   http.post("/api/cache/clear", async ({ request }) => {
-    const body = await request.json() as any;
+    const body = (await request.json()) as any;
     const chatId = body?.chatId;
 
     conversationCache.clearCache(chatId);

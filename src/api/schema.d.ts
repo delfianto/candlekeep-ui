@@ -398,7 +398,7 @@ export interface paths {
         };
         /**
          * List Chats
-         * @description List chats with pagination and filtering
+         * @description List chats with cursor-based pagination and filtering
          */
         get: operations["list_chats_api_chats_get"];
         put?: never;
@@ -962,6 +962,10 @@ export interface components {
              * Format: date-time
              */
             updated_at: string;
+            /** Preview */
+            preview?: string | null;
+            /** Model Name */
+            model_name?: string | null;
         };
         /**
          * ChatUpdate
@@ -2726,8 +2730,8 @@ export interface operations {
     list_chats_api_chats_get: {
         parameters: {
             query?: {
-                /** @description Page number (1-based) */
-                page?: number;
+                /** @description ISO 8601 timestamp cursor for pagination */
+                cursor?: string | null;
                 /** @description Items per page */
                 limit?: number;
                 character_id?: string | null;

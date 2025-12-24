@@ -10,12 +10,16 @@ interface UseChatMessagesOptions {
   autoLoad?: boolean;
 }
 
-export function useChatMessages(getChatId: () => string | null, options: UseChatMessagesOptions = {}) {
-  const { pageSize = 50, autoLoad = true } = options;
+export function useChatMessages(
+  getChatId: () => string | null,
+  options: UseChatMessagesOptions = {},
+) {
+  const { pageSize = 20, autoLoad = true } = options;
 
   const messages = ref<Message[]>([]);
   const loading = ref(false);
-  const hasMore = ref(true);
+  const hasMore = ref(false);
+  const nextCursor = ref<string | null>(null);
   const error = ref<Error | null>(null);
 
   const loadMessages = async (cursor?: string) => {
@@ -41,28 +45,28 @@ export function useChatMessages(getChatId: () => string | null, options: UseChat
       }
 
       if (data) {
-        // Handle both old array format (just in case) and new object format
         const newMessages: Message[] = Array.isArray(data) ? data : data.items;
         const meta = Array.isArray(data) ? null : data.meta;
 
+        // The API returns Newest -> Oldest.
+        // batch = [Latest_in_batch, ..., Oldest_in_batch]
+
         if (meta) {
           hasMore.value = meta.has_more;
+          nextCursor.value = meta.cursor || null;
         } else {
-          // Fallback for old API or missing meta
-          if (newMessages.length < pageSize) {
-            hasMore.value = false;
-          }
+          hasMore.value = newMessages.length >= pageSize;
+          nextCursor.value = hasMore.value ? newMessages[newMessages.length - 1].created_at : null;
         }
 
-        // The API returns Newest -> Oldest.
-        // We want to display Oldest -> Newest.
-        const sortedBatch = [...newMessages].reverse();
+        // We want to display Oldest -> Newest in the UI state.
+        const sortedBatch = [...newMessages].reverse(); // [Oldest_in_batch, ..., Latest_in_batch]
 
         if (cursor) {
           // Prepend older messages
           messages.value = [...sortedBatch, ...messages.value];
         } else {
-          // Initial load (replace)
+          // Initial load
           messages.value = sortedBatch;
         }
       }
@@ -75,31 +79,30 @@ export function useChatMessages(getChatId: () => string | null, options: UseChat
   };
 
   const loadMore = async () => {
-    if (hasMore.value && !loading.value && messages.value.length > 0) {
-      // Use the timestamp of the oldest message (first in the list) as the cursor
-      const oldestMessage = messages.value[0];
-      await loadMessages(oldestMessage.created_at);
+    if (hasMore.value && !loading.value && nextCursor.value) {
+      await loadMessages(nextCursor.value);
     }
   };
 
   const refresh = () => {
     messages.value = [];
-    hasMore.value = true;
+    hasMore.value = false;
+    nextCursor.value = null;
     loadMessages();
   };
 
-  // Watch for chatId changes and reload if needed
   watch(
     () => getChatId(),
     (newChatId) => {
       if (autoLoad && newChatId) {
         messages.value = [];
-        hasMore.value = true;
+        hasMore.value = false;
+        nextCursor.value = null;
         loadMessages();
-      } else {
-        // If chatId becomes null, clear the messages
+      } else if (!newChatId) {
         messages.value = [];
         hasMore.value = false;
+        nextCursor.value = null;
       }
     },
     { immediate: true },
