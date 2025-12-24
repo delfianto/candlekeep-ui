@@ -38,6 +38,10 @@ const {
   loadMore: loadMoreChats,
 } = useChatSessions({ pageSize: 20 })
 
+const currentChat = computed(() => {
+  return chatSessions.value.find((c) => c.id === chatId.value) || null
+})
+
 // Auto-select first chat if none selected and chats are loaded
 watch(chatSessions, (newChats) => {
   if (!chatId.value && newChats.length > 0) {
@@ -108,10 +112,10 @@ const handleLoadMore = async () => {
   <div class="h-full w-full bg-background overflow-hidden flex flex-col">
     <ResizablePanelGroup direction="horizontal" class="flex-1 items-stretch overflow-hidden">
       <ResizablePanel
-        :default-size="25"
-        :min-size="20"
-        :max-size="40"
-        class="hidden md:flex flex-col border-r bg-muted/10 min-w-64 min-h-0"
+        :default-size="30"
+        :min-size="30"
+        :max-size="45"
+        class="hidden md:flex flex-col border-r bg-muted/10 min-w-96 min-h-0"
       >
         <div
           class="p-4 flex items-center justify-between shrink-0 h-16 border-b bg-background/50 backdrop-blur"
@@ -142,7 +146,7 @@ const handleLoadMore = async () => {
             <button
               v-for="chat in chatSessions"
               :key="chat.id"
-              class="flex flex-col items-start gap-1 p-3 rounded-lg text-left transition-colors hover:bg-accent group relative overflow-hidden shrink-0"
+              class="flex items-center gap-3 p-3 rounded-lg text-left transition-colors hover:bg-accent group relative overflow-hidden shrink-0"
               :class="{ 'bg-accent shadow-sm': chat.id === chatId }"
               @click="$router.push(`/chats/${chat.id}`)"
             >
@@ -151,28 +155,31 @@ const handleLoadMore = async () => {
                 class="absolute left-0 top-0 bottom-0 w-1 bg-primary"
               />
 
-              <div class="flex items-center justify-between w-full">
-                <span
-                  class="font-semibold text-sm truncate pr-2"
-                  :class="chat.id === chatId ? 'text-foreground' : 'text-foreground/80'"
-                >
-                  {{ chat.title }}
-                </span>
-                <span class="text-[10px] opacity-70 shrink-0">
-                  {{ new Date(chat.updated_at).toLocaleDateString() }}
-                </span>
-              </div>
+              <Avatar class="size-16 border shrink-0">
+                <AvatarImage :src="chat.avatar_thumbnail_path ?? ''" />
+                <AvatarFallback class="bg-primary/10 text-primary text-base">
+                  {{ (chat.character_name || chat.title || '??').substring(0, 2).toUpperCase() }}
+                </AvatarFallback>
+              </Avatar>
 
-              <div class="flex flex-col gap-0.5 w-full">
-                <span
-                  v-if="chat.model_name"
-                  class="text-[10px] font-medium text-primary/80 uppercase tracking-wider"
-                >
-                  {{ chat.model_name }}
-                </span>
-                <span class="text-xs line-clamp-2 opacity-60 leading-snug">
-                  {{ chat.preview || 'No messages yet...' }}
-                </span>
+              <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+                <div class="flex items-center justify-between w-full">
+                  <span
+                    class="font-semibold text-sm truncate pr-2"
+                    :class="chat.id === chatId ? 'text-foreground' : 'text-foreground/80'"
+                  >
+                    {{ chat.title }}
+                  </span>
+                  <span class="text-[10px] opacity-70 shrink-0">
+                    {{ new Date(chat.updated_at).toLocaleDateString() }}
+                  </span>
+                </div>
+
+                <div class="flex flex-col gap-0.5 w-full">
+                  <span class="text-xs line-clamp-2 opacity-60 leading-snug">
+                    {{ chat.preview || 'No messages yet...' }}
+                  </span>
+                </div>
               </div>
             </button>
 
@@ -209,14 +216,28 @@ const handleLoadMore = async () => {
             </Sheet>
 
             <Avatar class="size-9 border shadow-sm">
-              <AvatarImage src="/placeholder.jpg" />
-              <AvatarFallback class="bg-primary/10 text-primary">CK</AvatarFallback>
+              <AvatarImage :src="currentChat?.avatar_thumbnail_path ?? ''" />
+              <AvatarFallback class="bg-primary/10 text-primary text-xs">
+                {{ (currentChat?.character_name || currentChat?.title || 'CK').substring(0, 2).toUpperCase() }}
+              </AvatarFallback>
             </Avatar>
             <div class="flex flex-col">
-              <h2 class="text-sm font-semibold leading-none mb-1">Keeper of Candlekeep</h2>
+              <h2 class="text-sm font-semibold leading-none mb-1">
+                {{ currentChat?.character_name || currentChat?.title || 'Keeper of Candlekeep' }}
+              </h2>
               <p class="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                <span class="size-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                Active Session
+                <span
+                  class="size-1.5 rounded-full"
+                  :class="
+                    currentChat && !currentChat.model_id
+                      ? 'bg-red-500'
+                      : 'bg-green-500 animate-pulse'
+                  "
+                ></span>
+                {{ currentChat?.model_name || 'Active Session' }}
+                <span v-if="currentChat && !currentChat.model_id" class="text-red-500 font-medium">
+                  (Invalid Model)
+                </span>
               </p>
             </div>
           </div>

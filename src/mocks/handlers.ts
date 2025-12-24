@@ -91,13 +91,20 @@ export const handlers = [
 
   http.post("/api/chats", async ({ request }) => {
     const body = (await request.json()) as any;
+
+    // Find character to populate avatar fields
+    const character = db.characters.find((c) => c.id === body.character_id);
+
     const newChat: Chat = {
       id: `chat-${Date.now()}`,
       character_id: body.character_id,
+      character_name: character?.name || null,
       model_id: body.model_id || "model-1",
       title: body.title || "New Conversation",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      avatar_path: character?.avatar_path || null,
+      avatar_thumbnail_path: character?.avatar_thumbnail_path || null,
     };
     db.chats.unshift(newChat);
     // Note: For new chats, there's no need to initialize in conversationCache

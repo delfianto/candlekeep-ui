@@ -8,7 +8,10 @@
   "paths": {
     "/admin/logs/http": {
       "get": {
-        "tags": ["admin", "logs"],
+        "tags": [
+          "admin",
+          "logs"
+        ],
         "summary": "Query Http Logs",
         "description": "Query HTTP request logs",
         "operationId": "query_http_logs_admin_logs_http_get",
@@ -129,7 +132,10 @@
     },
     "/admin/logs/llm": {
       "get": {
-        "tags": ["admin", "logs"],
+        "tags": [
+          "admin",
+          "logs"
+        ],
         "summary": "Query Llm Logs",
         "description": "Query LLM API call logs",
         "operationId": "query_llm_logs_admin_logs_llm_get",
@@ -250,7 +256,10 @@
     },
     "/admin/logs/llm/stats": {
       "get": {
-        "tags": ["admin", "logs"],
+        "tags": [
+          "admin",
+          "logs"
+        ],
         "summary": "Get Llm Stats",
         "description": "Get aggregated LLM usage statistics",
         "operationId": "get_llm_stats_admin_logs_llm_stats_get",
@@ -318,7 +327,10 @@
     },
     "/admin/logs/errors": {
       "get": {
-        "tags": ["admin", "logs"],
+        "tags": [
+          "admin",
+          "logs"
+        ],
         "summary": "Query Error Logs",
         "description": "Query application error logs",
         "operationId": "query_error_logs_admin_logs_errors_get",
@@ -391,7 +403,9 @@
     },
     "/api/providers": {
       "get": {
-        "tags": ["providers"],
+        "tags": [
+          "providers"
+        ],
         "summary": "List Providers",
         "description": "List configured model providers",
         "operationId": "list_providers_api_providers_get",
@@ -413,7 +427,9 @@
         }
       },
       "post": {
-        "tags": ["providers"],
+        "tags": [
+          "providers"
+        ],
         "summary": "Create Provider",
         "description": "Register a new model provider",
         "operationId": "create_provider_api_providers_post",
@@ -453,7 +469,9 @@
     },
     "/api/providers/{provider_id}": {
       "get": {
-        "tags": ["providers"],
+        "tags": [
+          "providers"
+        ],
         "summary": "Get Provider",
         "description": "Get provider details by ID",
         "operationId": "get_provider_api_providers__provider_id__get",
@@ -492,7 +510,9 @@
         }
       },
       "put": {
-        "tags": ["providers"],
+        "tags": [
+          "providers"
+        ],
         "summary": "Update Provider",
         "description": "Update provider configuration",
         "operationId": "update_provider_api_providers__provider_id__put",
@@ -543,7 +563,9 @@
     },
     "/api/providers/{provider_id}/flags": {
       "patch": {
-        "tags": ["providers"],
+        "tags": [
+          "providers"
+        ],
         "summary": "Update Provider Flags",
         "description": "Enable or disable a provider",
         "operationId": "update_provider_flags_api_providers__provider_id__flags_patch",
@@ -594,7 +616,9 @@
     },
     "/api/model-families/parameter-docs": {
       "get": {
-        "tags": ["model-families"],
+        "tags": [
+          "model-families"
+        ],
         "summary": "Get Parameter Definitions",
         "description": "Returns documentation for all known model parameters.",
         "operationId": "get_parameter_definitions_api_model_families_parameter_docs_get",
@@ -612,7 +636,9 @@
     },
     "/api/model-families": {
       "get": {
-        "tags": ["model-families"],
+        "tags": [
+          "model-families"
+        ],
         "summary": "List Model Families",
         "description": "List all model families with pagination and filtering",
         "operationId": "list_model_families_api_model_families_get",
@@ -701,7 +727,9 @@
         }
       },
       "post": {
-        "tags": ["model-families"],
+        "tags": [
+          "model-families"
+        ],
         "summary": "Create Model Family",
         "description": "Create a new model family",
         "operationId": "create_model_family_api_model_families_post",
@@ -741,7 +769,9 @@
     },
     "/api/model-families/{family_id}": {
       "get": {
-        "tags": ["model-families"],
+        "tags": [
+          "model-families"
+        ],
         "summary": "Get Model Family",
         "description": "Get model family details by ID",
         "operationId": "get_model_family_api_model_families__family_id__get",
@@ -780,7 +810,9 @@
         }
       },
       "put": {
-        "tags": ["model-families"],
+        "tags": [
+          "model-families"
+        ],
         "summary": "Update Model Family",
         "description": "Update model family",
         "operationId": "update_model_family_api_model_families__family_id__put",
@@ -829,7 +861,9 @@
         }
       },
       "delete": {
-        "tags": ["model-families"],
+        "tags": [
+          "model-families"
+        ],
         "summary": "Delete Model Family",
         "description": "Delete model family",
         "operationId": "delete_model_family_api_model_families__family_id__delete",
@@ -863,7 +897,9 @@
     },
     "/api/models": {
       "get": {
-        "tags": ["models"],
+        "tags": [
+          "models"
+        ],
         "summary": "List Models",
         "description": "List model definitions with pagination and filtering",
         "operationId": "list_models_api_models_get",
@@ -968,7 +1004,9 @@
         }
       },
       "post": {
-        "tags": ["models"],
+        "tags": [
+          "models"
+        ],
         "summary": "Create Model",
         "description": "Create a new model definition",
         "operationId": "create_model_api_models_post",
@@ -1008,7 +1046,9 @@
     },
     "/api/models/{model_id}": {
       "get": {
-        "tags": ["models"],
+        "tags": [
+          "models"
+        ],
         "summary": "Get Model",
         "description": "Get model definition by ID.\nReturns detailed information including the embedded Model Family.",
         "operationId": "get_model_api_models__model_id__get",
@@ -1047,7 +1087,9 @@
         }
       },
       "put": {
-        "tags": ["models"],
+        "tags": [
+          "models"
+        ],
         "summary": "Update Model",
         "description": "Update model definition",
         "operationId": "update_model_api_models__model_id__put",
@@ -1096,7 +1138,9 @@
         }
       },
       "delete": {
-        "tags": ["models"],
+        "tags": [
+          "models"
+        ],
         "summary": "Delete Model",
         "description": "Delete model definition",
         "operationId": "delete_model_api_models__model_id__delete",
@@ -1130,7 +1174,9 @@
     },
     "/api/models/{model_id}/flags": {
       "patch": {
-        "tags": ["models"],
+        "tags": [
+          "models"
+        ],
         "summary": "Update Model Flags",
         "description": "Toggle model enabled and OpenRouter routing flags",
         "operationId": "update_model_flags_api_models__model_id__flags_patch",
@@ -1181,7 +1227,9 @@
     },
     "/api/characters": {
       "get": {
-        "tags": ["characters"],
+        "tags": [
+          "characters"
+        ],
         "summary": "List Characters",
         "description": "List characters with pagination and filtering",
         "operationId": "list_characters_api_characters_get",
@@ -1303,7 +1351,9 @@
         }
       },
       "post": {
-        "tags": ["characters"],
+        "tags": [
+          "characters"
+        ],
         "summary": "Create Character",
         "description": "Create a new character with optional avatar upload",
         "operationId": "create_character_api_characters_post",
@@ -1343,7 +1393,9 @@
     },
     "/api/characters/{character_id}": {
       "get": {
-        "tags": ["characters"],
+        "tags": [
+          "characters"
+        ],
         "summary": "Get Character",
         "description": "Get character details by ID",
         "operationId": "get_character_api_characters__character_id__get",
@@ -1382,7 +1434,9 @@
         }
       },
       "put": {
-        "tags": ["characters"],
+        "tags": [
+          "characters"
+        ],
         "summary": "Update Character",
         "description": "Update character",
         "operationId": "update_character_api_characters__character_id__put",
@@ -1430,7 +1484,9 @@
         }
       },
       "delete": {
-        "tags": ["characters"],
+        "tags": [
+          "characters"
+        ],
         "summary": "Delete Character",
         "description": "Delete character",
         "operationId": "delete_character_api_characters__character_id__delete",
@@ -1464,7 +1520,9 @@
     },
     "/api/characters/{character_id}/avatar": {
       "get": {
-        "tags": ["characters"],
+        "tags": [
+          "characters"
+        ],
         "summary": "Get Character Avatar",
         "description": "Serve character avatar image",
         "operationId": "get_character_avatar_api_characters__character_id__avatar_get",
@@ -1503,7 +1561,9 @@
     },
     "/api/characters/{character_id}/avatar_thumbnail": {
       "get": {
-        "tags": ["characters"],
+        "tags": [
+          "characters"
+        ],
         "summary": "Get Character Avatar Thumbnail",
         "description": "Serve character avatar thumbnail image",
         "operationId": "get_character_avatar_thumbnail_api_characters__character_id__avatar_thumbnail_get",
@@ -1542,7 +1602,9 @@
     },
     "/api/chats": {
       "get": {
-        "tags": ["chats"],
+        "tags": [
+          "chats"
+        ],
         "summary": "List Chats",
         "description": "List chats with cursor-based pagination and filtering",
         "operationId": "list_chats_api_chats_get",
@@ -1670,7 +1732,9 @@
         }
       },
       "post": {
-        "tags": ["chats"],
+        "tags": [
+          "chats"
+        ],
         "summary": "Create Chat",
         "description": "Create a new chat",
         "operationId": "create_chat_api_chats_post",
@@ -1710,7 +1774,9 @@
     },
     "/api/chats/{chat_id}": {
       "get": {
-        "tags": ["chats"],
+        "tags": [
+          "chats"
+        ],
         "summary": "Get Chat",
         "description": "Get chat details by ID",
         "operationId": "get_chat_api_chats__chat_id__get",
@@ -1749,7 +1815,9 @@
         }
       },
       "put": {
-        "tags": ["chats"],
+        "tags": [
+          "chats"
+        ],
         "summary": "Update Chat",
         "description": "Update chat (e.g., change title or model)",
         "operationId": "update_chat_api_chats__chat_id__put",
@@ -1798,7 +1866,9 @@
         }
       },
       "delete": {
-        "tags": ["chats"],
+        "tags": [
+          "chats"
+        ],
         "summary": "Delete Chat",
         "description": "Delete chat",
         "operationId": "delete_chat_api_chats__chat_id__delete",
@@ -1832,7 +1902,9 @@
     },
     "/api/chats/{chat_id}/messages": {
       "get": {
-        "tags": ["messages"],
+        "tags": [
+          "messages"
+        ],
         "summary": "Get Chat Messages",
         "description": "Get chat messages (Cursor Pagination).\nReturns wrapped response: { items: [...], meta: { cursor: '...', has_more: true } }",
         "operationId": "get_chat_messages_api_chats__chat_id__messages_get",
@@ -1903,7 +1975,9 @@
         }
       },
       "post": {
-        "tags": ["messages"],
+        "tags": [
+          "messages"
+        ],
         "summary": "Send Message",
         "description": "Send a message and get AI response (blocking)",
         "operationId": "send_message_api_chats__chat_id__messages_post",
@@ -1954,7 +2028,9 @@
     },
     "/api/chats/{chat_id}/messages/stream": {
       "post": {
-        "tags": ["messages"],
+        "tags": [
+          "messages"
+        ],
         "summary": "Send Message Stream",
         "description": "Send a message and get AI response (streaming SSE)",
         "operationId": "send_message_stream_api_chats__chat_id__messages_stream_post",
@@ -2003,7 +2079,9 @@
     },
     "/api/personas/": {
       "get": {
-        "tags": ["personas"],
+        "tags": [
+          "personas"
+        ],
         "summary": "List Personas",
         "description": "List personas with pagination and filtering",
         "operationId": "list_personas_api_personas__get",
@@ -2092,7 +2170,9 @@
         }
       },
       "post": {
-        "tags": ["personas"],
+        "tags": [
+          "personas"
+        ],
         "summary": "Create Persona",
         "description": "Create new persona with optional avatar upload",
         "operationId": "create_persona_api_personas__post",
@@ -2132,7 +2212,9 @@
     },
     "/api/personas/{persona_id}": {
       "get": {
-        "tags": ["personas"],
+        "tags": [
+          "personas"
+        ],
         "summary": "Get Persona",
         "description": "Get persona by ID",
         "operationId": "get_persona_api_personas__persona_id__get",
@@ -2171,7 +2253,9 @@
         }
       },
       "put": {
-        "tags": ["personas"],
+        "tags": [
+          "personas"
+        ],
         "summary": "Update Persona",
         "description": "Update persona",
         "operationId": "update_persona_api_personas__persona_id__put",
@@ -2219,7 +2303,9 @@
         }
       },
       "delete": {
-        "tags": ["personas"],
+        "tags": [
+          "personas"
+        ],
         "summary": "Delete Persona",
         "description": "Delete persona",
         "operationId": "delete_persona_api_personas__persona_id__delete",
@@ -2253,7 +2339,9 @@
     },
     "/api/personas/{persona_id}/avatar": {
       "get": {
-        "tags": ["personas"],
+        "tags": [
+          "personas"
+        ],
         "summary": "Get Persona Avatar",
         "description": "Serve persona avatar image",
         "operationId": "get_persona_avatar_api_personas__persona_id__avatar_get",
@@ -2292,7 +2380,9 @@
     },
     "/api/personas/{persona_id}/avatar_thumbnail": {
       "get": {
-        "tags": ["personas"],
+        "tags": [
+          "personas"
+        ],
         "summary": "Get Persona Avatar Thumbnail",
         "description": "Serve persona avatar thumbnail image",
         "operationId": "get_persona_avatar_thumbnail_api_personas__persona_id__avatar_thumbnail_get",
@@ -2331,7 +2421,9 @@
     },
     "/api/personas/{persona_id}/set-default": {
       "post": {
-        "tags": ["personas"],
+        "tags": [
+          "personas"
+        ],
         "summary": "Set Default Persona",
         "description": "Set persona as default",
         "operationId": "set_default_persona_api_personas__persona_id__set_default_post",
@@ -2372,7 +2464,9 @@
     },
     "/api/prompt-templates/": {
       "get": {
-        "tags": ["prompt-templates"],
+        "tags": [
+          "prompt-templates"
+        ],
         "summary": "List Templates",
         "description": "List prompt templates with pagination",
         "operationId": "list_templates_api_prompt_templates__get",
@@ -2429,7 +2523,9 @@
         }
       },
       "post": {
-        "tags": ["prompt-templates"],
+        "tags": [
+          "prompt-templates"
+        ],
         "summary": "Create Template",
         "description": "Create new prompt template",
         "operationId": "create_template_api_prompt_templates__post",
@@ -2469,7 +2565,9 @@
     },
     "/api/prompt-templates/{template_id}": {
       "get": {
-        "tags": ["prompt-templates"],
+        "tags": [
+          "prompt-templates"
+        ],
         "summary": "Get Template",
         "description": "Get prompt template by ID",
         "operationId": "get_template_api_prompt_templates__template_id__get",
@@ -2508,7 +2606,9 @@
         }
       },
       "put": {
-        "tags": ["prompt-templates"],
+        "tags": [
+          "prompt-templates"
+        ],
         "summary": "Update Template",
         "description": "Update prompt template",
         "operationId": "update_template_api_prompt_templates__template_id__put",
@@ -2557,7 +2657,9 @@
         }
       },
       "delete": {
-        "tags": ["prompt-templates"],
+        "tags": [
+          "prompt-templates"
+        ],
         "summary": "Delete Template",
         "description": "Delete prompt template",
         "operationId": "delete_template_api_prompt_templates__template_id__delete",
@@ -2596,7 +2698,9 @@
     },
     "/api/prompt-templates/{template_id}/set-default": {
       "post": {
-        "tags": ["prompt-templates"],
+        "tags": [
+          "prompt-templates"
+        ],
         "summary": "Set Default Template",
         "description": "Set prompt template as default",
         "operationId": "set_default_template_api_prompt_templates__template_id__set_default_post",
@@ -2637,7 +2741,9 @@
     },
     "/api/prompt-templates/{template_id}/preview": {
       "post": {
-        "tags": ["prompt-templates"],
+        "tags": [
+          "prompt-templates"
+        ],
         "summary": "Preview Template",
         "description": "Preview template rendering with sample data",
         "operationId": "preview_template_api_prompt_templates__template_id__preview_post",
@@ -2688,7 +2794,9 @@
     },
     "/health": {
       "get": {
-        "tags": ["health"],
+        "tags": [
+          "health"
+        ],
         "summary": "Get Health Status",
         "description": "Get application health status",
         "operationId": "get_health_status_health_get",
@@ -2877,7 +2985,9 @@
           }
         },
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "title": "Body_create_character_api_characters_post"
       },
       "Body_create_persona_api_personas__post": {
@@ -2916,7 +3026,9 @@
           }
         },
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "title": "Body_create_persona_api_personas__post"
       },
       "Body_update_character_api_characters__character_id__put": {
@@ -3378,7 +3490,9 @@
           }
         },
         "type": "object",
-        "required": ["character_id"],
+        "required": [
+          "character_id"
+        ],
         "title": "ChatCreate",
         "description": "Schema for creating a new chat"
       },
@@ -3451,10 +3565,51 @@
               }
             ],
             "title": "Model Name"
+          },
+          "character_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Name",
+            "description": "Name of the character in the chat"
+          },
+          "avatar_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Path",
+            "description": "Path to character avatar"
+          },
+          "avatar_thumbnail_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Thumbnail Path",
+            "description": "Path to character thumbnail"
           }
         },
         "type": "object",
-        "required": ["character_id", "id", "created_at", "updated_at"],
+        "required": [
+          "character_id",
+          "id",
+          "created_at",
+          "updated_at"
+        ],
         "title": "ChatResponse",
         "description": "Schema for chat responses"
       },
@@ -3491,7 +3646,12 @@
       },
       "Gender": {
         "type": "string",
-        "enum": ["male", "female", "non-binary", "others"],
+        "enum": [
+          "male",
+          "female",
+          "non-binary",
+          "others"
+        ],
         "title": "Gender",
         "description": "Character gender options"
       },
@@ -3518,7 +3678,9 @@
           }
         },
         "type": "object",
-        "required": ["content"],
+        "required": [
+          "content"
+        ],
         "title": "MessageCreate",
         "description": "Schema for creating a new message (user message)"
       },
@@ -3548,13 +3710,23 @@
           }
         },
         "type": "object",
-        "required": ["role", "content", "id", "chat_id", "created_at"],
+        "required": [
+          "role",
+          "content",
+          "id",
+          "chat_id",
+          "created_at"
+        ],
         "title": "MessageResponse",
         "description": "Schema for message responses"
       },
       "MessageRole": {
         "type": "string",
-        "enum": ["user", "assistant", "system"],
+        "enum": [
+          "user",
+          "assistant",
+          "system"
+        ],
         "title": "MessageRole",
         "description": "Message role types"
       },
@@ -3634,7 +3806,12 @@
           }
         },
         "type": "object",
-        "required": ["provider_id", "model_identifier", "name", "model_family_id"],
+        "required": [
+          "provider_id",
+          "model_identifier",
+          "name",
+          "model_family_id"
+        ],
         "title": "ModelCreate",
         "description": "Schema for creating a new model definition"
       },
@@ -3822,7 +3999,10 @@
           }
         },
         "type": "object",
-        "required": ["name", "family_identifier"],
+        "required": [
+          "name",
+          "family_identifier"
+        ],
         "title": "ModelFamilyCreate",
         "description": "Schema for creating a new model family"
       },
@@ -3959,7 +4139,13 @@
           }
         },
         "type": "object",
-        "required": ["name", "family_identifier", "id", "created_at", "updated_at"],
+        "required": [
+          "name",
+          "family_identifier",
+          "id",
+          "created_at",
+          "updated_at"
+        ],
         "title": "ModelFamilyResponse",
         "description": "Schema for detailed model family responses"
       },
@@ -4417,7 +4603,10 @@
           }
         },
         "type": "object",
-        "required": ["items", "meta"],
+        "required": [
+          "items",
+          "meta"
+        ],
         "title": "PaginatedResponse[CharacterResponse]"
       },
       "PaginatedResponse_ChatResponse_": {
@@ -4434,7 +4623,10 @@
           }
         },
         "type": "object",
-        "required": ["items", "meta"],
+        "required": [
+          "items",
+          "meta"
+        ],
         "title": "PaginatedResponse[ChatResponse]"
       },
       "PaginatedResponse_MessageResponse_": {
@@ -4451,7 +4643,10 @@
           }
         },
         "type": "object",
-        "required": ["items", "meta"],
+        "required": [
+          "items",
+          "meta"
+        ],
         "title": "PaginatedResponse[MessageResponse]"
       },
       "PaginatedResponse_ModelFamilyListResponse_": {
@@ -4468,7 +4663,10 @@
           }
         },
         "type": "object",
-        "required": ["items", "meta"],
+        "required": [
+          "items",
+          "meta"
+        ],
         "title": "PaginatedResponse[ModelFamilyListResponse]"
       },
       "PaginatedResponse_ModelListResponse_": {
@@ -4485,7 +4683,10 @@
           }
         },
         "type": "object",
-        "required": ["items", "meta"],
+        "required": [
+          "items",
+          "meta"
+        ],
         "title": "PaginatedResponse[ModelListResponse]"
       },
       "PaginatedResponse_PersonaResponse_": {
@@ -4502,7 +4703,10 @@
           }
         },
         "type": "object",
-        "required": ["items", "meta"],
+        "required": [
+          "items",
+          "meta"
+        ],
         "title": "PaginatedResponse[PersonaResponse]"
       },
       "PaginatedResponse_PromptTemplateResponse_": {
@@ -4519,7 +4723,10 @@
           }
         },
         "type": "object",
-        "required": ["items", "meta"],
+        "required": [
+          "items",
+          "meta"
+        ],
         "title": "PaginatedResponse[PromptTemplateResponse]"
       },
       "PaginationMeta": {
@@ -4572,7 +4779,10 @@
           }
         },
         "type": "object",
-        "required": ["limit", "has_more"],
+        "required": [
+          "limit",
+          "has_more"
+        ],
         "title": "PaginationMeta",
         "description": "Standard metadata for all paginated responses.\nFields are optional to support both Cursor (infinite scroll) and Offset (page numbers) strategies."
       },
@@ -4643,7 +4853,12 @@
           }
         },
         "type": "object",
-        "required": ["name", "id", "created_at", "updated_at"],
+        "required": [
+          "name",
+          "id",
+          "created_at",
+          "updated_at"
+        ],
         "title": "PersonaResponse",
         "description": "Schema for persona response"
       },
@@ -4708,7 +4923,10 @@
           }
         },
         "type": "object",
-        "required": ["name", "system_template"],
+        "required": [
+          "name",
+          "system_template"
+        ],
         "title": "PromptTemplateCreate",
         "description": "Schema for creating a prompt template"
       },
@@ -4787,7 +5005,13 @@
           }
         },
         "type": "object",
-        "required": ["name", "system_template", "id", "created_at", "updated_at"],
+        "required": [
+          "name",
+          "system_template",
+          "id",
+          "created_at",
+          "updated_at"
+        ],
         "title": "PromptTemplateResponse",
         "description": "Schema for prompt template response"
       },
@@ -4928,7 +5152,10 @@
           }
         },
         "type": "object",
-        "required": ["name", "provider_type"],
+        "required": [
+          "name",
+          "provider_type"
+        ],
         "title": "ProviderCreate",
         "description": "Schema for creating a new provider"
       },
@@ -4940,7 +5167,9 @@
           }
         },
         "type": "object",
-        "required": ["enabled"],
+        "required": [
+          "enabled"
+        ],
         "title": "ProviderFlagsUpdate",
         "description": "Schema for updating provider flags only"
       },
@@ -5018,7 +5247,15 @@
       },
       "ProviderType": {
         "type": "string",
-        "enum": ["xai", "google", "openai", "anthropic", "openrouter", "ollama", "custom"],
+        "enum": [
+          "xai",
+          "google",
+          "openai",
+          "anthropic",
+          "openrouter",
+          "ollama",
+          "custom"
+        ],
         "title": "ProviderType",
         "description": "Supported provider types"
       },
@@ -5131,7 +5368,10 @@
           }
         },
         "type": "object",
-        "required": ["rendered", "variables_used"],
+        "required": [
+          "rendered",
+          "variables_used"
+        ],
         "title": "TemplatePreviewResponse",
         "description": "Schema for template preview response"
       },
@@ -5161,7 +5401,11 @@
           }
         },
         "type": "object",
-        "required": ["loc", "msg", "type"],
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
         "title": "ValidationError"
       }
     }
