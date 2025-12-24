@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   { path: "/", name: "home", component: () => import("@/views/HomeView.vue") },
-  { path: "/chats", name: "chats", component: () => import("@/views/ChatView.vue") },
-  { path: "/chats/:chatId", name: "chat", component: () => import("@/views/ChatView.vue") },
+  { path: "/chats", name: "chats", component: () => import("@/views/chat/ChatView.vue") },
+  { path: "/chats/:chatId", name: "chat", component: () => import("@/views/chat/ChatView.vue") },
   {
     path: "/characters",
     name: "characters",
