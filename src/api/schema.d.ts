@@ -1212,12 +1212,6 @@ export interface components {
             description: string | null;
             /** Provider Types */
             provider_types: string[];
-            /** Unsupported Parameters */
-            unsupported_parameters: string[];
-            /** Extra Metadata */
-            extra_metadata: {
-                [key: string]: unknown;
-            } | null;
             /**
              * Created At
              * Format: date-time

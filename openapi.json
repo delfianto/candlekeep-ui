@@ -3975,25 +3975,6 @@
             "type": "array",
             "title": "Provider Types"
           },
-          "unsupported_parameters": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Unsupported Parameters"
-          },
-          "extra_metadata": {
-            "anyOf": [
-              {
-                "additionalProperties": true,
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Extra Metadata"
-          },
           "created_at": {
             "type": "string",
             "format": "date-time",
@@ -4012,8 +3993,6 @@
           "family_identifier",
           "description",
           "provider_types",
-          "unsupported_parameters",
-          "extra_metadata",
           "created_at",
           "updated_at"
         ],

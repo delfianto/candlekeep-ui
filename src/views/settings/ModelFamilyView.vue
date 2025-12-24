@@ -351,31 +351,6 @@ onMounted(fetchData)
                 {{ new Date(family.created_at).toLocaleDateString() }}
               </span>
             </div>
-
-            <div
-              v-if="family.extra_metadata?.context_window"
-              class="flex justify-between py-2 border-b"
-            >
-              <span class="text-muted-foreground">Context Window</span>
-              <span
-                class="font-medium"
-                >{{ family.extra_metadata.context_window.toLocaleString() }}</span
-              >
-            </div>
-
-            <div v-if="family.extra_metadata?.models" class="space-y-2 pt-2">
-              <Label class="text-muted-foreground">Known Models</Label>
-              <div class="flex flex-wrap gap-1">
-                <Badge
-                  v-for="m in family.extra_metadata.models"
-                  :key="m"
-                  variant="outline"
-                  class="text-[10px]"
-                >
-                  {{ m }}
-                </Badge>
-              </div>
-            </div>
           </CardContent>
           <CardFooter class="flex flex-col gap-3">
             <div class="flex w-full gap-2">

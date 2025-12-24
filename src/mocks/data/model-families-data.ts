@@ -24,10 +24,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: ["max_tokens", "reasoning_effort", "summary", "verbosity"],
     extra_metadata: {
-      context_window: 128000,
       supports_vision: true,
       supports_function_calling: true,
-      models: ["gpt-4.1", "gpt-4.1-mini", "gpt-4o", "gpt-4o-mini"],
     },
     id: "4821-openai-gpt-4",
     created_at: NOW,
@@ -60,10 +58,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
       "presence_penalty",
     ],
     extra_metadata: {
-      context_window: 200000,
       supports_vision: true,
       supports_function_calling: true,
-      models: ["gpt-5", "gpt-5-mini", "gpt-5-nano"],
     },
     id: "9283-openai-gpt-5-thinking",
     created_at: NOW,
@@ -95,10 +91,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
       "presence_penalty",
     ],
     extra_metadata: {
-      context_window: 200000,
       supports_vision: true,
       supports_function_calling: true,
-      models: ["gpt-5.1"],
     },
     id: "1029-openai-gpt-5-1-thinking",
     created_at: NOW,
@@ -130,10 +124,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
       "presence_penalty",
     ],
     extra_metadata: {
-      context_window: 200000,
       supports_vision: true,
       supports_function_calling: true,
-      models: ["gpt-5.2"],
     },
     id: "7732-openai-gpt-5-2-thinking",
     created_at: NOW,
@@ -156,10 +148,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: ["reasoning_effort", "summary", "verbosity", "max_tokens"],
     extra_metadata: {
-      context_window: 128000,
       supports_vision: false,
       supports_function_calling: false,
-      models: ["gpt-5-chat-latest"],
     },
     id: "3391-openai-gpt-5-chat",
     created_at: NOW,
@@ -183,10 +173,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: ["reasoning_effort", "verbosity", "max_tokens"],
     extra_metadata: {
-      context_window: 128000,
       supports_vision: false,
       supports_function_calling: false,
-      models: ["gpt-5.1-chat-latest", "gpt-5.2-chat-latest"],
     },
     id: "6612-openai-gpt-5-x-chat",
     created_at: NOW,
@@ -215,10 +203,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 500000,
       supports_vision: true,
       supports_function_calling: true,
-      models: ["claude-4.5-haiku", "claude-4.5-sonnet"],
     },
     id: "2281-anthropic-claude-4-5-standard",
     created_at: NOW,
@@ -235,7 +221,6 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 64000,
       supports_vision: false,
       supports_function_calling: true,
     },
@@ -267,10 +252,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 1000000,
       supports_vision: true,
       supports_function_calling: true,
-      models: ["claude-4.5-opus"],
     },
     id: "1992-anthropic-claude-4-5-opus",
     created_at: NOW,
@@ -325,10 +308,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 2000000,
       supports_vision: true,
       supports_function_calling: true,
-      models: ["gemini-2.5-flash", "gemini-2.5-pro"],
     },
     id: "8473-google-gemini-2-5-text",
     created_at: NOW,
@@ -388,10 +369,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 2000000,
       supports_vision: true,
       supports_function_calling: true,
-      models: ["gemini-3-flash", "gemini-3-pro"],
     },
     id: "5521-google-gemini-3-0-text",
     created_at: NOW,
@@ -411,10 +390,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: ["stop", "frequency_penalty", "presence_penalty", "reasoning_effort"],
     extra_metadata: {
-      context_window: 256000,
       supports_vision: false,
       supports_function_calling: true,
-      models: ["grok-4-0709", "grok-4"],
       notes: "Reasoning always active. No penalty/stop support.",
     },
     id: "3319-xai-grok-4",
@@ -435,10 +412,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: ["stop", "frequency_penalty", "presence_penalty", "reasoning_effort"],
     extra_metadata: {
-      context_window: 128000,
       supports_vision: false,
       supports_function_calling: true,
-      models: ["grok-4.1-2025-11-17", "grok-4.1"],
       notes:
         "Enhanced emotional intelligence and creative expression. Best for character-driven RP.",
     },
@@ -460,10 +435,8 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: ["stop", "frequency_penalty", "presence_penalty", "reasoning_effort"],
     extra_metadata: {
-      context_window: 2000000,
       supports_vision: false,
       supports_function_calling: true,
-      models: ["grok-4.1-fast"],
       notes:
         "2M context enables entire novel-length RP sessions. Fastest Grok variant with superior tool calling.",
     },
@@ -483,7 +456,6 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 8192,
       supports_vision: false,
       supports_function_calling: false,
     },
@@ -502,7 +474,6 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 32768,
       supports_vision: false,
       supports_function_calling: false,
     },
@@ -521,7 +492,6 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 8192,
       supports_vision: true,
       supports_function_calling: false,
     },
@@ -540,7 +510,6 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 32768,
       quantization: "Q4_K_M",
     },
     id: "6628-ollama-mistral",
@@ -558,7 +527,6 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 8192,
       quantization: "Q4_K_M",
     },
     id: "3382-ollama-cydonia-rp",
@@ -576,7 +544,6 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 8192,
       quantization: "Q4_K_M",
     },
     id: "9912-ollama-llama-3-1",
@@ -594,7 +561,6 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 128000,
       quantization: "Q4_K_M",
     },
     id: "5582-ollama-gemma-3",
@@ -612,7 +578,6 @@ export const allModelFamiliesMock: ModelFamilyItem[] = [
     },
     unsupported_parameters: [],
     extra_metadata: {
-      context_window: 8192,
       quantization: "Q4_K_M",
     },
     id: "1102-ollama-violet-lotus-rp",
