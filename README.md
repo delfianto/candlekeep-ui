@@ -41,9 +41,9 @@ Candlekeep UI is a greenfield project built from scratch, aiming to deliver a mo
 ### API Management
 
 - **Generate API Schema:** `bun run api:gen`
-    - Re-generates `src/api/schema.d.ts` from `openapi.json`.
+  - Re-generates `src/api/schema.d.ts` from `openapi.json`.
 
-    - Run this after updating the backend `openapi.json` file.
+  - Run this after updating the backend `openapi.json` file.
 
 ## Project Structure & Conventions
 

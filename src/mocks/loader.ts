@@ -41,8 +41,8 @@ class ConversationCache {
 
     const loadedModule = await loader();
     // Handle default export from dynamic import
-    const data = 'default' in loadedModule ? (loadedModule as any).default : loadedModule;
-    
+    const data = "default" in loadedModule ? (loadedModule as any).default : loadedModule;
+
     const metadata = this.metadata.get(chatId)!;
     const messages = this.hydrate(chatId, data, metadata.daysAgoStart);
 
@@ -83,7 +83,7 @@ class ConversationCache {
 
     // 3. Check if we have more than limit
     const hasMore = filteredMessages.length > limit;
-    
+
     // 4. Apply Limit
     const messages = filteredMessages.slice(0, limit);
 

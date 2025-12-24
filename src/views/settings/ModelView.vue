@@ -289,11 +289,7 @@ onMounted(async () => {
                       <SelectValue placeholder="Select a provider" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem
-                        v-for="prov in filteredProviders"
-                        :key="prov.id"
-                        :value="prov.id"
-                      >
+                      <SelectItem v-for="prov in filteredProviders" :key="prov.id" :value="prov.id">
                         {{ prov.name }}
                       </SelectItem>
                     </SelectContent>

@@ -45,9 +45,7 @@ export const useSettingsStore = defineStore("settings", () => {
       if (error) throw error;
 
       if (data) {
-        providers.value = (data as any[]).sort((a: any, b: any) =>
-          a.name.localeCompare(b.name)
-        );
+        providers.value = (data as any[]).sort((a: any, b: any) => a.name.localeCompare(b.name));
         hasLoadedProviders.value = true;
       }
     } catch (error) {
