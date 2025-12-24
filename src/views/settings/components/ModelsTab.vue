@@ -74,7 +74,9 @@ const fetchData = async () => {
 
     if (data && 'items' in data) {
       items.value = (data.items as Model[]) || []
-      total.value = data.total_items ?? items.value.length
+      // Cast to any to access meta if the type definition isn't updated in the IDE context yet
+      const meta = (data as any).meta
+      total.value = meta?.total ?? items.value.length
     } else if (Array.isArray(data)) {
       items.value = data as Model[]
       total.value = items.value.length

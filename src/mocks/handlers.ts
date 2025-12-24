@@ -35,7 +35,15 @@ export const handlers = [
   // Characters
   http.get("/api/characters", async () => {
     await delay(150);
-    return HttpResponse.json(db.characters);
+    return HttpResponse.json({
+      items: db.characters,
+      meta: {
+        limit: 100, // Assuming default limit
+        has_more: false,
+        total: db.characters.length,
+        page: 1,
+      },
+    });
   }),
 
   http.get("/api/characters/:id", async ({ params }) => {
@@ -52,7 +60,15 @@ export const handlers = [
     const sortedChats = [...db.chats].sort((a, b) => {
       return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
     });
-    return HttpResponse.json(sortedChats);
+    return HttpResponse.json({
+      items: sortedChats,
+      meta: {
+        limit: 100, // Assuming default limit
+        has_more: false,
+        total: sortedChats.length,
+        page: 1,
+      },
+    });
   }),
 
   http.post("/api/chats", async ({ request }) => {
@@ -90,8 +106,40 @@ export const handlers = [
 
     // Check if conversation exists
     if (!conversationCache.has(chatId)) {
+      // Fallback: If chat exists in DB but not in cache (no YAML), generate a mock message
+      const chatExists = db.chats.find(c => c.id === chatId);
+      if (chatExists) {
+        await delay(100);
+        const mockMsg = {
+           id: `msg-default-${chatId}`,
+           chat_id: chatId,
+           role: "assistant" as const,
+           content: `[Mock] This conversation with ${chatExists.title} hasn't been implemented in YAML yet. This is a placeholder message.`,
+           created_at: new Date().toISOString(),
+        };
+        return HttpResponse.json({
+          items: [mockMsg],
+          meta: {
+            limit,
+            has_more: false,
+            cursor: null,
+            total: 1,
+            page: 1
+          }
+        });
+      }
+      
       await delay(100);
-      return HttpResponse.json([]);
+      return HttpResponse.json({
+        items: [],
+        meta: {
+          limit,
+          has_more: false,
+          cursor: null,
+          total: 0,
+          page: 1
+        }
+      });
     }
 
     await delay(100);
@@ -100,12 +148,22 @@ export const handlers = [
     const result = await conversationCache.getCursorPaginated(chatId, limit, cursor);
 
     if (!result) {
-      return HttpResponse.json([]);
+      return HttpResponse.json({
+        items: [],
+        meta: {
+          limit,
+          has_more: false,
+          cursor: null,
+        },
+      });
     }
 
-    return HttpResponse.json(result.messages, {
-      headers: {
-        "X-Has-More": result.hasMore.toString(),
+    return HttpResponse.json({
+      items: result.messages,
+      meta: {
+        limit,
+        has_more: result.hasMore,
+        cursor: result.hasMore ? result.messages[0]?.created_at : null, // Assuming cursor is the timestamp of the oldest message
       },
     });
   }),
@@ -186,7 +244,7 @@ export const handlers = [
 
     const pageParam = url.searchParams.get("page");
     const page = pageParam ? parseInt(pageParam, 10) : 1;
-    const pageData = db.modelsPages.find((p) => p.current_page === page);
+    const pageData = db.modelsPages.find((p) => p.meta.page === page);
     if (!pageData) return HttpResponse.json(db.modelsPages[0]);
     return HttpResponse.json(pageData);
   }),
@@ -241,7 +299,7 @@ export const handlers = [
     const pageParam = url.searchParams.get("page");
     const page = pageParam ? parseInt(pageParam, 10) : 1;
 
-    const pageData = db.modelFamiliesPages.find((p) => p.current_page === page);
+    const pageData = db.modelFamiliesPages.find((p) => p.meta.page === page);
 
     if (!pageData) {
       return HttpResponse.json(db.modelFamiliesPages[0]);

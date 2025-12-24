@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useChatMessages } from '@/composables/useChatMessages'
 import type { components } from '@/api/schema'
 import {
@@ -30,6 +30,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 type Chat = components["schemas"]["ChatResponse"];
 
 // Get chatId from route
+const router = useRouter()
 const route = useRoute()
 const chatId = computed(() => route.params.chatId as string || null)
 
@@ -41,7 +42,14 @@ onMounted(async () => {
   try {
     const response = await fetch('/api/chats')
     if (response.ok) {
-      chatSessions.value = await response.json()
+      const data = await response.json()
+      // Handle both array and paginated response
+      chatSessions.value = Array.isArray(data) ? data : data.items
+      
+      // Auto-select first chat if none selected
+      if (!chatId.value && chatSessions.value.length > 0) {
+        router.replace(`/chats/${chatSessions.value[0].id}`)
+      }
     }
   } catch (err) {
     console.error('Error loading chats:', err)
@@ -116,6 +124,8 @@ const handleLoadMore = async () => {
               v-for="chat in chatSessions"
               :key="chat.id"
               class="flex flex-col items-start gap-1 p-3 rounded-lg text-left transition-colors hover:bg-accent/50"
+              :class="{ 'bg-accent/50': chat.id === chatId }"
+              @click="$router.push(`/chats/${chat.id}`)"
             >
               <div class="flex items-center justify-between w-full">
                 <span class="font-semibold text-sm truncate text-foreground">{{ chat.title }}</span>

@@ -1,11 +1,11 @@
 import type { components } from "@/api/schema";
 import { allModelFamiliesMock } from "@/mocks/data/model-families-data";
 
-type ModelFamilyPage = components["schemas"]["PaginatedResponse_ModelFamilyResponse_"];
-type ModelFamilyItem = components["schemas"]["ModelFamilyResponse"];
+type ModelFamilyPage = components["schemas"]["PaginatedResponse_ModelFamilyListResponse_"];
+type ModelFamilyItem = components["schemas"]["ModelFamilyListResponse"];
 
 // Helper to strip 'parameters' for the list view to reduce payload size
-const toSummary = (item: ModelFamilyItem): ModelFamilyItem => {
+const toSummary = (item: any): ModelFamilyItem => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { parameters, ...rest } = item;
   return rest as ModelFamilyItem;
@@ -13,7 +13,7 @@ const toSummary = (item: ModelFamilyItem): ModelFamilyItem => {
 
 // Helper to generate a paginated response structure
 const createPage = (
-  items: ModelFamilyItem[],
+  items: any[],
   page: number,
   totalItems: number,
   limit: number = 10,
@@ -22,13 +22,12 @@ const createPage = (
 
   return {
     items: items.map(toSummary),
-    total_items: totalItems,
-    current_page: page,
-    limit: limit,
-    has_next_page: page < totalPages,
-    has_previous_page: page > 1,
-    next_page: page < totalPages ? page + 1 : null,
-    previous_page: page > 1 ? page - 1 : null,
+    meta: {
+      total: totalItems,
+      page: page,
+      limit: limit,
+      has_more: page < totalPages,
+    },
   };
 };
 

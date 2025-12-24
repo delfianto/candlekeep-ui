@@ -43,9 +43,7 @@ const fetchData = async () => {
       // Handle both paginated and non-paginated responses for safety
       if (data.items) {
         items.value = data.items
-        total.value = data.total_items || data.items.length
-        // Update page if server adjusted it (optional)
-        // page.value = data.current_page
+        total.value = data.meta?.total || data.items.length
       } else {
         items.value = Array.isArray(data) ? data : []
         total.value = items.value.length

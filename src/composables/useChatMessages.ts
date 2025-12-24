@@ -39,15 +39,22 @@ export function useChatMessages(getChatId: () => string | null, options: UseChat
         throw new Error(`Failed to load messages: ${response.statusText}`);
       }
 
-      const newMessages: Message[] = await response.json();
+      const data = await response.json();
+      // Handle both old array format (just in case) and new object format
+      const newMessages: Message[] = Array.isArray(data) ? data : data.items;
+      const meta = Array.isArray(data) ? null : data.meta;
 
-      const hasMoreHeader = response.headers.get("X-Has-More");
-      if (hasMoreHeader !== null) {
-        hasMore.value = hasMoreHeader === "true";
+      if (meta) {
+        hasMore.value = meta.has_more;
       } else {
-        // Fallback if header is missing
-        if (newMessages.length < pageSize) {
-          hasMore.value = false;
+        // Fallback for old API or missing meta
+        const hasMoreHeader = response.headers.get("X-Has-More");
+        if (hasMoreHeader !== null) {
+          hasMore.value = hasMoreHeader === "true";
+        } else {
+           if (newMessages.length < pageSize) {
+             hasMore.value = false;
+           }
         }
       }
 
@@ -95,10 +102,10 @@ export function useChatMessages(getChatId: () => string | null, options: UseChat
       } else {
         // If chatId becomes null, clear the messages
         messages.value = [];
-        hasMore.value = true;
+        hasMore.value = false;
       }
     },
-    { immediate: autoLoad && getChatId() !== null },
+    { immediate: true },
   );
 
   return {

@@ -1,12 +1,12 @@
 import type { components } from "@/api/schema";
 import { allModelsMock } from "@/mocks/data/models-data";
 
-type ModelPage = components["schemas"]["PaginatedResponse_ModelResponse_"];
-type ModelItem = components["schemas"]["ModelResponse"];
+type ModelPage = components["schemas"]["PaginatedResponse_ModelListResponse_"];
+type ModelItem = components["schemas"]["ModelListResponse"];
 
 // Helper to generate a paginated response structure
 const createPage = (
-  items: ModelItem[],
+  items: any[],
   page: number,
   totalItems: number,
   limit: number = 10,
@@ -14,14 +14,13 @@ const createPage = (
   const totalPages = Math.ceil(totalItems / limit);
 
   return {
-    items: items,
-    total_items: totalItems,
-    current_page: page,
-    limit: limit,
-    has_next_page: page < totalPages,
-    has_previous_page: page > 1,
-    next_page: page < totalPages ? page + 1 : null,
-    previous_page: page > 1 ? page - 1 : null,
+    items: items as ModelItem[],
+    meta: {
+      total: totalItems,
+      page: page,
+      limit: limit,
+      has_more: page < totalPages,
+    },
   };
 };
 

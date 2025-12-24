@@ -5,6 +5,7 @@ type Character = components["schemas"]["CharacterResponse"];
 
 export const characters: Character[] = [
   {
+    version: 1,
     id: "7384-aranwen-the-banished",
     name: "Aranwen the Banished",
     description:
@@ -19,6 +20,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-1/200/200",
   },
   {
+    version: 1,
     id: "2910-lynara-frost-scholar",
     name: "Lynara Frost-Scholar",
     description:
@@ -33,6 +35,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-2/200/200",
   },
   {
+    version: 1,
     id: "5621-zahrasha-death-singer",
     name: "Zahrasha the Death-Singer",
     description:
@@ -47,6 +50,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-3/200/200",
   },
   {
+    version: 1,
     id: "8492-eloise-montclair",
     name: "Eloise Montclair",
     description:
@@ -61,6 +65,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-4/200/200",
   },
   {
+    version: 1,
     id: "1847-beeps-with-the-hist",
     name: "Beeps-With-The-Hist",
     description:
@@ -75,6 +80,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-5/200/200",
   },
   {
+    version: 1,
     id: "3956-hildra-stormcloak",
     name: "Hildra Stormcloak",
     description:
@@ -89,6 +95,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-6/200/200",
   },
   {
+    version: 1,
     id: "6273-calanwe-sun-blessed",
     name: "Calanwe Sun-Blessed",
     description:
@@ -103,6 +110,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-7/200/200",
   },
   {
+    version: 1,
     id: "9104-octavia-maro",
     name: "Octavia Maro",
     description:
@@ -117,6 +125,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-8/200/200",
   },
   {
+    version: 1,
     id: "4738-finedrin-treemother",
     name: "Finedrin Treemother",
     description:
@@ -131,6 +140,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-9/200/200",
   },
   {
+    version: 1,
     id: "7825-taneth-at-sentinel",
     name: "Taneth at-Sentinel",
     description:
@@ -145,6 +155,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-10/200/200",
   },
   {
+    version: 1,
     id: "2469-yargol-gra-dushnikh",
     name: "Yargol gra-Dushnikh",
     description:
@@ -159,6 +170,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-11/200/200",
   },
   {
+    version: 1,
     id: "8156-nerise-sarethi",
     name: "Nerise Sarethi",
     description:
@@ -173,6 +185,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-12/200/200",
   },
   {
+    version: 1,
     id: "5309-morella-the-hollow",
     name: "Morella the Hollow",
     description:
@@ -187,6 +200,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-13/200/200",
   },
   {
+    version: 1,
     id: "6941-valerica-heir",
     name: "Valerica's Heir",
     description:
@@ -201,6 +215,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-14/200/200",
   },
   {
+    version: 1,
     id: "3582-lilatha-of-artaeum",
     name: "Lilatha of Artaeum",
     description:
@@ -215,6 +230,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-15/200/200",
   },
   {
+    version: 1,
     id: "9217-mirelle-shadowfoot",
     name: "Mirelle Shadowfoot",
     description:
@@ -229,6 +245,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-16/200/200",
   },
   {
+    version: 1,
     id: "4893-helga-sky-voice",
     name: "Helga Sky-Voice",
     description:
@@ -243,6 +260,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-17/200/200",
   },
   {
+    version: 1,
     id: "7604-drenlyn-uvirith",
     name: "Drenlyn Uvirith",
     description:
@@ -257,6 +275,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-18/200/200",
   },
   {
+    version: 1,
     id: "2135-aetheris-moravayn",
     name: "Aetheris Moravayn",
     description:
@@ -271,6 +290,7 @@ export const characters: Character[] = [
     avatar_thumbnail_path: "https://picsum.photos/seed/tes-char-19/200/200",
   },
   {
+    version: 1,
     id: "5768-sister-tacita",
     name: "Sister Tacita",
     description:
