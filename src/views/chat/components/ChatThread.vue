@@ -16,6 +16,7 @@ import { useChatMessages } from '@/composables/useChatMessages'
 import MarkdownRenderer from '@/components/shared/MarkdownRenderer.vue'
 import type { components } from '@/api/schema'
 import { CHAT_PLACEHOLDERS } from '@/constants/placeholders'
+import ChatMessageActions from './ChatMessageActions.vue'
 
 type Chat = components['schemas']['ChatResponse']
 
@@ -230,9 +231,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
                 <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-tight">
                   {{ msg.role === 'assistant' ? (currentChat?.character_name || 'Assistant') : 'You' }}
                 </span>
-                <span class="text-[10px] text-muted-foreground/40 font-medium">
-                  {{ new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
-                </span>
               </div>
 
               <div
@@ -246,6 +244,8 @@ const handleKeyDown = (e: KeyboardEvent) => {
                   :class="{ 'prose-invert': msg.role === 'user' }"
                 />
               </div>
+
+              <ChatMessageActions :message="msg" />
             </div>
           </div>
         </div>
