@@ -43,10 +43,29 @@ async function prepareApp() {
       });
     }
 
-    return worker.start({
+    await worker.start({
       onUnhandledRequest: "bypass",
       quiet: true,
     });
+
+    // Ensure the service worker is controlling the page before we proceed
+    // This prevents early requests from bypassing the mock worker
+    if (navigator.serviceWorker && !navigator.serviceWorker.controller) {
+      console.log("[MSW] Waiting for controller...");
+      await new Promise<void>((resolve) => {
+        const handler = () => {
+          if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.removeEventListener("controllerchange", handler);
+            console.log("[MSW] Controller active.");
+            resolve();
+          }
+        };
+        navigator.serviceWorker.addEventListener("controllerchange", handler);
+      });
+    } else {
+      console.log("[MSW] Already controlling.");
+    }
+    return;
   }
 }
 
