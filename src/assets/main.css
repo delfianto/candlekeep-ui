@@ -223,6 +223,12 @@ Replaces the old @layer base { * { @apply border-border } }
   }
 }
 
+/* Sonner Toaster Overrides */
+[data-sonner-toaster] {
+  position: fixed !important;
+  z-index: 99999 !important;
+}
+
 /* Minimalist Global Scrollbar Styles */
 @layer base {
   * {

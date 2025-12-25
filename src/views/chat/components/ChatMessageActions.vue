@@ -19,6 +19,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 import type { components } from '@/api/schema'
+import { useClipboard } from '@vueuse/core'
+import { useToast } from '@/composables/useToast'
 
 type Message = components['schemas']['MessageResponse']
 
@@ -33,6 +35,13 @@ const emit = defineEmits<{
 }>()
 
 const isMenuOpen = ref(false)
+const { copy } = useClipboard()
+const { success } = useToast()
+
+const handleCopy = async () => {
+  await copy(props.message.content)
+  success(`Message ${props.message.id} copied`, 'The message content is now in your clipboard.')
+}
 </script>
 
 <template>
@@ -81,7 +90,7 @@ const isMenuOpen = ref(false)
           <span>Branch</span>
           <GitFork class="size-3.5 ml-auto opacity-60" />
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem @click="handleCopy">
           <span>Copy</span>
           <Copy class="size-3.5 ml-auto opacity-60" />
         </DropdownMenuItem>

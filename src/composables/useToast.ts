@@ -1,0 +1,29 @@
+import { toast } from "vue-sonner";
+
+/**
+ * A centralized toast composable to provide a consistent interface
+ * for showing notifications across the application.
+ */
+export function useToast() {
+  return {
+    toast,
+    success: (message: string, description?: string) => {
+      toast.success(message, { description });
+    },
+    error: (message: string, description?: string) => {
+      toast.error(message, { description });
+    },
+    info: (message: string, description?: string) => {
+      toast.info(message, { description });
+    },
+    warning: (message: string, description?: string) => {
+      toast.warning(message, { description });
+    },
+    loading: (message: string, description?: string) => {
+      return toast.loading(message, { description });
+    },
+    dismiss: (id?: string | number) => {
+      toast.dismiss(id);
+    },
+  };
+}
