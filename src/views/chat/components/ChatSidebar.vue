@@ -8,7 +8,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Avatar, AvatarFallback, CachedAvatar } from '@/components/ui/avatar'
+import CharacterAvatar from '@/components/shared/CharacterAvatar.vue'
 
 type Chat = components['schemas']['ChatResponse']
 
@@ -65,12 +65,12 @@ const emit = defineEmits<{
             class="absolute left-0 top-0 bottom-0 w-1 bg-primary"
           />
 
-          <Avatar class="size-16 border shrink-0">
-            <CachedAvatar :src="chat.avatar_thumbnail_path ?? ''" />
-            <AvatarFallback class="bg-primary/10 text-primary text-base">
-              {{ (chat.character_name || chat.title || '??').substring(0, 2).toUpperCase() }}
-            </AvatarFallback>
-          </Avatar>
+          <CharacterAvatar
+            :src="chat.avatar_thumbnail_path"
+            :username="chat.character_name || chat.title"
+            class="size-16"
+            fallback-class="text-base"
+          />
 
           <div class="flex-1 min-w-0 flex flex-col gap-0.5">
             <div class="flex items-center justify-between w-full">

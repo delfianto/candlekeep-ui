@@ -9,7 +9,8 @@ import {
   Loader2
 } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, CachedAvatar } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import CharacterAvatar from '@/components/shared/CharacterAvatar.vue'
 import { Textarea } from '@/components/ui/textarea'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useChatMessages } from '@/composables/useChatMessages'
@@ -102,15 +103,13 @@ const handleLoadMore = async () => {
           <SheetContent side="left"><p>Mobile Menu</p></SheetContent>
         </Sheet>
 
-        <Avatar
-          class="size-9 border shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
+        <CharacterAvatar
+          :src="currentChat?.avatar_thumbnail_path"
+          :username="currentChat?.character_name || currentChat?.title"
+          class="size-9 cursor-pointer hover:opacity-80 transition-opacity"
+          fallback-class="text-xs"
           @click="emit('openCharacterInspector')"
-        >
-          <CachedAvatar :src="currentChat?.avatar_thumbnail_path ?? ''" />
-          <AvatarFallback class="bg-primary/10 text-primary text-xs">
-            {{ (currentChat?.character_name || currentChat?.title || 'CK').substring(0, 2).toUpperCase() }}
-          </AvatarFallback>
-        </Avatar>
+        />
         <div class="flex flex-col">
           <h2 class="text-sm font-semibold leading-none mb-1">
             {{ currentChat?.character_name || currentChat?.title || 'Keeper of Candlekeep' }}
@@ -177,14 +176,15 @@ const handleLoadMore = async () => {
             class="flex gap-4 group"
             :class="{ 'flex-row-reverse': msg.role === 'user' }"
           >
-            <Avatar class="size-9 shrink-0 border shadow-sm mt-0.5">
-              <template v-if="msg.role === 'assistant'">
-                <CachedAvatar :src="currentChat?.avatar_thumbnail_path ?? ''" />
-                <AvatarFallback class="bg-primary/10 text-primary text-xs">
-                  {{ (currentChat?.character_name || currentChat?.title || 'CK').substring(0, 2).toUpperCase() }}
-                </AvatarFallback>
-              </template>
-              <AvatarFallback v-else class="bg-muted">
+            <CharacterAvatar
+              v-if="msg.role === 'assistant'"
+              :src="currentChat?.avatar_thumbnail_path"
+              :username="currentChat?.character_name || currentChat?.title"
+              class="size-9 mt-0.5"
+              fallback-class="text-xs"
+            />
+            <Avatar v-else class="size-9 shrink-0 border shadow-sm mt-0.5">
+              <AvatarFallback class="bg-muted">
                 <User class="size-5" />
               </AvatarFallback>
             </Avatar>

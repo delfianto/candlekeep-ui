@@ -4,7 +4,7 @@ import { client } from '@/api/client'
 import type { components } from '@/api/schema'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, CachedAvatar, AvatarFallback } from '@/components/ui/avatar'
+import CharacterAvatar from '@/components/shared/CharacterAvatar.vue'
 import CachedImage from '@/components/shared/CachedImage.vue'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -94,12 +94,12 @@ watch(() => props.characterId, (newId) => {
         <ScrollArea class="h-full">
           <div class="p-4 space-y-4">
             <div class="flex items-center gap-4">
-              <Avatar class="size-16 border">
-                <CachedAvatar :src="character?.avatar_thumbnail_path ?? ''" />
-                <AvatarFallback
-                  >{{ character?.name?.substring(0, 2).toUpperCase() }}</AvatarFallback
-                >
-              </Avatar>
+              <CharacterAvatar
+                :src="character?.avatar_thumbnail_path"
+                :username="character?.name"
+                class="size-16"
+                fallback-class="text-xl"
+              />
               <div>
                 <h2 class="text-xl font-bold tracking-tight">{{ character?.name }}</h2>
                 <div class="flex flex-wrap gap-1 mt-1">
