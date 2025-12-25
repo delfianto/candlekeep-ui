@@ -2,16 +2,34 @@ import { ref, watchEffect, onScopeDispose, toValue, type MaybeRefOrGetter } from
 
 const CACHE_NAME = "candlekeep-assets-v1";
 
+interface RegistryEntry {
+  blobUrl: string;
+  refCount: number;
+}
+
+const blobUrlRegistry = new Map<string, RegistryEntry>();
+const inFlightRequests = new Map<string, Promise<string>>();
+
 export function useAssetCache(urlSource: MaybeRefOrGetter<string | undefined | null>) {
   const cachedSrc = ref<string | undefined>(undefined);
   const error = ref<Error | null>(null);
 
-  // Track the previous blob URL to clean it up when it's replaced
-  let previousUrl: string | undefined;
+  let currentRegisteredUrl: string | undefined;
+
+  const releaseUrl = (url: string) => {
+    const entry = blobUrlRegistry.get(url);
+    if (entry) {
+      entry.refCount--;
+      if (entry.refCount <= 0) {
+        URL.revokeObjectURL(entry.blobUrl);
+        blobUrlRegistry.delete(url);
+      }
+    }
+  };
 
   onScopeDispose(() => {
-    if (previousUrl?.startsWith("blob:")) {
-      URL.revokeObjectURL(previousUrl);
+    if (currentRegisteredUrl) {
+      releaseUrl(currentRegisteredUrl);
     }
   });
 
@@ -21,74 +39,87 @@ export function useAssetCache(urlSource: MaybeRefOrGetter<string | undefined | n
 
     onCleanup(() => {
       isCancelled = true;
+      if (currentRegisteredUrl) {
+        releaseUrl(currentRegisteredUrl);
+        currentRegisteredUrl = undefined;
+      }
     });
 
-    // Reset state
     error.value = null;
 
-    // If no URL, clear cache and return
     if (!url) {
       cachedSrc.value = undefined;
       return;
     }
 
-    try {
-      // Check for Cache API support
-      if (typeof window === "undefined" || !("caches" in window)) {
-        cachedSrc.value = url;
-        return;
-      }
+    const existing = blobUrlRegistry.get(url);
+    if (existing) {
+      existing.refCount++;
+      currentRegisteredUrl = url;
+      cachedSrc.value = existing.blobUrl;
+      return;
+    }
 
-      const cache = await caches.open(CACHE_NAME);
+    let requestPromise = inFlightRequests.get(url);
 
-      if (isCancelled) return;
-
-      const cachedResponse = await cache.match(url);
-
-      if (isCancelled) return;
-
-      if (cachedResponse) {
-        const blob = await cachedResponse.blob();
-        if (isCancelled) return;
-
-        const newUrl = URL.createObjectURL(blob);
-
-        // Clean up previous blob if it exists
-        if (previousUrl?.startsWith("blob:")) {
-          URL.revokeObjectURL(previousUrl);
-        }
-        previousUrl = newUrl;
-        cachedSrc.value = newUrl;
-      } else {
-        // Fetch from network
-        const response = await fetch(url);
-
-        if (isCancelled) return;
-
-        if (!response.ok) throw new Error(`Failed to load asset: ${response.statusText}`);
-
-        // Cache the response
+    if (!requestPromise) {
+      requestPromise = (async () => {
         try {
-          await cache.put(url, response.clone());
-        } catch (err) {
-          console.warn("Failed to cache asset:", err);
+          if (typeof window === "undefined" || !("caches" in window)) {
+            return url;
+          }
+
+          const cache = await caches.open(CACHE_NAME);
+          const cachedResponse = await cache.match(url);
+
+          let blob: Blob;
+          if (cachedResponse) {
+            blob = await cachedResponse.blob();
+          } else {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Failed to fetch: ${response.statusText}`);
+            try {
+              await cache.put(url, response.clone());
+            } catch (err) {
+              console.warn("Cache put failed:", err);
+            }
+            blob = await response.blob();
+          }
+
+          const blobUrl = URL.createObjectURL(blob);
+
+          blobUrlRegistry.set(url, {
+            blobUrl,
+            refCount: 0,
+          });
+
+          return blobUrl;
+        } catch (e) {
+          inFlightRequests.delete(url);
+          throw e;
+        } finally {
+          inFlightRequests.delete(url);
         }
+      })();
 
-        const blob = await response.blob();
-        if (isCancelled) return;
+      inFlightRequests.set(url, requestPromise);
+    }
 
-        const newUrl = URL.createObjectURL(blob);
+    try {
+      const blobUrl = await requestPromise;
+      if (isCancelled) return;
 
-        if (previousUrl?.startsWith("blob:")) {
-          URL.revokeObjectURL(previousUrl);
-        }
-        previousUrl = newUrl;
-        cachedSrc.value = newUrl;
+      const entry = blobUrlRegistry.get(url);
+      if (entry) {
+        entry.refCount++;
+        currentRegisteredUrl = url;
+        cachedSrc.value = blobUrl;
+      } else {
+        cachedSrc.value = blobUrl;
       }
     } catch (e) {
       if (isCancelled) return;
-
-      console.warn("Asset cache failed, falling back to network url:", e);
+      console.warn("Asset cache failed:", e);
       error.value = e as Error;
       cachedSrc.value = url;
     }

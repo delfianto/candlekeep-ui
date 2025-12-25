@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, computed, onMounted } from 'vue'
 import {
   MessageSquare,
   MoreVertical,
@@ -49,18 +49,21 @@ const scrollContainer = ref<HTMLDivElement | null>(null)
 const isInitialLoad = ref(true)
 const placeholderText = ref(CHAT_PLACEHOLDERS[0])
 
-// Randomize placeholder on mount
-import { onMounted } from 'vue'
+// Hoist assistant metadata to prevent redundant prop lookups in v-for
+const assistantMetadata = computed(() => ({
+  name: props.currentChat?.character.name || 'Assistant',
+  avatar: props.currentChat?.character.avatar_thumbnail,
+  id: props.currentChat?.character.id
+}))
+
 onMounted(() => {
   placeholderText.value = CHAT_PLACEHOLDERS[Math.floor(Math.random() * CHAT_PLACEHOLDERS.length)]
 })
 
-// Reset initial load flag when chat changes
 watch(() => props.chatId, () => {
   isInitialLoad.value = true
 })
 
-// Reliable Scroll to Bottom (Native Div)
 const scrollToBottom = () => {
   if (scrollContainer.value) {
     scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight
@@ -148,15 +151,15 @@ const handleKeyDown = (e: KeyboardEvent) => {
         </Sheet>
 
         <CharacterAvatar
-          :src="currentChat?.character.avatar_thumbnail"
-          :username="currentChat?.character.name || currentChat?.title"
+          :src="assistantMetadata.avatar"
+          :username="assistantMetadata.name"
           class="size-9 cursor-pointer hover:opacity-80 transition-opacity"
           fallback-class="text-xs"
           @click="emit('openCharacterInspector')"
         />
         <div class="flex flex-col">
           <h2 class="text-sm font-semibold leading-none mb-1">
-            {{ currentChat?.character.name || currentChat?.title || 'Keeper of Candlekeep' }}
+            {{ assistantMetadata.name }}
           </h2>
           <p class="text-[11px] text-muted-foreground flex items-center gap-1.5">
             <span
@@ -220,13 +223,14 @@ const handleKeyDown = (e: KeyboardEvent) => {
             class="flex gap-4 group"
             :class="{ 'flex-row-reverse': msg.role === 'user' }"
           >
-            <CharacterAvatar
-              v-if="msg.role === 'assistant'"
-              :src="currentChat?.character.avatar_thumbnail"
-              :username="currentChat?.character.name || currentChat?.title"
-              class="size-9 mt-0.5"
-              fallback-class="text-xs"
-            />
+            <template v-if="msg.role === 'assistant'">
+              <CharacterAvatar
+                :src="assistantMetadata.avatar"
+                :username="assistantMetadata.name"
+                class="size-9 mt-0.5"
+                fallback-class="text-xs"
+              />
+            </template>
             <CharacterAvatar v-else class="size-9 mt-0.5" fallback-class="bg-muted">
               <User class="size-5" />
             </CharacterAvatar>
@@ -237,7 +241,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
                 :class="{ 'flex-row-reverse': msg.role === 'user' }"
               >
                 <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-tight">
-                  {{ msg.role === 'assistant' ? (currentChat?.character.name || 'Assistant') : 'You' }}
+                  {{ msg.role === 'assistant' ? assistantMetadata.name : 'You' }}
                 </span>
               </div>
 
@@ -302,6 +306,14 @@ const handleKeyDown = (e: KeyboardEvent) => {
 </template>
 
 <style scoped>
+.size-9 {
+  width: 2.25rem; /* 36px */
+  height: 2.25rem;
+  aspect-ratio: 1 / 1;
+  contain: paint; /* Optimization: tells browser content won't overflow */
+  background-color: hsl(var(--muted)); /* Show immediate placeholder */
+}
+
 /* CSS to make the native div scrollbar look like Shadcn/Radix */
 .custom-scrollbar::-webkit-scrollbar {
   width: 10px;
