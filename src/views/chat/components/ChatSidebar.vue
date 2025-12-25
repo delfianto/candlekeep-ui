@@ -8,7 +8,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, CachedAvatar } from '@/components/ui/avatar'
 
 type Chat = components['schemas']['ChatResponse']
 
@@ -66,7 +66,7 @@ const emit = defineEmits<{
           />
 
           <Avatar class="size-16 border shrink-0">
-            <AvatarImage :src="chat.avatar_thumbnail_path ?? ''" />
+            <CachedAvatar :src="chat.avatar_thumbnail_path ?? ''" />
             <AvatarFallback class="bg-primary/10 text-primary text-base">
               {{ (chat.character_name || chat.title || '??').substring(0, 2).toUpperCase() }}
             </AvatarFallback>

@@ -10,7 +10,7 @@ import {
   SidebarMenuButton
 } from '@/components/ui/sidebar'
 import { Separator } from '@/components/ui/separator'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, CachedAvatar, AvatarFallback } from '@/components/ui/avatar'
 import AppSidebarButton from './AppSidebarButton.vue'
 import {
   Home,
@@ -105,7 +105,7 @@ const navItems = [
               class="h-14 gap-4 transition-all duration-200 group-data-[collapsible=icon]:justify-center"
             >
               <Avatar class="h-8 w-8 shrink-0 rounded-lg border">
-                <AvatarImage src="/avatar-placeholder.png" alt="User" />
+                <CachedAvatar src="/avatar-placeholder.png" alt="User" />
                 <AvatarFallback class="rounded-lg">DM</AvatarFallback>
               </Avatar>
               <div

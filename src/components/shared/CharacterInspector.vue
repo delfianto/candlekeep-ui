@@ -4,7 +4,8 @@ import { client } from '@/api/client'
 import type { components } from '@/api/schema'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, CachedAvatar, AvatarFallback } from '@/components/ui/avatar'
+import CachedImage from '@/components/shared/CachedImage.vue'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Loader2, User } from 'lucide-vue-next'
@@ -76,7 +77,7 @@ watch(() => props.characterId, (newId) => {
         <div
           class="h-full w-full flex items-center justify-center bg-muted/10 rounded-lg border overflow-hidden relative"
         >
-          <img
+          <CachedImage
             v-if="character?.avatar_path"
             :src="character.avatar_path"
             :alt="character.name"
@@ -94,7 +95,7 @@ watch(() => props.characterId, (newId) => {
           <div class="p-4 space-y-4">
             <div class="flex items-center gap-4">
               <Avatar class="size-16 border">
-                <AvatarImage :src="character?.avatar_thumbnail_path ?? ''" />
+                <CachedAvatar :src="character?.avatar_thumbnail_path ?? ''" />
                 <AvatarFallback
                   >{{ character?.name?.substring(0, 2).toUpperCase() }}</AvatarFallback
                 >

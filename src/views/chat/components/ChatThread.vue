@@ -10,7 +10,7 @@ import {
   Loader2
 } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, CachedAvatar } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useChatMessages } from '@/composables/useChatMessages'
@@ -107,7 +107,7 @@ const handleLoadMore = async () => {
           class="size-9 border shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
           @click="emit('openCharacterInspector')"
         >
-          <AvatarImage :src="currentChat?.avatar_thumbnail_path ?? ''" />
+          <CachedAvatar :src="currentChat?.avatar_thumbnail_path ?? ''" />
           <AvatarFallback class="bg-primary/10 text-primary text-xs">
             {{ (currentChat?.character_name || currentChat?.title || 'CK').substring(0, 2).toUpperCase() }}
           </AvatarFallback>
