@@ -45,7 +45,7 @@ const router = useRouter()
       <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
         <Button
           size="lg"
-          class="h-14 px-10 text-xl font-medieval tracking-wide shadow-lg transition-all hover:scale-105 hover:shadow-primary/20"
+          class="h-14 w-72 px-10 text-xl font-medieval tracking-wide shadow-lg transition-all hover:scale-105 hover:shadow-primary/20 border border-transparent dark:hover:bg-primary/80 dark:hover:backdrop-blur-sm"
           @click="router.push('/chats')"
         >
           Enter the Archives
@@ -53,7 +53,7 @@ const router = useRouter()
         <Button
           variant="outline"
           size="lg"
-          class="h-14 px-10 text-xl font-medieval tracking-wide shadow-sm hover:bg-muted/50 transition-all"
+          class="h-14 w-72 px-10 text-xl font-medieval tracking-wide shadow-lg transition-all hover:scale-105 hover:shadow-primary/20 dark:bg-background dark:border-primary dark:text-primary dark:hover:bg-primary/10"
           @click="router.push('/characters')"
         >
           Visit the Roster
