@@ -184,15 +184,15 @@ const handleResetParamsConfirm = async () => {
                   <Tooltip>
                     <TooltipTrigger as-child>
                       <Info
-                        class="size-3 text-muted-foreground/40 cursor-help hover:text-foreground shrink-0"
+                        class="size-3.5 text-muted-foreground/40 cursor-help hover:text-foreground shrink-0"
                       />
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p class="max-w-xs text-xs">{{ getParamDoc(key).detailed_info }}</p>
-                      <p class="text-[10px] text-muted-foreground mt-1 font-mono">
-                        Default:
-                        {{ formatDefaultValue((model.model_family.parameters![key] as any).default) }}
-                      </p>
+                    <TooltipContent side="right" :side-offset="10" class="max-w-sm p-4">
+                      <p class="text-sm leading-relaxed">{{ getParamDoc(key).detailed_info }}</p>
+                      <div class="text-xs font-mono mt-2 pt-2 border-t border-background/20">
+                        <span class="opacity-60">Default:</span>
+                        <span class="ml-1 font-bold">{{ formatDefaultValue((model.model_family.parameters![key] as any).default) }}</span>
+                      </div>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -244,15 +244,15 @@ const handleResetParamsConfirm = async () => {
                   <Tooltip>
                     <TooltipTrigger as-child>
                       <Info
-                        class="size-3 text-muted-foreground/40 cursor-help hover:text-foreground shrink-0"
+                        class="size-3.5 text-muted-foreground/40 cursor-help hover:text-foreground shrink-0"
                       />
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p class="max-w-xs text-xs">{{ getParamDoc(key).detailed_info }}</p>
-                      <p class="text-[10px] text-muted-foreground mt-1 font-mono">
-                        Default:
-                        {{ formatDefaultValue((model.model_family.parameters![key] as any).default) }}
-                      </p>
+                    <TooltipContent side="right" :side-offset="10" class="max-w-sm p-4">
+                      <p class="text-sm leading-relaxed">{{ getParamDoc(key).detailed_info }}</p>
+                      <div class="text-xs font-mono mt-2 pt-2 border-t border-background/20">
+                        <span class="opacity-60">Default:</span>
+                        <span class="ml-1 font-bold">{{ formatDefaultValue((model.model_family.parameters![key] as any).default) }}</span>
+                      </div>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -312,8 +312,12 @@ const handleResetParamsConfirm = async () => {
                 <TooltipTrigger as-child>
                   <Info class="size-3.5 text-muted-foreground/50 cursor-help" />
                 </TooltipTrigger>
-                <TooltipContent>
-                  <p class="max-w-xs text-xs">{{ getParamDoc(key).detailed_info }}</p>
+                <TooltipContent side="right" :side-offset="10" class="max-w-sm p-4">
+                  <p class="text-sm leading-relaxed">{{ getParamDoc(key).detailed_info }}</p>
+                  <div class="text-xs font-mono mt-2 pt-2 border-t border-background/20">
+                    <span class="opacity-60">Default:</span>
+                    <span class="ml-1 font-bold">{{ formatDefaultValue((model.model_family.parameters![key] as any).default) }}</span>
+                  </div>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

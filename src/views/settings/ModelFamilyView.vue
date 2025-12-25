@@ -252,14 +252,14 @@ onMounted(fetchData)
                         <TooltipTrigger as-child>
                           <Info class="size-3.5 text-muted-foreground cursor-help" />
                         </TooltipTrigger>
-                        <TooltipContent v-if="settingsStore.parameterDocs[key]" class="max-w-xs">
-                          <p class="font-bold mb-1">{{ settingsStore.parameterDocs[key].label }}</p>
-                          <p class="text-xs">
+                        <TooltipContent v-if="settingsStore.parameterDocs[key]" side="right" :side-offset="10" class="max-w-sm p-4">
+                          <p class="text-sm font-bold mb-2 border-b border-background/20 pb-1">{{ settingsStore.parameterDocs[key].label }}</p>
+                          <p class="text-sm leading-relaxed">
                             {{ settingsStore.parameterDocs[key].detailed_info }}
                           </p>
                         </TooltipContent>
-                        <TooltipContent v-else>
-                          <p class="text-xs italic">No documentation available.</p>
+                        <TooltipContent v-else side="right" :side-offset="10" class="p-4">
+                          <p class="text-sm italic">No documentation available.</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
