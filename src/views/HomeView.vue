@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import libraryImage from '@/assets/candlekeep-library.png'
-import { useRouter } from 'vue-router'
 import { APP_INFO } from '@/constants/appInfo'
+import { Button } from '@/components/ui/button'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 </script>
@@ -19,7 +19,7 @@ const router = useRouter()
         class="w-full h-full object-cover opacity-60 dark:opacity-40 blur-[1px]"
       />
       <div
-        class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"
+        class="absolute inset-0 bg-linear-to-t from-background via-background/60 to-transparent"
       />
       <div class="absolute inset-0 bg-radial-gradient from-transparent to-background/60" />
     </div>
