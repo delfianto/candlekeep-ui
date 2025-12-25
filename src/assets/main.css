@@ -1,9 +1,15 @@
 @import "tailwindcss";
 @import "../theme/tokens.css";
 @import "tw-animate-css";
-/*
----break---
-*/
+
+@font-face {
+  font-family: "BlackChancery";
+  src: url("./blackchancery.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -11,6 +17,8 @@ Tailwind 4 Theme Configuration
 Map the CSS variables in tokens.css to Tailwind utilities.
 */
 @theme {
+  --font-medieval: "BlackChancery", serif;
+
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));

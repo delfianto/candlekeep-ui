@@ -27,6 +27,7 @@ const route = useRoute()
 const chatId = computed(() => route.params.chatId as string || null)
 const isMobile = useMediaQuery('(max-width: 768px)')
 const showRightPane = ref(false)
+const paneMode = ref<'character' | 'settings'>('character')
 
 const {
   chatSessions,
@@ -56,8 +57,14 @@ const handleOpenCharacterInspector = () => {
   if (isMobile.value) {
     router.push({ name: 'character-detail', params: { id: currentChat.value.character_id } })
   } else {
+    paneMode.value = 'character'
     showRightPane.value = true
   }
+}
+
+const handleOpenSettings = () => {
+  paneMode.value = 'settings'
+  showRightPane.value = true
 }
 </script>
 
@@ -84,24 +91,36 @@ const handleOpenCharacterInspector = () => {
       <ResizableHandle class="hidden md:flex bg-border w-px" />
 
       <!-- Main Content: Chat Thread -->
-      <ResizablePanel :default-size="75" class="flex flex-col min-w-96 min-h-0 bg-background">
+      <ResizablePanel :default-size="70" class="flex flex-col min-w-96 min-h-0 bg-background">
         <ChatThread
           :chat-id="chatId"
           :current-chat="currentChat"
           @open-character-inspector="handleOpenCharacterInspector"
+          @open-settings="handleOpenSettings"
         />
       </ResizablePanel>
     </ResizablePanelGroup>
 
     <!-- Right Pane: Sheet (Dynamic Content) -->
     <Sheet v-model:open="showRightPane">
-      <SheetContent side="right" class="w-[90vw] sm:max-w-135p-0 overflow-hidden flex flex-col">
+      <SheetContent
+        side="right"
+        class="w-[90vw] sm:max-w-[540px] p-0 overflow-hidden flex flex-col"
+      >
         <SheetHeader class="sr-only">
-          <SheetTitle>Chat Details</SheetTitle>
-          <SheetDescription> View character info or settings. </SheetDescription>
+          <SheetTitle
+            >{{ paneMode === 'character' ? 'Character Details' : 'Chat Settings' }}</SheetTitle
+          >
+          <SheetDescription>
+            {{ paneMode === 'character' ? 'View character info' : 'Adjust chat settings' }}
+          </SheetDescription>
         </SheetHeader>
 
-        <ChatDetailPane v-if="currentChat" :character-id="currentChat.character_id" />
+        <ChatDetailPane
+          v-if="currentChat"
+          :character-id="currentChat.character_id"
+          :mode="paneMode"
+        />
 
         <div class="p-4 border-t bg-background shrink-0">
           <SheetClose as-child>

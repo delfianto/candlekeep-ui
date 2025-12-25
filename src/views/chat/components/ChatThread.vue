@@ -25,6 +25,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'openCharacterInspector'): void
+  (e: 'openSettings'): void
 }>()
 
 const { messages, loading, hasMore, loadMore, error } = useChatMessages(() => props.chatId, {
@@ -131,7 +132,9 @@ const handleLoadMore = async () => {
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <Button variant="ghost" size="icon"><MoreVertical class="size-5" /></Button>
+        <Button variant="ghost" size="icon" @click="emit('openSettings')">
+          <MoreVertical class="size-5" />
+        </Button>
       </div>
     </header>
 
