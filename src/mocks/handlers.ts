@@ -212,6 +212,34 @@ export const handlers = [
     return HttpResponse.json(aiMsg);
   }),
 
+  // Regenerate message stream handler
+  http.post("/api/chats/:chatId/messages/stream/regenerate", async () => {
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const text = "[Mock Regenerated Response] This is a simulated regenerated reply after backtracking.";
+        const words = text.split(" ");
+
+        for (const word of words) {
+          const chunk = JSON.stringify({ text: word + " " });
+          controller.enqueue(encoder.encode(`data: ${chunk}\n\n`));
+          await new Promise((r) => setTimeout(r, 50));
+        }
+
+        controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+        controller.close();
+      },
+    });
+
+    return new HttpResponse(stream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
+    });
+  }),
+
   // Prefetch endpoint (optional)
   http.post("/api/chats/:chatId/prefetch", async ({ params }) => {
     const chatId = params.chatId as string;
