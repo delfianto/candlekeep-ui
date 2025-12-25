@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, nextTick, computed, onMounted } from 'vue'
 import {
-  MessageSquare,
+  MessageCircleMore,
   MoreVertical,
   Paperclip,
   Send,
@@ -144,7 +144,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
         <Sheet>
           <SheetTrigger as-child>
             <Button variant="ghost" size="icon" class="md:hidden -ml-2">
-              <MessageSquare class="size-5" />
+              <MessageCircleMore class="size-5" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left"><p>Mobile Menu</p></SheetContent>
@@ -212,7 +212,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
           v-if="!loading && messages.length === 0"
           class="flex-1 flex flex-col items-center justify-center py-20 text-center opacity-40"
         >
-          <MessageSquare class="size-12 mb-4" />
+          <MessageCircleMore class="size-12 mb-4" />
           <p class="text-sm font-medium">No messages yet.</p>
         </div>
 

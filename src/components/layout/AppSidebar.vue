@@ -14,10 +14,10 @@ import { Avatar, CachedAvatar, AvatarFallback } from '@/components/ui/avatar'
 import AppSidebarButton from './AppSidebarButton.vue'
 import {
   Home,
-  MessageSquare,
+  MessageCircleMore,
   Users,
-  BookOpen,
-  Database,
+  NotebookText,
+  Box,
   Settings,
   Moon,
   Sun,
@@ -35,10 +35,10 @@ const toggleTheme = () => {
 
 const navItems = [
   { label: 'Home', icon: Home, route: '/' },
-  { label: 'Chats', icon: MessageSquare, route: '/chats' },
+  { label: 'Chats', icon: MessageCircleMore, route: '/chats' },
   { label: 'Characters', icon: Users, route: '/characters' },
-  { label: 'World Lore', icon: BookOpen, route: '/world' },
-  { label: 'Memory', icon: Database, route: '/memory' },
+  { label: 'World Lore', icon: NotebookText, route: '/world' },
+  { label: 'Memory', icon: Box, route: '/memory' },
 ]
 </script>
 

@@ -2,7 +2,7 @@
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import AppSidebar from './AppSidebar.vue'
 import { Button } from '@/components/ui/button'
-import { MessageSquare, Users, BookOpen, Sun, Moon } from 'lucide-vue-next'
+import { MessageCircleMore, Users, NotebookText, Sun, Moon } from 'lucide-vue-next'
 import { useColorMode } from '@vueuse/core'
 
 const mode = useColorMode()
@@ -11,9 +11,9 @@ const toggleTheme = () => {
 }
 
 const navItems = [
-  { label: 'Chat', icon: MessageSquare, route: '/chat' },
+  { label: 'Chat', icon: MessageCircleMore, route: '/chat' },
   { label: 'Characters', icon: Users, route: '/characters' },
-  { label: 'World Info', icon: BookOpen, route: '/world' },
+  { label: 'World Info', icon: NotebookText, route: '/world' },
 ]
 </script>
 
