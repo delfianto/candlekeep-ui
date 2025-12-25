@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useChatMessages } from '@/composables/useChatMessages'
+import MarkdownRenderer from '@/components/shared/MarkdownRenderer.vue'
 import type { components } from '@/api/schema'
 
 type Chat = components['schemas']['ChatResponse']
@@ -199,12 +200,15 @@ const handleLoadMore = async () => {
               </div>
 
               <div
-                class="p-3.5 rounded-2xl text-[14px] leading-relaxed whitespace-pre-wrap shadow-sm border transition-shadow group-hover:shadow-md"
+                class="p-3.5 rounded-2xl text-[14px] leading-relaxed shadow-sm border transition-shadow group-hover:shadow-md"
                 :class="msg.role === 'user'
                   ? 'bg-primary text-primary-foreground border-primary rounded-tr-none'
                   : 'bg-card border-border rounded-tl-none'"
               >
-                {{ msg.content }}
+                <MarkdownRenderer
+                  :content="msg.content"
+                  :class="{ 'prose-invert': msg.role === 'user' }"
+                />
               </div>
             </div>
           </div>
