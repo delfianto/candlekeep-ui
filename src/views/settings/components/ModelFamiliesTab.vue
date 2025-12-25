@@ -75,7 +75,7 @@ onMounted(fetchData)
 <template>
   <Card>
     <CardHeader class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
+      <div class="grid gap-1.5">
         <CardTitle>Model Families</CardTitle>
         <CardDescription>Base configurations for groups of related models.</CardDescription>
       </div>
