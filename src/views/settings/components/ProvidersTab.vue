@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import {
   Card,
+  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
@@ -27,7 +28,7 @@ defineProps<{
       class="min-w-0 overflow-hidden"
       :class="prov.enabled ? 'border-primary/50 bg-primary/5' : ''"
     >
-      <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2 gap-2">
+      <CardHeader>
         <div class="flex items-center gap-3 min-w-0">
           <BrandIcon :name="prov.provider_type" class="size-5 shrink-0" />
           <CardTitle
@@ -36,9 +37,11 @@ defineProps<{
             >{{ prov.name }}</CardTitle
           >
         </div>
-        <Badge :variant="prov.enabled ? 'default' : 'outline'" class="shrink-0">
-          {{ prov.enabled ? 'Active' : 'Disabled' }}
-        </Badge>
+        <CardAction>
+          <Badge :variant="prov.enabled ? 'default' : 'outline'" class="shrink-0">
+            {{ prov.enabled ? 'Active' : 'Disabled' }}
+          </Badge>
+        </CardAction>
       </CardHeader>
 
       <CardContent class="pt-4 flex flex-col gap-2">

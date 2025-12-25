@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useDebounceFn } from '@vueuse/core'
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -131,21 +132,21 @@ onMounted(fetchData)
 
 <template>
   <Card>
-    <CardHeader class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="grid gap-1.5">
-        <CardTitle>Model Registry</CardTitle>
-        <CardDescription>Available models fetched from connected providers.</CardDescription>
-      </div>
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
-        <div class="relative w-full sm:w-64">
-          <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
-          <Input v-model="searchQuery" placeholder="Search models..." class="pl-8" />
+    <CardHeader>
+      <CardTitle>Model Registry</CardTitle>
+      <CardDescription>Available models fetched from connected providers.</CardDescription>
+      <CardAction>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
+          <div class="relative w-full sm:w-64">
+            <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
+            <Input v-model="searchQuery" placeholder="Search models..." class="pl-8" />
+          </div>
+          <Button size="sm" @click="router.push('/settings/models/new')">
+            <Plus class="size-4 mr-2" />
+            Add Custom Model
+          </Button>
         </div>
-        <Button size="sm" @click="router.push('/settings/models/new')">
-          <Plus class="size-4 mr-2" />
-          Add Custom Model
-        </Button>
-      </div>
+      </CardAction>
     </CardHeader>
     <CardContent>
       <div class="flex justify-end mb-4" v-if="total > limit">

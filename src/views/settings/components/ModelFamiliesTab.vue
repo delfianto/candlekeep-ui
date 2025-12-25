@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useDebounceFn } from '@vueuse/core'
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -74,18 +75,18 @@ onMounted(fetchData)
 
 <template>
   <Card>
-    <CardHeader class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="grid gap-1.5">
-        <CardTitle>Model Families</CardTitle>
-        <CardDescription>Base configurations for groups of related models.</CardDescription>
-      </div>
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
-        <div class="relative w-full sm:w-64">
-          <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
-          <Input v-model="searchQuery" placeholder="Search families..." class="pl-8" />
+    <CardHeader>
+      <CardTitle>Model Families</CardTitle>
+      <CardDescription>Base configurations for groups of related models.</CardDescription>
+      <CardAction>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
+          <div class="relative w-full sm:w-64">
+            <Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
+            <Input v-model="searchQuery" placeholder="Search families..." class="pl-8" />
+          </div>
+          <Button size="sm"><Plus class="size-4 mr-2" /> Create Family</Button>
         </div>
-        <Button size="sm"><Plus class="size-4 mr-2" /> Create Family</Button>
-      </div>
+      </CardAction>
     </CardHeader>
     <CardContent>
       <!-- Top Pagination -->
