@@ -3,6 +3,7 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSettingsStore } from '@/stores/settings'
 import ContentLayout from '@/components/layout/ContentLayout.vue'
+import MobilePageHeader from '@/components/layout/MobilePageHeader.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Sheet,
@@ -61,41 +62,39 @@ onMounted(fetchData)
 <template>
   <ContentLayout variant="standard">
     <Tabs v-model="activeTab" class="space-y-6">
-      <!-- MOBILE HEADER -->
-      <div
-        class="md:hidden sticky -top-4 -mx-4 -mt-4 p-4 z-30 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 border-b flex items-center justify-between mb-4"
+      <MobilePageHeader
+        :title="currentTabLabel"
+        :icon="tabsConfig.find((t) => t.value === activeTab)?.icon"
       >
-        <h2 class="text-lg font-semibold flex items-center gap-2">
-          <component :is="tabsConfig.find(t => t.value === activeTab)?.icon" class="size-5" />
-          {{ currentTabLabel }}
-        </h2>
-        <Sheet v-model:open="isMobileMenuOpen">
-          <SheetTrigger as-child>
-            <Button variant="ghost" size="icon">
-              <Menu class="size-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="top" class="w-full">
-            <SheetHeader>
-              <SheetTitle>Settings</SheetTitle>
-              <SheetDescription>Manage application preferences.</SheetDescription>
-            </SheetHeader>
-            <div class="grid grid-cols-2 gap-2 py-4">
-              <Button
-                v-for="tab in tabsConfig"
-                :key="tab.value"
-                variant="ghost"
-                class="w-full justify-start gap-3"
-                :class="activeTab === tab.value ? 'bg-secondary' : ''"
-                @click="activeTab = tab.value"
-              >
-                <component :is="tab.icon" class="size-4" />
-                {{ tab.label }}
+        <template #actions>
+          <Sheet v-model:open="isMobileMenuOpen">
+            <SheetTrigger as-child>
+              <Button variant="ghost" size="icon">
+                <Menu class="size-5" />
               </Button>
-            </div>
-          </SheetContent>
-        </Sheet>
-      </div>
+            </SheetTrigger>
+            <SheetContent side="top" class="w-full">
+              <SheetHeader>
+                <SheetTitle>Settings</SheetTitle>
+                <SheetDescription>Manage application preferences.</SheetDescription>
+              </SheetHeader>
+              <div class="grid grid-cols-2 gap-2 py-4">
+                <Button
+                  v-for="tab in tabsConfig"
+                  :key="tab.value"
+                  variant="ghost"
+                  class="w-full justify-start gap-3"
+                  :class="activeTab === tab.value ? 'bg-secondary' : ''"
+                  @click="activeTab = tab.value"
+                >
+                  <component :is="tab.icon" class="size-4" />
+                  {{ tab.label }}
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </template>
+      </MobilePageHeader>
 
       <!-- DESKTOP TABS LIST -->
       <TabsList class="hidden md:grid w-full md:w-180 md:grid-cols-6 bg-muted/50 p-1">
