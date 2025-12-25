@@ -89,6 +89,108 @@ export function useChatMessages(
     loadMessages();
   };
 
+  // New state to track if we are currently generating (prevents double clicks)
+  const isSending = ref(false);
+
+  // Helper to process the SSE stream (Shared logic)
+  const readStream = async (response: Response) => {
+    if (!response.body) return;
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    // Create a temporary "pending" message
+    const tempMsg: Message = {
+      id: crypto.randomUUID(), // Temp ID
+      role: "assistant",
+      content: "",
+      created_at: new Date().toISOString(),
+      chat_id: getChatId()!,
+    };
+
+    // Add to UI immediately
+    messages.value = [...messages.value, tempMsg];
+
+    // Retrieve the reactive proxy to ensure UI updates triggers
+    const assistantMsgIndex = messages.value.length - 1;
+    // We'll access messages.value[assistantMsgIndex] directly to ensure we mutate the proxy
+
+    let buffer = "";
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        const lines = buffer.split("\n\n");
+        // Keep the last part in the buffer as it might be incomplete
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const dataStr = line.slice(6);
+            if (dataStr === "[DONE]") break;
+
+            try {
+              const data = JSON.parse(dataStr);
+              if (data.error) throw new Error(data.error);
+              if (data.text) {
+                // Mutate the reactive message object in the array
+                if (messages.value[assistantMsgIndex]) {
+                  messages.value[assistantMsgIndex].content += data.text;
+                }
+              }
+            } catch (e) {
+              console.warn("Stream parse error", e);
+            }
+          }
+        }
+      }
+    } finally {
+      isSending.value = false;
+      // Optional: Reload specifically to get the real ID from DB
+      // await loadMessages();
+    }
+  };
+
+  const regenerate = async () => {
+    const chatId = getChatId();
+    if (!chatId || isSending.value) return;
+
+    // 1. Check if last message is assistant (to delete it optimistically)
+    const lastMsg = messages.value.at(-1);
+
+    // Optimistic UI Update: Remove the "bad" response immediately
+    if (lastMsg?.role === "assistant") {
+      messages.value = messages.value.slice(0, -1);
+    }
+
+    isSending.value = true;
+    error.value = null;
+
+    try {
+      // Note: We use raw fetch here because openapi-fetch might not support streaming easily
+      // and we are hitting a custom SSE endpoint.
+      const response = await fetch(`/api/chats/${chatId}/messages/stream/regenerate`, {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.detail || "Regeneration failed");
+      }
+
+      await readStream(response);
+    } catch (err) {
+      error.value = err instanceof Error ? err : new Error("Regeneration failed");
+      isSending.value = false;
+      // If failed, maybe reload messages to restore the state?
+      await loadMessages();
+    }
+  };
+
   const sendMessage = async (content: string) => {
     const currentChatId = getChatId();
     if (!currentChatId) return;
@@ -146,6 +248,8 @@ export function useChatMessages(
     loading,
     hasMore,
     error,
+    isSending,
+    regenerate,
     loadMore,
     refresh,
     sendMessage,

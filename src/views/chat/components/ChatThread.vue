@@ -30,7 +30,7 @@ const emit = defineEmits<{
   (e: 'openSettings'): void
 }>()
 
-const { messages, loading, hasMore, loadMore, error, sendMessage } = useChatMessages(() => props.chatId, {
+const { messages, loading, hasMore, loadMore, error, sendMessage, regenerate, isSending: isRegenerating } = useChatMessages(() => props.chatId, {
   pageSize: 20,
   autoLoad: true
 })
@@ -207,7 +207,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
 
         <div class="flex flex-col gap-8">
           <div
-            v-for="msg in messages"
+            v-for="(msg, index) in messages"
             :key="msg.id"
             class="flex gap-4 group"
             :class="{ 'flex-row-reverse': msg.role === 'user' }"
@@ -245,7 +245,12 @@ const handleKeyDown = (e: KeyboardEvent) => {
                 />
               </div>
 
-              <ChatMessageActions :message="msg" />
+              <ChatMessageActions
+                :message="msg"
+                :is-latest="index === messages.length - 1"
+                :is-regenerating="isRegenerating"
+                @regenerate="regenerate"
+              />
             </div>
           </div>
         </div>
