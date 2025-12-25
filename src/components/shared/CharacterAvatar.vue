@@ -12,11 +12,12 @@ defineProps<{
 <template>
   <Avatar class="shrink-0 border shadow-sm">
     <CachedAvatar :src="src ?? ''" />
-
     <AvatarFallback
       :class="cn('bg-primary/10 text-primary font-medium flex items-center justify-center', fallbackClass)"
     >
-      {{ (username || 'CK').substring(0, 2).toUpperCase() }}
+      <slot>
+        {{ (username || 'CK').substring(0, 2).toUpperCase() }}
+      </slot>
     </AvatarFallback>
   </Avatar>
 </template>

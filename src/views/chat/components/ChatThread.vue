@@ -9,7 +9,6 @@ import {
   Loader2
 } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import CharacterAvatar from '@/components/shared/CharacterAvatar.vue'
 import { Textarea } from '@/components/ui/textarea'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
@@ -183,11 +182,9 @@ const handleLoadMore = async () => {
               class="size-9 mt-0.5"
               fallback-class="text-xs"
             />
-            <Avatar v-else class="size-9 shrink-0 border shadow-sm mt-0.5">
-              <AvatarFallback class="bg-muted">
-                <User class="size-5" />
-              </AvatarFallback>
-            </Avatar>
+            <CharacterAvatar v-else class="size-9 mt-0.5" fallback-class="bg-muted">
+              <User class="size-5" />
+            </CharacterAvatar>
 
             <div class="flex flex-col gap-1.5 max-w-[85%] lg:max-w-[75%]">
               <div
