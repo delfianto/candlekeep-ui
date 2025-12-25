@@ -61,7 +61,7 @@ onMounted(fetchData)
 
 <template>
   <ContentLayout variant="standard">
-    <Tabs v-model="activeTab" class="space-y-6">
+    <Tabs v-model="activeTab" class="space-y-6 min-h-[50vh]">
       <MobilePageHeader
         :title="currentTabLabel"
         :icon="tabsConfig.find((t) => t.value === activeTab)?.icon"
