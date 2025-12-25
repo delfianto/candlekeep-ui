@@ -5,7 +5,6 @@ import {
   MoreVertical,
   Paperclip,
   Send,
-  Bot,
   User,
   Loader2
 } from 'lucide-vue-next'
@@ -178,11 +177,15 @@ const handleLoadMore = async () => {
             class="flex gap-4 group"
             :class="{ 'flex-row-reverse': msg.role === 'user' }"
           >
-            <Avatar class="size-8 shrink-0 border shadow-sm mt-0.5">
-              <AvatarFallback
-                :class="msg.role === 'assistant' ? 'bg-primary/10 text-primary' : 'bg-muted'"
-              >
-                <component :is="msg.role === 'assistant' ? Bot : User" class="size-4" />
+            <Avatar class="size-9 shrink-0 border shadow-sm mt-0.5">
+              <template v-if="msg.role === 'assistant'">
+                <CachedAvatar :src="currentChat?.avatar_thumbnail_path ?? ''" />
+                <AvatarFallback class="bg-primary/10 text-primary text-xs">
+                  {{ (currentChat?.character_name || currentChat?.title || 'CK').substring(0, 2).toUpperCase() }}
+                </AvatarFallback>
+              </template>
+              <AvatarFallback v-else class="bg-muted">
+                <User class="size-5" />
               </AvatarFallback>
             </Avatar>
 
@@ -192,7 +195,7 @@ const handleLoadMore = async () => {
                 :class="{ 'flex-row-reverse': msg.role === 'user' }"
               >
                 <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-tight">
-                  {{ msg.role === 'assistant' ? 'Assistant' : 'You' }}
+                  {{ msg.role === 'assistant' ? (currentChat?.character_name || 'Assistant') : 'You' }}
                 </span>
                 <span class="text-[10px] text-muted-foreground/40 font-medium">
                   {{ new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
