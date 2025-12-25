@@ -89,6 +89,41 @@ export function useChatMessages(
     loadMessages();
   };
 
+  const sendMessage = async (content: string) => {
+    const currentChatId = getChatId();
+    if (!currentChatId) return;
+
+    // Optimistic Update (User Message)
+    const tempUserMsg: Message = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: content,
+      created_at: new Date().toISOString(),
+      chat_id: currentChatId,
+    };
+    messages.value = [...messages.value, tempUserMsg];
+
+    try {
+      const { data, error: apiError } = await client.POST("/api/chats/{chat_id}/messages", {
+        params: { path: { chat_id: currentChatId } },
+        body: { content },
+      });
+
+      if (apiError) throw new Error("Failed to send message");
+
+      // Replace optimistic message with real one (if needed) or just append the response
+      // The API returns the Assistant's response message.
+      // We might need to refresh or handle the response.
+      // Assuming data is the Assistant Message.
+      if (data) {
+        messages.value = [...messages.value, data];
+      }
+    } catch (err) {
+      console.error("Failed to send message", err);
+      // Remove optimistic message or show error state
+    }
+  };
+
   watch(
     () => getChatId(),
     (newChatId) => {
@@ -113,5 +148,6 @@ export function useChatMessages(
     error,
     loadMore,
     refresh,
+    sendMessage,
   };
 }

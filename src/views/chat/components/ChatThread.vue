@@ -15,6 +15,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useChatMessages } from '@/composables/useChatMessages'
 import MarkdownRenderer from '@/components/shared/MarkdownRenderer.vue'
 import type { components } from '@/api/schema'
+import { CHAT_PLACEHOLDERS } from '@/constants/placeholders'
 
 type Chat = components['schemas']['ChatResponse']
 
@@ -28,7 +29,7 @@ const emit = defineEmits<{
   (e: 'openSettings'): void
 }>()
 
-const { messages, loading, hasMore, loadMore, error } = useChatMessages(() => props.chatId, {
+const { messages, loading, hasMore, loadMore, error, sendMessage } = useChatMessages(() => props.chatId, {
   pageSize: 20,
   autoLoad: true
 })
@@ -36,6 +37,13 @@ const { messages, loading, hasMore, loadMore, error } = useChatMessages(() => pr
 const inputValue = ref('')
 const scrollContainer = ref<HTMLDivElement | null>(null)
 const isInitialLoad = ref(true)
+const placeholderText = ref(CHAT_PLACEHOLDERS[0])
+
+// Randomize placeholder on mount
+import { onMounted } from 'vue'
+onMounted(() => {
+  placeholderText.value = CHAT_PLACEHOLDERS[Math.floor(Math.random() * CHAT_PLACEHOLDERS.length)]
+})
 
 // Reset initial load flag when chat changes
 watch(() => props.chatId, () => {
@@ -84,6 +92,34 @@ const handleLoadMore = async () => {
   const newScrollHeight = container.scrollHeight
   const heightDifference = newScrollHeight - previousScrollHeight
   container.scrollTop = previousScrollTop + heightDifference
+}
+
+const isSending = ref(false)
+
+const handleSend = async () => {
+  const content = inputValue.value.trim()
+  if (!content || isSending.value) return
+
+  inputValue.value = ''
+  isSending.value = true
+
+  // Pick a new placeholder for the next turn
+  placeholderText.value = CHAT_PLACEHOLDERS[Math.floor(Math.random() * CHAT_PLACEHOLDERS.length)]
+
+  try {
+    await sendMessage(content)
+    await nextTick()
+    scrollToBottom()
+  } finally {
+    isSending.value = false
+  }
+}
+
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault()
+    handleSend()
+  }
 }
 </script>
 
@@ -229,11 +265,18 @@ const handleLoadMore = async () => {
         </Button>
         <Textarea
           v-model="inputValue"
-          placeholder="Write your response..."
+          :placeholder="placeholderText"
+          @keydown="handleKeyDown"
           class="min-h-10 max-h-48 border-0 focus-visible:ring-0 resize-none bg-transparent py-3 shadow-none text-sm"
         />
-        <Button size="icon" class="size-10 shrink-0 rounded-xl shadow-lg">
-          <Send class="size-5" />
+        <Button
+          size="icon"
+          class="size-10 shrink-0 rounded-xl shadow-lg"
+          @click="handleSend"
+          :disabled="!inputValue.trim() || isSending"
+        >
+          <Loader2 v-if="isSending" class="size-5 animate-spin" />
+          <Send v-else class="size-5" />
         </Button>
       </div>
       <div class="text-center mt-3">
