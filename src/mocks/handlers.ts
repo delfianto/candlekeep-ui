@@ -97,14 +97,19 @@ export const handlers = [
 
     const newChat: Chat = {
       id: `chat-${Date.now()}`,
-      character_id: body.character_id,
-      character_name: character?.name || null,
-      model_id: body.model_id || "model-1",
+      character: {
+        id: body.character_id,
+        name: character?.name || "Unknown",
+        avatar: character?.avatar || null,
+        avatar_thumbnail: character?.avatar_thumbnail || null,
+      },
+      model: {
+        id: body.model_id || "model-1",
+        name: "Mock Model",
+      },
       title: body.title || "New Conversation",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      avatar_path: character?.avatar_path || null,
-      avatar_thumbnail_path: character?.avatar_thumbnail_path || null,
     };
     db.chats.unshift(newChat);
     // Note: For new chats, there's no need to initialize in conversationCache
@@ -189,55 +194,59 @@ export const handlers = [
     });
   }),
 
-  // Post message handler
+  // Unified Post message handler (Streaming + Regular + Regenerate)
   http.post("/api/chats/:chatId/messages", async ({ params, request }) => {
     const chatId = params.chatId as string;
-    const body = (await request.json()) as any;
+    const url = new URL(request.url);
+    const stream = url.searchParams.get("stream") === "true";
+    const regenerate = url.searchParams.get("regenerate") === "true";
 
     const chat = db.chats.find((c) => c.id === chatId);
     if (chat) {
       chat.updated_at = new Date().toISOString();
     }
 
-    await delay(800);
+    if (stream) {
+      const encoder = new TextEncoder();
+      const responseStream = new ReadableStream({
+        async start(controller) {
+          const text = regenerate
+            ? "[Mock Regenerated Response] This is a simulated regenerated reply."
+            : "[Mock Streaming AI Response] This is a simulated streaming reply.";
+          const words = text.split(" ");
 
-    const aiMsg = {
-      id: `msg-${Date.now() + 1}`,
-      chat_id: chatId,
-      role: "assistant" as const,
-      content: `[Mock AI Response] You said: "${body.content}". This is a simulated reply.`,
-      created_at: new Date(Date.now() + 1).toISOString(),
-    };
+          for (const word of words) {
+            const chunk = JSON.stringify({ text: word + " " });
+            controller.enqueue(encoder.encode(`data: ${chunk}\n\n`));
+            await new Promise((r) => setTimeout(r, 50));
+          }
 
-    return HttpResponse.json(aiMsg);
-  }),
+          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+          controller.close();
+        },
+      });
 
-  // Regenerate message stream handler
-  http.post("/api/chats/:chatId/messages/stream/regenerate", async () => {
-    const encoder = new TextEncoder();
-    const stream = new ReadableStream({
-      async start(controller) {
-        const text = "[Mock Regenerated Response] This is a simulated regenerated reply after backtracking.";
-        const words = text.split(" ");
+      return new HttpResponse(responseStream, {
+        headers: {
+          "Content-Type": "text/event-stream",
+          "Cache-Control": "no-cache",
+          Connection: "keep-alive",
+        },
+      });
+    } else {
+      const body = (await request.json()) as any;
+      await delay(800);
 
-        for (const word of words) {
-          const chunk = JSON.stringify({ text: word + " " });
-          controller.enqueue(encoder.encode(`data: ${chunk}\n\n`));
-          await new Promise((r) => setTimeout(r, 50));
-        }
+      const aiMsg = {
+        id: `msg-${Date.now() + 1}`,
+        chat_id: chatId,
+        role: "assistant" as const,
+        content: `[Mock AI Response] You said: "${body?.content}". This is a simulated reply.`,
+        created_at: new Date(Date.now() + 1).toISOString(),
+      };
 
-        controller.enqueue(encoder.encode("data: [DONE]\n\n"));
-        controller.close();
-      },
-    });
-
-    return new HttpResponse(stream, {
-      headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-      },
-    });
+      return HttpResponse.json(aiMsg);
+    }
   }),
 
   // Prefetch endpoint (optional)

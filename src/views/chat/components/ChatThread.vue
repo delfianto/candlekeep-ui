@@ -140,27 +140,27 @@ const handleKeyDown = (e: KeyboardEvent) => {
         </Sheet>
 
         <CharacterAvatar
-          :src="currentChat?.avatar_thumbnail_path"
-          :username="currentChat?.character_name || currentChat?.title"
+          :src="currentChat?.character.avatar_thumbnail"
+          :username="currentChat?.character.name || currentChat?.title"
           class="size-9 cursor-pointer hover:opacity-80 transition-opacity"
           fallback-class="text-xs"
           @click="emit('openCharacterInspector')"
         />
         <div class="flex flex-col">
           <h2 class="text-sm font-semibold leading-none mb-1">
-            {{ currentChat?.character_name || currentChat?.title || 'Keeper of Candlekeep' }}
+            {{ currentChat?.character.name || currentChat?.title || 'Keeper of Candlekeep' }}
           </h2>
           <p class="text-[11px] text-muted-foreground flex items-center gap-1.5">
             <span
               class="size-1.5 rounded-full"
               :class="
-                currentChat && !currentChat.model_id
+                currentChat && !currentChat.model.id
                   ? 'bg-red-500'
                   : 'bg-green-500 animate-pulse'
               "
             ></span>
-            {{ currentChat?.model_name || 'Active Session' }}
-            <span v-if="currentChat && !currentChat.model_id" class="text-red-500 font-medium">
+            {{ currentChat?.model.name || 'Active Session' }}
+            <span v-if="currentChat && !currentChat.model.id" class="text-red-500 font-medium">
               (Invalid Model)
             </span>
           </p>
@@ -214,8 +214,8 @@ const handleKeyDown = (e: KeyboardEvent) => {
           >
             <CharacterAvatar
               v-if="msg.role === 'assistant'"
-              :src="currentChat?.avatar_thumbnail_path"
-              :username="currentChat?.character_name || currentChat?.title"
+              :src="currentChat?.character.avatar_thumbnail"
+              :username="currentChat?.character.name || currentChat?.title"
               class="size-9 mt-0.5"
               fallback-class="text-xs"
             />
@@ -229,7 +229,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
                 :class="{ 'flex-row-reverse': msg.role === 'user' }"
               >
                 <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-tight">
-                  {{ msg.role === 'assistant' ? (currentChat?.character_name || 'Assistant') : 'You' }}
+                  {{ msg.role === 'assistant' ? (currentChat?.character.name || 'Assistant') : 'You' }}
                 </span>
               </div>
 

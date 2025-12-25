@@ -78,8 +78,8 @@ watch(() => props.characterId, (newId) => {
           class="h-full w-full flex items-center justify-center bg-muted/10 rounded-lg border overflow-hidden relative"
         >
           <CachedImage
-            v-if="character?.avatar_path"
-            :src="character.avatar_path"
+            v-if="character?.avatar"
+            :src="character.avatar"
             :alt="character.name"
             class="w-full h-full object-contain"
           />
@@ -95,7 +95,7 @@ watch(() => props.characterId, (newId) => {
           <div class="p-4 space-y-4">
             <div class="flex items-center gap-4">
               <CharacterAvatar
-                :src="character?.avatar_thumbnail_path"
+                :src="character?.avatar_thumbnail"
                 :username="character?.name"
                 class="size-16"
                 fallback-class="text-xl"

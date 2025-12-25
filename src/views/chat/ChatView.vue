@@ -55,7 +55,7 @@ const handleOpenCharacterInspector = () => {
   if (!currentChat.value) return
 
   if (isMobile.value) {
-    router.push({ name: 'character-detail', params: { id: currentChat.value.character_id } })
+    router.push({ name: 'character-detail', params: { id: currentChat.value.character.id } })
   } else {
     paneMode.value = 'character'
     showRightPane.value = true
@@ -118,7 +118,7 @@ const handleOpenSettings = () => {
 
         <ChatDetailPane
           v-if="currentChat"
-          :character-id="currentChat.character_id"
+          :character-id="currentChat.character.id"
           :mode="paneMode"
         />
 

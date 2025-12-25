@@ -66,8 +66,8 @@ const emit = defineEmits<{
           />
 
           <CharacterAvatar
-            :src="chat.avatar_thumbnail_path"
-            :username="chat.character_name || chat.title"
+            :src="chat.character.avatar_thumbnail"
+            :username="chat.character.name || chat.title"
             class="size-16"
             fallback-class="text-base"
           />

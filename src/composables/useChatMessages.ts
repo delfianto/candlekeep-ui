@@ -159,10 +159,8 @@ export function useChatMessages(
     const chatId = getChatId();
     if (!chatId || isSending.value) return;
 
-    // 1. Check if last message is assistant (to delete it optimistically)
-    const lastMsg = messages.value.at(-1);
-
     // Optimistic UI Update: Remove the "bad" response immediately
+    const lastMsg = messages.value.at(-1);
     if (lastMsg?.role === "assistant") {
       messages.value = messages.value.slice(0, -1);
     }
@@ -171,10 +169,12 @@ export function useChatMessages(
     error.value = null;
 
     try {
-      // Note: We use raw fetch here because openapi-fetch might not support streaming easily
-      // and we are hitting a custom SSE endpoint.
-      const response = await fetch(`/api/chats/${chatId}/messages/stream/regenerate`, {
+      const response = await fetch(`/api/chats/${chatId}/messages?stream=true&regenerate=true`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(null), // Empty body for regenerate
       });
 
       if (!response.ok) {
@@ -186,14 +186,13 @@ export function useChatMessages(
     } catch (err) {
       error.value = err instanceof Error ? err : new Error("Regeneration failed");
       isSending.value = false;
-      // If failed, maybe reload messages to restore the state?
       await loadMessages();
     }
   };
 
   const sendMessage = async (content: string) => {
-    const currentChatId = getChatId();
-    if (!currentChatId) return;
+    const chatId = getChatId();
+    if (!chatId || isSending.value) return;
 
     // Optimistic Update (User Message)
     const tempUserMsg: Message = {
@@ -201,28 +200,31 @@ export function useChatMessages(
       role: "user",
       content: content,
       created_at: new Date().toISOString(),
-      chat_id: currentChatId,
+      chat_id: chatId,
     };
     messages.value = [...messages.value, tempUserMsg];
 
+    isSending.value = true;
+    error.value = null;
+
     try {
-      const { data, error: apiError } = await client.POST("/api/chats/{chat_id}/messages", {
-        params: { path: { chat_id: currentChatId } },
-        body: { content },
+      const response = await fetch(`/api/chats/${chatId}/messages?stream=true`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content }),
       });
 
-      if (apiError) throw new Error("Failed to send message");
-
-      // Replace optimistic message with real one (if needed) or just append the response
-      // The API returns the Assistant's response message.
-      // We might need to refresh or handle the response.
-      // Assuming data is the Assistant Message.
-      if (data) {
-        messages.value = [...messages.value, data];
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.detail || "Failed to send message");
       }
+
+      await readStream(response);
     } catch (err) {
-      console.error("Failed to send message", err);
-      // Remove optimistic message or show error state
+      error.value = err instanceof Error ? err : new Error("Failed to send message");
+      isSending.value = false;
     }
   };
 
