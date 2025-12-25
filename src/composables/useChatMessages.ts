@@ -89,8 +89,8 @@ export function useChatMessages(
     loadMessages();
   };
 
-  // New state to track if we are currently generating (prevents double clicks)
-  const isSending = ref(false);
+  // Track if we are currently generating (prevents double clicks and triggers scroll)
+  const isGenerating = ref(false);
 
   // Helper to process the SSE stream (Shared logic)
   const readStream = async (response: Response) => {
@@ -100,7 +100,7 @@ export function useChatMessages(
 
     // Create a temporary "pending" message
     const tempMsg: Message = {
-      id: crypto.randomUUID(), // Temp ID
+      id: crypto.randomUUID(),
       role: "assistant",
       content: "",
       created_at: new Date().toISOString(),
@@ -110,10 +110,7 @@ export function useChatMessages(
     // Add to UI immediately
     messages.value = [...messages.value, tempMsg];
 
-    // Retrieve the reactive proxy to ensure UI updates triggers
     const assistantMsgIndex = messages.value.length - 1;
-    // We'll access messages.value[assistantMsgIndex] directly to ensure we mutate the proxy
-
     let buffer = "";
 
     try {
@@ -125,7 +122,6 @@ export function useChatMessages(
         buffer += chunk;
 
         const lines = buffer.split("\n\n");
-        // Keep the last part in the buffer as it might be incomplete
         buffer = lines.pop() || "";
 
         for (const line of lines) {
@@ -137,9 +133,14 @@ export function useChatMessages(
               const data = JSON.parse(dataStr);
               if (data.error) throw new Error(data.error);
               if (data.text) {
-                // Mutate the reactive message object in the array
-                if (messages.value[assistantMsgIndex]) {
-                  messages.value[assistantMsgIndex].content += data.text;
+                // Mutate the reactive message object
+                // We use a new object reference to ensure standard watchers trigger
+                const currentMsg = messages.value[assistantMsgIndex];
+                if (currentMsg) {
+                  messages.value[assistantMsgIndex] = {
+                    ...currentMsg,
+                    content: currentMsg.content + data.text,
+                  };
                 }
               }
             } catch (e) {
@@ -149,15 +150,13 @@ export function useChatMessages(
         }
       }
     } finally {
-      isSending.value = false;
-      // Optional: Reload specifically to get the real ID from DB
-      // await loadMessages();
+      isGenerating.value = false;
     }
   };
 
   const regenerate = async () => {
     const chatId = getChatId();
-    if (!chatId || isSending.value) return;
+    if (!chatId || isGenerating.value) return;
 
     // Optimistic UI Update: Remove the "bad" response immediately
     const lastMsg = messages.value.at(-1);
@@ -165,7 +164,7 @@ export function useChatMessages(
       messages.value = messages.value.slice(0, -1);
     }
 
-    isSending.value = true;
+    isGenerating.value = true;
     error.value = null;
 
     try {
@@ -174,7 +173,7 @@ export function useChatMessages(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(null), // Empty body for regenerate
+        body: JSON.stringify(null),
       });
 
       if (!response.ok) {
@@ -185,14 +184,14 @@ export function useChatMessages(
       await readStream(response);
     } catch (err) {
       error.value = err instanceof Error ? err : new Error("Regeneration failed");
-      isSending.value = false;
+      isGenerating.value = false;
       await loadMessages();
     }
   };
 
   const sendMessage = async (content: string) => {
     const chatId = getChatId();
-    if (!chatId || isSending.value) return;
+    if (!chatId || isGenerating.value) return;
 
     // Optimistic Update (User Message)
     const tempUserMsg: Message = {
@@ -204,7 +203,7 @@ export function useChatMessages(
     };
     messages.value = [...messages.value, tempUserMsg];
 
-    isSending.value = true;
+    isGenerating.value = true;
     error.value = null;
 
     try {
@@ -224,7 +223,7 @@ export function useChatMessages(
       await readStream(response);
     } catch (err) {
       error.value = err instanceof Error ? err : new Error("Failed to send message");
-      isSending.value = false;
+      isGenerating.value = false;
     }
   };
 
@@ -250,7 +249,7 @@ export function useChatMessages(
     loading,
     hasMore,
     error,
-    isSending,
+    isGenerating,
     regenerate,
     loadMore,
     refresh,

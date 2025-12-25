@@ -30,7 +30,16 @@ const emit = defineEmits<{
   (e: 'openSettings'): void
 }>()
 
-const { messages, loading, hasMore, loadMore, error, sendMessage, regenerate, isSending: isRegenerating } = useChatMessages(() => props.chatId, {
+const {
+  messages,
+  loading,
+  hasMore,
+  loadMore,
+  error,
+  sendMessage,
+  regenerate,
+  isGenerating
+} = useChatMessages(() => props.chatId, {
   pageSize: 20,
   autoLoad: true
 })
@@ -58,21 +67,25 @@ const scrollToBottom = () => {
   }
 }
 
-watch(messages, async (newVal, oldVal) => {
-  // Scenario 1: Initial Load (New Chat selected)
-  if (isInitialLoad.value && newVal.length > 0) {
+// Watch for NEW messages (length changes)
+watch(() => messages.value.length, async (newLen, oldLen) => {
+  if (newLen > oldLen) {
     await nextTick()
-    scrollToBottom()
-
-    // Double-tap for delayed layout shifts (images/fonts)
-    setTimeout(() => {
+    // Scroll if it's the initial load or if something is generating
+    if (isInitialLoad.value || isGenerating.value) {
       scrollToBottom()
-      isInitialLoad.value = false
-    }, 100)
+      if (isInitialLoad.value) {
+        // Handle images/fonts delay
+        setTimeout(scrollToBottom, 100)
+        isInitialLoad.value = false
+      }
+    }
   }
-  // Scenario 2: User sent a new message (List grew by 1 at the end)
-  else if (!isInitialLoad.value && newVal.length > oldVal.length && newVal[newVal.length - 1].role === 'user') {
-    await nextTick()
+})
+
+// Watch for CONTENT changes (streaming)
+watch(() => messages.value.at(-1)?.content, () => {
+  if (isGenerating.value) {
     scrollToBottom()
   }
 })
@@ -95,24 +108,19 @@ const handleLoadMore = async () => {
   container.scrollTop = previousScrollTop + heightDifference
 }
 
-const isSending = ref(false)
-
 const handleSend = async () => {
   const content = inputValue.value.trim()
-  if (!content || isSending.value) return
+  if (!content || isGenerating.value) return
 
   inputValue.value = ''
-  isSending.value = true
 
   // Pick a new placeholder for the next turn
   placeholderText.value = CHAT_PLACEHOLDERS[Math.floor(Math.random() * CHAT_PLACEHOLDERS.length)]
 
   try {
     await sendMessage(content)
-    await nextTick()
-    scrollToBottom()
-  } finally {
-    isSending.value = false
+  } catch (e) {
+    console.error('Failed to send', e)
   }
 }
 
@@ -248,7 +256,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
               <ChatMessageActions
                 :message="msg"
                 :is-latest="index === messages.length - 1"
-                :is-regenerating="isRegenerating"
+                :is-regenerating="isGenerating"
                 @regenerate="regenerate"
               />
             </div>
@@ -278,9 +286,9 @@ const handleKeyDown = (e: KeyboardEvent) => {
           size="icon"
           class="size-10 shrink-0 rounded-xl shadow-lg"
           @click="handleSend"
-          :disabled="!inputValue.trim() || isSending"
+          :disabled="!inputValue.trim() || isGenerating"
         >
-          <Loader2 v-if="isSending" class="size-5 animate-spin" />
+          <Loader2 v-if="isGenerating" class="size-5 animate-spin" />
           <Send v-else class="size-5" />
         </Button>
       </div>
