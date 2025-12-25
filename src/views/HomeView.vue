@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button'
 import libraryImage from '@/assets/candlekeep-library.png'
 import { useRouter } from 'vue-router'
+import { APP_INFO } from '@/constants/appInfo'
 
 const router = useRouter()
 </script>
@@ -10,13 +11,19 @@ const router = useRouter()
   <div
     class="relative h-full w-full flex flex-col items-center justify-center p-6 text-center overflow-hidden"
   >
-            <!-- Background Image with Overlay -->
-            <div class="absolute inset-0 z-0">
-                <img :src="libraryImage" alt="Candlekeep Library" class="w-full h-full object-cover opacity-60 dark:opacity-40 blur-[1px]" />
-                <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-                <div class="absolute inset-0 bg-radial-gradient from-transparent to-background/60" />
-            </div>
-        
+    <!-- Background Image with Overlay -->
+    <div class="absolute inset-0 z-0">
+      <img
+        :src="libraryImage"
+        alt="Candlekeep Library"
+        class="w-full h-full object-cover opacity-60 dark:opacity-40 blur-[1px]"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"
+      />
+      <div class="absolute inset-0 bg-radial-gradient from-transparent to-background/60" />
+    </div>
+
     <div
       class="relative z-10 max-w-4xl space-y-12 animate-in fade-in duration-1000 slide-in-from-bottom-4"
     >
@@ -54,7 +61,7 @@ const router = useRouter()
       </div>
 
       <div class="pt-12 text-sm text-muted-foreground/60 font-serif">
-        <p>V 0.1.0 • Alpha Build</p>
+        <p>Version {{ APP_INFO.version }}</p>
       </div>
     </div>
   </div>
